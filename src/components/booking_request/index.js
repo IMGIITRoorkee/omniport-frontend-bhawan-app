@@ -37,12 +37,11 @@ class BookingRequests extends Component {
   };
 
   componentDidMount() {
-    this.props.getRoomBookings(bookingsUrl(this.props.who_am_i.residence));
     this.props.getPresentRoomBookings(
       statusBookingsUrl(
         this.props.who_am_i.residence,
         this.props.constants.statues.BOOKING_STATUSES.pen,
-        false,
+        "False",
       )
     );
     this.props.getPastRoomBookings(
@@ -77,7 +76,7 @@ class BookingRequests extends Component {
   handleItemClick = (e, { name }) => {
     this.setState({ activeItem: name, activePage: 1 });
     this.props.getPresentRoomBookings(
-      statusBookingsUrl(this.props.who_am_i.residence, name, false)
+      statusBookingsUrl(this.props.who_am_i.residence, name, "False")
     );
   };
   handlePastItemClick = (e, { name }) => {
@@ -133,7 +132,7 @@ class BookingRequests extends Component {
       statusBookingsUrl(
         this.props.who_am_i.residence,
         this.props.constants.statues.BOOKING_STATUSES[this.state.activeItem],
-        false,
+        "False",
       )
     );
     this.props.getPastRoomBookings(
@@ -173,7 +172,7 @@ class BookingRequests extends Component {
       `${statusBookingsUrl(
         this.props.who_am_i.residence,
         this.state.activeItem,
-        false,
+        "False",
       )}&page=${activePage}`
     );
   };

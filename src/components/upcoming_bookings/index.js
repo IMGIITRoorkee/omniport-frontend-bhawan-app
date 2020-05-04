@@ -9,7 +9,7 @@ import * as moment from "moment";
 class UpcomingBookings extends React.Component {
   componentDidMount() {
     this.props.getRoomBookings(
-      bookingsUrl(this.props.who_am_i.residence, false)
+      bookingsUrl(this.props.who_am_i.residence, "False")
     );
   }
   render() {

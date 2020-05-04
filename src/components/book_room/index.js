@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Form, Input, Container, Icon } from "semantic-ui-react";
+import { Button, Form, Input, Container, Icon, Message } from "semantic-ui-react";
 import { DateInput, TimeInput } from "semantic-ui-calendar-react";
 import "./index.css";
 import { bookRoom } from "../../actions/book-room";
