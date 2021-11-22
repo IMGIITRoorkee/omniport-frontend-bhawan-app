@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { Header, Table, Container, Dropdown, Pagination, Segment, Button } from 'semantic-ui-react'
+import { Header, Table, Container, Dropdown, Pagination, Segment, Button, Checkbox, Input } from 'semantic-ui-react'
 
 import { Loading } from "formula_one";
 
@@ -25,7 +25,9 @@ class StudentDatabase extends Component {
     filterYear: "",
     filterBranch: '',
     loading: true,
-    currentResidentDownloadUrl: ''
+    currentResidentDownloadUrl: '',
+    allResidents: false,
+    residentSearch: "",
   };
 
   componentDidMount() {
@@ -40,35 +42,45 @@ class StudentDatabase extends Component {
   }
 
   onChange = (event, { name, value }) => {
+    let filter = '?is_student=true&'
     if (this.state.hasOwnProperty(name)) {
-      this.setState({ [name]: value })
+      this.setState({ [name]: value }, () => {
+        if (name == 'filterYear') {
+          if (value != '') filter = `${filter}year=${value}&`
+          if (this.state.filterBranch != '')
+            filter = `${filter}branch=${this.state.filterBranch}&`
+        } else if (name == 'filterBranch') {
+          if (value != '') filter = `${filter}branch=${value}&`
+          if (this.state.filterYear != '')
+            filter = `${filter}year=${this.state.filterYear}&`
+        }
+
+        if (this.state.allResidents) {
+          filter = `${filter}all=${true}&`
+        }
+
+        if (this.state.residentSearch.length >= 3) {
+          filter = `${filter}search=${this.state.residentSearch}&`
+        }
+
+        this.setState({
+          loading: true
+        })
+
+        this.props.getResidents(
+          `${residentUrl(this.props.activeHostel)}${filter}`,
+          this.successCallBack,
+          this.errCallBack
+        )
+
+        this.setState({
+          activePage: 1,
+          currentResidentDownloadUrl: `${residentDownloadUrl(
+            this.props.activeHostel
+          )}${filter}`
+        })
+      })
     }
-    let filter="?is_student=true&"
-
-    if(name=='filterYear'){
-        if(value!="") filter = `${filter}year=${value}&`
-        if(this.state.filterBranch!="") filter = `${filter}branch=${this.state.filterBranch}&`
-    }
-
-    else if(name=="filterBranch"){
-      if(value!="") filter = `${filter}branch=${value}&`
-      if(this.state.filterYear!="") filter = `${filter}year=${this.state.filterYear}&`
-    }
-
-    this.setState({
-      loading: true,
-    })
-
-    this.props.getResidents(
-      `${residentUrl(this.props.activeHostel)}${filter}`,
-      this.successCallBack,
-      this.errCallBack
-    )
-
-    this.setState({
-      activePage: 1,
-      currentResidentDownloadUrl: `${residentDownloadUrl(this.props.activeHostel)}${filter}`,
-    })
   }
 
   handlePaginationChange = (e, { activePage }) => {
@@ -98,7 +110,9 @@ class StudentDatabase extends Component {
       filterBranch,
       filterYear,
       loading,
-      currentResidentDownloadUrl
+      currentResidentDownloadUrl,
+      allResidents,
+      residentSearch
     } = this.state
     const { residents, constants } = this.props
 
@@ -115,32 +129,51 @@ class StudentDatabase extends Component {
       <div>
         <Header as='h4'>Student Database </Header>
         <Container>
-        <Dropdown
-          name="filterYear"
-          clearable
-          options={yearOptions}
-          onChange={this.onChange}
-          placeholder="Filter by year"
-          value={filterYear}
-          selection
-        />
-        <Dropdown
-          name="filterBranch"
-          clearable
-          search
-          placeholder="Filter by branch"
-          value={filterBranch}
-          onChange={this.onChange}
-          options={branchOptions}
-          selection
-        />
-        <a href={currentResidentDownloadUrl} download>
-          <Button
-           primary
-          >
-            Download list
-          </Button>
-        </a>
+        <div styleName='filter-container'>
+          <div styleName='filter-container'>
+            <Dropdown
+              name="filterYear"
+              clearable
+              options={yearOptions}
+              onChange={this.onChange}
+              placeholder="Filter by year"
+              value={filterYear}
+              selection
+            />
+            <Dropdown
+              name="filterBranch"
+              clearable
+              search
+              placeholder="Filter by branch"
+              value={filterBranch}
+              onChange={this.onChange}
+              options={branchOptions}
+              selection
+            />
+            <Input
+              name="residentSearch"
+              value={residentSearch}
+              onChange={this.onChange}
+              icon="search"
+              placeholder="Enter 3 characters to search."
+            />
+            <Checkbox
+              name="allResidents"
+              checked={allResidents}
+              label="All residents"
+              onChange={(e, { name, checked }) =>
+                this.onChange(e, { name: name, value: checked })
+              }
+            />
+          </div>
+          <a href={currentResidentDownloadUrl} download>
+            <Button
+            primary
+            >
+              Download list
+            </Button>
+          </a>
+        </div>
         {!loading?
           (
             <React.Fragment>
@@ -159,6 +192,7 @@ class StudentDatabase extends Component {
                         <Table.HeaderCell>Current Year</Table.HeaderCell>
                         <Table.HeaderCell>Department</Table.HeaderCell>
                         <Table.HeaderCell>Date Of Birth</Table.HeaderCell>
+                        {allResidents && <Table.HeaderCell>Hostel</Table.HeaderCell>}
                         <Table.HeaderCell>Display Picture</Table.HeaderCell>
                       </Table.Row>
                     </Table.Header>
@@ -175,6 +209,7 @@ class StudentDatabase extends Component {
                                 <Table.Cell>{resident.currentYear}</Table.Cell>
                                 <Table.Cell>{resident.department}</Table.Cell>
                                 <Table.Cell>{resident.dateOfBirth}</Table.Cell>
+                                {allResidents && <Table.Cell>{resident.hostelCode}</Table.Cell>}
                                 <Table.Cell>
                                   {resident.displayPicture? (
                                     <a href={resident.displayPicture} download={resident.residentName}>

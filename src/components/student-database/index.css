@@ -4,3 +4,13 @@
     display: block;
     margin: 0.5em;
 }
+
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-container > div {
+    margin-right: 0.5rem;
+}
