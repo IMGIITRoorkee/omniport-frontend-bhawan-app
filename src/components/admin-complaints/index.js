@@ -317,7 +317,7 @@ class AdminComplains extends Component {
                         <Table.Header>
                           <Table.Row>
                             <Table.HeaderCell>ID</Table.HeaderCell>
-                            <Table.HeaderCell>Complaint</Table.HeaderCell>
+                            <Table.HeaderCell>Complaint Description</Table.HeaderCell>
                             <Table.HeaderCell>Applicant Name</Table.HeaderCell>
                             <Table.HeaderCell>Complaint Date</Table.HeaderCell>
                             <Table.HeaderCell>Complaint Type</Table.HeaderCell>
@@ -451,7 +451,7 @@ class AdminComplains extends Component {
                             <Table.Header>
                               <Table.Row>
                                 <Table.HeaderCell>ID</Table.HeaderCell>
-                                <Table.HeaderCell>Complaint</Table.HeaderCell>
+                                <Table.HeaderCell>Complaint Description</Table.HeaderCell>
                                 <Table.HeaderCell>Applicant Name</Table.HeaderCell>
                                 <Table.HeaderCell>Complaint Date</Table.HeaderCell>
                                 <Table.HeaderCell>Complaint Type</Table.HeaderCell>

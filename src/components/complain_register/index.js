@@ -165,7 +165,7 @@ class ComplainRegister extends React.Component {
             value={complain}
             onChange={this.handleChange}
             control={TextArea}
-            label='Complaint / Feedback'
+            label='Complaint Description / Feedback'
             placeholder='Type your complaint here ....'
             styleName='complaint'
             rows='5'
@@ -194,7 +194,7 @@ class ComplainRegister extends React.Component {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>ID</Table.HeaderCell>
-                <Table.HeaderCell>Complaint</Table.HeaderCell>
+                <Table.HeaderCell>Complaint Description</Table.HeaderCell>
                 <Table.HeaderCell>Complain Type</Table.HeaderCell>
                 <Table.HeaderCell>Complain Status</Table.HeaderCell>
                 <Table.HeaderCell>Complain Date</Table.HeaderCell>

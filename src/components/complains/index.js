@@ -62,7 +62,7 @@ class Complains extends React.Component {
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>ID</Table.HeaderCell>
-                      <Table.HeaderCell>Complaint</Table.HeaderCell>
+                      <Table.HeaderCell>Complaint Description</Table.HeaderCell>
                       <Table.HeaderCell>Complain Type</Table.HeaderCell>
                       <Table.HeaderCell>Complain Status</Table.HeaderCell>
                       <Table.HeaderCell>Complain Date</Table.HeaderCell>
