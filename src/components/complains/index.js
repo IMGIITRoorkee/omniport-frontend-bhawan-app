@@ -65,7 +65,7 @@ class Complains extends React.Component {
                       <Table.HeaderCell>Complaint Description</Table.HeaderCell>
                       <Table.HeaderCell>Complain Type</Table.HeaderCell>
                       <Table.HeaderCell>Complain Status</Table.HeaderCell>
-                      <Table.HeaderCell>Complain Date</Table.HeaderCell>
+                      <Table.HeaderCell>Complain Date and Time</Table.HeaderCell>
                       <Table.HeaderCell>Applicant Room</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
@@ -80,7 +80,7 @@ class Complains extends React.Component {
                               <Table.Cell>{complain.description}</Table.Cell>
                               <Table.Cell>{constants.complaint_types[complain.complaintType]}</Table.Cell>
                               <Table.Cell>{constants.statues.COMLAINT_STATUSES[complain.status]}</Table.Cell>
-                              <Table.Cell>{moment(complain.datetimeCreated.substring(0,10), 'YYYY-MM-DD').format('DD/MM/YY')}</Table.Cell>
+                              <Table.Cell>{moment(complain.datetimeCreated).format('DD/MM/YY H:mm')}</Table.Cell>
                               <Table.Cell>{complain.roomNo}</Table.Cell>
                             </Table.Row>
                           )

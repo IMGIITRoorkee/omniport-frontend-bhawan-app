@@ -197,7 +197,7 @@ class ComplainRegister extends React.Component {
                 <Table.HeaderCell>Complaint Description</Table.HeaderCell>
                 <Table.HeaderCell>Complain Type</Table.HeaderCell>
                 <Table.HeaderCell>Complain Status</Table.HeaderCell>
-                <Table.HeaderCell>Complain Date</Table.HeaderCell>
+                <Table.HeaderCell>Complain Date and Time</Table.HeaderCell>
                 <Table.HeaderCell>Applicant Room</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -218,9 +218,8 @@ class ComplainRegister extends React.Component {
                         </Table.Cell>
                         <Table.Cell>
                           {moment(
-                            complain.datetimeCreated.substring(0, 10),
-                            'YYYY-MM-DD'
-                          ).format('DD/MM/YY')}
+                            complain.datetimeCreated
+                          ).format('DD/MM/YY H:mm')}
                         </Table.Cell>
                         <Table.Cell>{complain.roomNo}</Table.Cell>
                       </Table.Row>

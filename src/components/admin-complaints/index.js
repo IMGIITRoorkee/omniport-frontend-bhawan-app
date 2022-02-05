@@ -319,7 +319,7 @@ class AdminComplains extends Component {
                             <Table.HeaderCell>ID</Table.HeaderCell>
                             <Table.HeaderCell>Complaint Description</Table.HeaderCell>
                             <Table.HeaderCell>Applicant Name</Table.HeaderCell>
-                            <Table.HeaderCell>Complaint Date</Table.HeaderCell>
+                            <Table.HeaderCell>Complaint Date and Time</Table.HeaderCell>
                             <Table.HeaderCell>Complaint Type</Table.HeaderCell>
                             <Table.HeaderCell>Contact Number</Table.HeaderCell>
                             <Table.HeaderCell>Applicant Room</Table.HeaderCell>
@@ -342,9 +342,8 @@ class AdminComplains extends Component {
                                     <Table.Cell>{complain.complainant}</Table.Cell>
                                     <Table.Cell>
                                       {moment(
-                                        complain.datetimeCreated.substring(0, 10),
-                                        'YYYY-MM-DD'
-                                      ).format('DD/MM/YY')}
+                                        complain.datetimeCreated
+                                      ).format('DD/MM/YY H:mm')}
                                     </Table.Cell>
                                     <Table.Cell>
                                       {
@@ -453,7 +452,7 @@ class AdminComplains extends Component {
                                 <Table.HeaderCell>ID</Table.HeaderCell>
                                 <Table.HeaderCell>Complaint Description</Table.HeaderCell>
                                 <Table.HeaderCell>Applicant Name</Table.HeaderCell>
-                                <Table.HeaderCell>Complaint Date</Table.HeaderCell>
+                                <Table.HeaderCell>Complaint Date and Time</Table.HeaderCell>
                                 <Table.HeaderCell>Complaint Type</Table.HeaderCell>
                                 <Table.HeaderCell>Contact Number</Table.HeaderCell>
                                 <Table.HeaderCell>Applicant Room</Table.HeaderCell>
@@ -476,9 +475,8 @@ class AdminComplains extends Component {
                                         <Table.Cell>{complain.complainant}</Table.Cell>
                                         <Table.Cell>
                                           {moment(
-                                            complain.datetimeCreated.substring(0, 10),
-                                            'YYYY-MM-DD'
-                                          ).format('DD/MM/YY')}
+                                            complain.datetimeCreated
+                                          ).format('DD/MM/YY H:mm')}
                                         </Table.Cell>
                                         <Table.Cell>
                                           {
