@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Table, Header, Pagination, Segment } from 'semantic-ui-react'
+import { Table, Header, Pagination, Segment, Dropdown } from 'semantic-ui-react'
 
 import { Loading } from "formula_one"
 
@@ -10,11 +10,24 @@ import { complainsUrl } from '../../urls'
 import moment from 'moment'
 import './index.css'
 
+
+const entries = [
+  { key: '5', text: '5', value: '5' },
+  { key: '10', text: '10', value: '10' },
+  { key: '15', text: '15', value: '15' },
+  { key: '20', text: '20', value: '20' },
+  { key: '25', text: '25', value: '25' },
+  { key: '50', text: '50', value: '50' },
+  { key: '100', text: '100', value: '100' },
+  { key: '150', text: '150', value: '150' },
+]
+
 class Complains extends React.Component {
   state = {
     complainAgainID: null,
     activePage: 1,
     complainsLoading: true,
+    entryNo: '5',
   }
   componentDidMount() {
     this.props.getComplains(
@@ -27,6 +40,18 @@ class Complains extends React.Component {
     this.setState({ activePage, complainsLoading: true })
     this.props.getComplains(
       `${complainsUrl(this.props.activeHostel)}?page=${activePage}`,
+      this.complainsSuccessCallBack,
+      this.complainsErrCallBack
+    )
+  }
+
+  handleEntriesChange = (e, { value }) => {
+    this.setState({ entryNo: value })
+    this.setState({
+      pendingLoading: true
+    })
+    this.props.getComplains(
+      `${complainsUrl(this.props.activeHostel)}?page=${this.state.activePage}&perPage=${value}`,
       this.complainsSuccessCallBack,
       this.complainsErrCallBack
     )
@@ -46,7 +71,7 @@ class Complains extends React.Component {
 
   render() {
     const { complains, constants } = this.props
-    const { activePage, complainsLoading } = this.state
+    const { activePage, complainsLoading, entryNo } = this.state
 
     return (
       <React.Fragment>
@@ -75,7 +100,7 @@ class Complains extends React.Component {
                           return (
                             <Table.Row>
                               <Table.Cell>
-                                {5 * (activePage - 1) + index + 1}
+                                {entryNo * (activePage - 1) + index + 1}
                               </Table.Cell>
                               <Table.Cell>{complain.description}</Table.Cell>
                               <Table.Cell>{constants.complaint_types[complain.complaintType]}</Table.Cell>
@@ -89,13 +114,28 @@ class Complains extends React.Component {
                   </Table.Body>
                 </Table>
                 </div>
-                {complains.count > 5 ? (
-                  <Pagination
-                    activePage={activePage}
-                    onPageChange={this.handlePaginationChange}
-                    totalPages={Math.ceil(complains.count / 5)}
-                  />
-                ) : null}
+                <div styleName='pagination-container'>
+                  <div>
+                    {complains.count > entryNo ? (
+                      <Pagination
+                        activePage={activePage}
+                        onPageChange={this.handlePaginationChange}
+                        totalPages={Math.ceil(complains.count / entryNo)}
+                      />
+                    ) : null}
+                  </div>
+                  <div>
+                    Entries per page : 
+                      <Dropdown
+                        name='entries'
+                        selection
+                        options={entries}
+                        onChange={this.handleEntriesChange}
+                        value={entryNo}
+                        compact
+                      />
+                  </div>
+                </div>
                     </React.Fragment>
                   ):
                   (

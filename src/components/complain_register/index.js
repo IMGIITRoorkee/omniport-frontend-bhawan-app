@@ -24,6 +24,17 @@ import { getComplains } from '../../actions/complains';
 import { addComplaint } from '../../actions/add_complaint';
 import { complainsUrl } from '../../urls';
 
+const entries = [
+  { key: '5', text: '5', value: '5' },
+  { key: '10', text: '10', value: '10' },
+  { key: '15', text: '15', value: '15' },
+  { key: '20', text: '20', value: '20' },
+  { key: '25', text: '25', value: '25' },
+  { key: '50', text: '50', value: '50' },
+  { key: '100', text: '100', value: '100' },
+  { key: '150', text: '150', value: '150' },
+]
+
 class ComplainRegister extends React.Component {
   constructor(props) {
     super(props);
@@ -36,6 +47,7 @@ class ComplainRegister extends React.Component {
       message: '',
       activePage: 1,
       complainsLoading: true,
+      entryNo: '5',
     };
   }
 
@@ -75,6 +87,18 @@ class ComplainRegister extends React.Component {
       this.complainsErrCallBack
     );
   };
+
+  handleEntriesChange = (e, { value }) => {
+    this.setState({ entryNo: value })
+    this.setState({
+      pendingLoading: true
+    })
+    this.props.getComplains(
+      `${complainsUrl(this.props.activeHostel)}?page=${this.state.activePage}&perPage=${value}`,
+      this.complainsSuccessCallBack,
+      this.complainsErrCallBack
+    );
+  }
 
   handleSubmit = (e) => {
     let data = {
@@ -121,7 +145,7 @@ class ComplainRegister extends React.Component {
   };
   render() {
     const { complains, constants } = this.props;
-    const { activePage, loading, complainsLoading, complain, category } = this.state;
+    const { activePage, loading, complainsLoading, complain, category, entryNo } = this.state;
     let options = [];
     for (var i in constants.complaint_types) {
       options.push({
@@ -207,7 +231,7 @@ class ComplainRegister extends React.Component {
                     return (
                       <Table.Row>
                         <Table.Cell>
-                          {5 * (activePage - 1) + index + 1}
+                          {entryNo * (activePage - 1) + index + 1}
                         </Table.Cell>
                         <Table.Cell>{complain.description}</Table.Cell>
                         <Table.Cell>
@@ -229,13 +253,28 @@ class ComplainRegister extends React.Component {
             </Table.Body>
           </Table>
           </div>
-          {complains.count > 5 ? (
-            <Pagination
-              activePage={activePage}
-              onPageChange={this.handlePaginationChange}
-              totalPages={Math.ceil(complains.count / 5)}
-            />
-          ) : null}
+          <div styleName='pagination-container'>
+            <div>
+              {complains.count > entryNo ? (
+                <Pagination
+                  activePage={activePage}
+                    onPageChange={this.handlePaginationChange}
+                    totalPages={Math.ceil(complains.count / entryNo)}
+                />
+              ) : null}
+            </div>
+            <div>
+              Entries per page : 
+                <Dropdown
+                  name='entries'
+                  selection
+                  options={entries}
+                  onChange={this.handleEntriesChange}
+                  value={entryNo}
+                  compact
+                />
+            </div>
+          </div>
         </React.Fragment>
           ):
           (

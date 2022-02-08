@@ -82,6 +82,7 @@ class AdminComplains extends Component {
     foundType: false,
     foundId: 1,
     entryNo: '5',
+    entryAprNo: '5',
   }
 
   componentDidMount() {
@@ -279,6 +280,21 @@ class AdminComplains extends Component {
     )
   }
 
+  handlePastPaginationChange = (e, { activePage }) => {
+    this.setState({ activeAprPage: activePage })
+    this.setState({
+      pastLoading: true
+    })
+    this.props.getResolvedComplains(
+      `${statusComplainsUrl(this.props.activeHostel, [
+        'RESOLVED',
+        'UNRESOLVED',
+      ])}&page=${activePage}`,
+      this.pastSuccessCallBack,
+      this.pastErrCallBack
+    )
+  }
+
   handleEntriesChange = (e, { value }) => {
     this.setState({ entryNo: value })
     this.setState({
@@ -293,8 +309,8 @@ class AdminComplains extends Component {
     )
   }
 
-  handlePastPaginationChange = (e, { activePage }) => {
-    this.setState({ activeAprPage: activePage })
+  handlePastEntriesChange = (e, { value }) => {
+    this.setState({ entryAprNo: value })
     this.setState({
       pastLoading: true
     })
@@ -302,10 +318,10 @@ class AdminComplains extends Component {
       `${statusComplainsUrl(this.props.activeHostel, [
         'RESOLVED',
         'UNRESOLVED',
-      ])}&page=${activePage}`,
+      ])}&page=${this.state.activeAprPage}&perPage=${value}`,
       this.pastSuccessCallBack,
       this.pastErrCallBack
-    )
+    )   
   }
 
   increaseUnsuccesfulComplains = (id) => {
@@ -325,6 +341,7 @@ class AdminComplains extends Component {
       pendingLoading,
       pastLoading,
       entryNo,
+      entryAprNo,
     } = this.state
     const { pendingComplains, resolvedComplains, constants } = this.props
     return (
@@ -511,7 +528,7 @@ class AdminComplains extends Component {
                                     return (
                                       <Table.Row>
                                         <Table.Cell>
-                                          {5 * (activeAprPage - 1) + index + 1}
+                                          {entryAprNo * (activeAprPage - 1) + index + 1}
                                         </Table.Cell>
                                         <Table.Cell>{complain.description}</Table.Cell>
                                         <Table.Cell>{complain.complainant}</Table.Cell>
@@ -546,13 +563,28 @@ class AdminComplains extends Component {
                             </Table.Body>
                           </Table>
                         </div>
-                  {resolvedComplains.count > 5 ? (
-                    <Pagination
-                      activePage={activeAprPage}
-                      onPageChange={this.handlePastPaginationChange}
-                      totalPages={Math.ceil(resolvedComplains.count / 5)}
-                    />
-                  ) : null}
+                        <div styleName='pagination-container'>
+                        <div>
+                          {resolvedComplains.count > entryAprNo ? (
+                            <Pagination
+                              activePage={activeAprPage}
+                              onPageChange={this.handlePastPaginationChange}
+                              totalPages={Math.ceil(resolvedComplains.count / entryAprNo)}
+                            />
+                          ) : null}
+                        </div>
+                        <div>
+                          Entries per page : 
+                          <Dropdown
+                            name='entries'
+                            selection
+                            options={entries}
+                            onChange={this.handlePastEntriesChange}
+                            value={entryAprNo}
+                            compact
+                          />
+                        </div>
+                      </div>
                       </React.Fragment>
                     ):
                     <Segment>No resolved complains found</Segment>
