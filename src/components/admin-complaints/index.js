@@ -51,6 +51,17 @@ const types = [
   { key: 'cle', text: 'CLEANING', value: 'cle' },
 ]
 
+const entries = [
+  { key: '5', text: '5', value: '5' },
+  { key: '10', text: '10', value: '10' },
+  { key: '15', text: '15', value: '15' },
+  { key: '20', text: '20', value: '20' },
+  { key: '25', text: '25', value: '25' },
+  { key: '50', text: '50', value: '50' },
+  { key: '100', text: '100', value: '100' },
+  { key: '150', text: '150', value: '150' },
+]
+
 class AdminComplains extends Component {
   state = {
     open: false,
@@ -70,6 +81,7 @@ class AdminComplains extends Component {
     found: false,
     foundType: false,
     foundId: 1,
+    entryNo: '5',
   }
 
   componentDidMount() {
@@ -267,6 +279,20 @@ class AdminComplains extends Component {
     )
   }
 
+  handleEntriesChange = (e, { value }) => {
+    this.setState({ entryNo: value })
+    this.setState({
+      pendingLoading: true
+    })
+    this.props.getPendingComplains(
+      `${statusComplainsUrl(this.props.activeHostel, [
+        'PENDING',
+      ])}page=${this.state.activePage}&perPage=${value}`,
+      this.pendingSuccessCallBack,
+      this.pendingErrCallBack
+    )
+  }
+
   handlePastPaginationChange = (e, { activePage }) => {
     this.setState({ activeAprPage: activePage })
     this.setState({
@@ -297,7 +323,8 @@ class AdminComplains extends Component {
       activePage,
       activeAprPage,
       pendingLoading,
-      pastLoading
+      pastLoading,
+      entryNo,
     } = this.state
     const { pendingComplains, resolvedComplains, constants } = this.props
     return (
@@ -336,7 +363,7 @@ class AdminComplains extends Component {
                                 return (
                                   <Table.Row>
                                     <Table.Cell>
-                                      {5 * (activePage - 1) + index + 1}
+                                      {entryNo * (activePage - 1) + index + 1}
                                     </Table.Cell>
                                     <Table.Cell>{complain.description}</Table.Cell>
                                     <Table.Cell>{complain.complainant}</Table.Cell>
@@ -372,13 +399,28 @@ class AdminComplains extends Component {
                         </Table.Body>
                       </Table>
                       </div>
-                      {pendingComplains.count > 5 ? (
-                        <Pagination
-                          activePage={activePage}
-                          onPageChange={this.handlePaginationChange}
-                          totalPages={Math.ceil(pendingComplains.count / 5)}
-                        />
-                      ) : null}
+                      <div styleName='pagination-container'>
+                        <div>
+                          {pendingComplains.count > entryNo ? (
+                            <Pagination
+                              activePage={activePage}
+                              onPageChange={this.handlePaginationChange}
+                              totalPages={Math.ceil(pendingComplains.count / entryNo)}
+                            />
+                          ) : null}
+                        </div>
+                        <div>
+                          Entries per page : 
+                          <Dropdown
+                            name='entries'
+                            selection
+                            options={entries}
+                            onChange={this.handleEntriesChange}
+                            value={entryNo}
+                            compact
+                          />
+                        </div>
+                      </div>
                       </React.Fragment>
                     ):
                     (

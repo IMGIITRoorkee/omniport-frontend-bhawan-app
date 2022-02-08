@@ -18,6 +18,11 @@
 .info-icon{
     margin-left: 10px;
 }
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 .table-height {
     min-height: 280px;
     overflow-x: scroll;
