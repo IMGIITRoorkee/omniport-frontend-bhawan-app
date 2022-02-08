@@ -105,7 +105,7 @@ class Complains extends React.Component {
                               <Table.Cell>{complain.description}</Table.Cell>
                               <Table.Cell>{constants.complaint_types[complain.complaintType]}</Table.Cell>
                               <Table.Cell>{constants.statues.COMLAINT_STATUSES[complain.status]}</Table.Cell>
-                              <Table.Cell>{moment(complain.datetimeCreated).format('DD/MM/YY H:mm')}</Table.Cell>
+                              <Table.Cell>{moment(complain.datetimeCreated).format('DD/MM/YY, hh:mm a')}</Table.Cell>
                               <Table.Cell>{complain.roomNo}</Table.Cell>
                             </Table.Row>
                           )

@@ -387,7 +387,7 @@ class AdminComplains extends Component {
                                     <Table.Cell>
                                       {moment(
                                         complain.datetimeCreated
-                                      ).format('DD/MM/YY H:mm')}
+                                      ).format('DD/MM/YY, hh:mm a')}
                                     </Table.Cell>
                                     <Table.Cell>
                                       {
@@ -535,7 +535,7 @@ class AdminComplains extends Component {
                                         <Table.Cell>
                                           {moment(
                                             complain.datetimeCreated
-                                          ).format('DD/MM/YY H:mm')}
+                                          ).format('DD/MM/YY, hh:mm a')}
                                         </Table.Cell>
                                         <Table.Cell>
                                           {
