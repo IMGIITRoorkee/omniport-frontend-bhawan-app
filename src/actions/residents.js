@@ -58,3 +58,38 @@ export const getResidents = (url, successCallBack, errCallBack) => {
       })
   }
 }
+
+export const fetchPreviousRecords = (url, prevSuccessCallBack, prevErrCallBack) => {
+  return (dispatch) => {
+    axios({
+      method: 'get',
+      url: url
+    })
+      .then((response) => {
+        let item = response.data
+        prevSuccessCallBack(response)
+        dispatch({
+          type: 'GET_PREVIOUS_RESIDENTS',
+          payload: item
+        })
+      })
+      .catch((err) => {
+        prevErrCallBack(err)
+      })
+  }
+}
+
+export const markResident = (url, successCallBack, errCallBack) => {
+  return (dispatch) => {
+    axios({
+      method: 'get',
+      url: url
+    })
+      .then((response) => {
+        successCallBack(response)
+      })
+      .catch((err) => {
+        errCallBack(err)
+      })
+  }
+}

@@ -14,9 +14,16 @@ import {
 
 import { searchPerson } from '../../actions/searchPerson'
 import { searchResident } from '../../actions/search-resident'
-import { addResident, deregister } from '../../actions/residents'
+import { addResident, deregister, markResident } from '../../actions/residents'
 
-import { yellowPagesStudentUrl, residentSearchUrl, residentUrl, deregisterUrl } from '../../urls'
+import {
+  yellowPagesStudentUrl,
+  residentSearchUrl, 
+  residentUrl, 
+  deregisterUrl,
+  markInsideUrl,
+  markOutUrl,
+} from '../../urls'
 
 import './index.css'
 
@@ -169,6 +176,46 @@ class RegisterStudent extends React.Component {
     })
   }
 
+  markSuccessCallBack = (res) => {
+    toast({
+      type: 'success',
+      title: res.data,
+      animation: 'fade up',
+      icon: 'smile outline',
+      time: 4000,
+    })
+  }
+
+  markFailureCallBack = (err) => {
+    toast({
+      type: 'error',
+      title: "Unable to mark student please try again",
+      animation: 'fade up',
+      icon: 'frown outline',
+      time: 4000,
+    })
+  }
+
+  markInCampus = () => {
+    let url = markInsideUrl(this.props.activeHostel, this.state.selected.person.id)
+    
+    this.props.markResident(
+      url,
+      this.markSuccessCallBack,
+      this.markFailureCallBack
+    )
+  }
+
+  markOutCampus = () => {
+    let url = markOutUrl(this.props.activeHostel, this.state.selected.person.id)
+    
+    this.props.markResident(
+      url,
+      this.markSuccessCallBack,
+      this.markFailureCallBack
+    )
+  }
+
   deRegisterStudent = () => {
     let url = deregisterUrl(this.props.activeHostel, this.state.selected.person.id)
     this.setState({
@@ -198,7 +245,6 @@ class RegisterStudent extends React.Component {
     this.setState({
       deregisterLoading: false,
     })
-    console.log()
     toast({
       type: 'error',
       title: "Unable to register student please try again",
@@ -467,24 +513,45 @@ class RegisterStudent extends React.Component {
                   />
                 </Form.Field>
               </Form.Group>
-              <Button
-                primary
-                type='submit'
-                loading={registerLoading}
-                onClick={this.registerStudent}
-                disabled={!roomNo || !selected}
-              >
-                Register
-              </Button>
-              <Button
-                secondary
-                type='submit'
-                onClick={this.deRegisterStudent}
-                loading={deregisterLoading}
-                disabled={!selected}
-              >
-                Deregister
-              </Button>
+              <div>
+                <Button
+                  primary
+                  type='submit'
+                  loading={registerLoading}
+                  onClick={this.registerStudent}
+                  disabled={!roomNo || !selected}
+                >
+                  Register
+                </Button>
+                <Button
+                  secondary
+                  type='submit'
+                  onClick={this.deRegisterStudent}
+                  loading={deregisterLoading}
+                  disabled={!selected}
+                >
+                  Deregister
+                </Button>
+              </div>
+              <div>
+                <Button
+                  primary
+                  type='submit'
+
+                  onClick={this.markInCampus}
+                  disabled={!roomNo || !selected}
+                >
+                  Mark Inside Campus
+                </Button>
+                <Button
+                  secondary
+                  type='submit'
+                  onClick={this.markOutCampus}
+                  disabled={!roomNo || !selected}
+                >
+                  Mark Out of Campus
+                </Button>
+              </div>
             </Form>
           </Container>
         </Grid.Column>
@@ -514,6 +581,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     deregister: (url, successCallBack, errCallBack) => {
       dispatch(deregister(url, successCallBack, errCallBack))
+    },
+    markResident: (url, successCallBack, errCallBack) => {
+      dispatch(markResident(url, successCallBack, errCallBack))
     }
   }
 }

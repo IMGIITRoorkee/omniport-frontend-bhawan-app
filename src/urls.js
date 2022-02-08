@@ -126,3 +126,9 @@ export const residentDownloadUrl = (residence) => {
 export const deregisterUrl = (residence, person) => {
   return `${baseApiUrl()}${residence}/resident/${person}/deregister/`
 }
+export const markInsideUrl = (residence, person) => {
+  return `${baseApiUrl()}${residence}/resident/${person}/markin/`
+}
+export const markOutUrl = (residence, person) => {
+  return `${baseApiUrl()}${residence}/resident/${person}/markout/`
+}

@@ -20,6 +20,7 @@ import searchResidentResult from './searchResident'
 import residents from './residents'
 import activeHostel from './active-hostel'
 import activePost from './active-post'
+import previousRecords from './previousRecords'
 
 const rootReducers = combineReducers({
   activeDay: activeDay,
@@ -42,6 +43,7 @@ const rootReducers = combineReducers({
   searchPersonResults: searchPersonResults,
   searchResidentResult: searchResidentResult,
   residents: residents,
+  previousRecords: previousRecords,
   activePost: activePost
 })
 
