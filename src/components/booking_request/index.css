@@ -8,6 +8,11 @@
 .booking-menu {
     border-bottom: 1px solid transparent;
 }
+.booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
 .forward {
     color: #00661D;
     cursor: pointer;

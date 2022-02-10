@@ -51,6 +51,10 @@ export const complainsUrl = (residence) => {
   return `${baseApiUrl()}${residence}/complaint/`
 }
 
+export const complainsDownloadUrl = (residence) => {
+  return `${baseApiUrl()}${residence}/complaint/download/`
+}
+
 export const statusComplainsUrl = (residence, statuses) => {
   let allStatus = '?'
   statuses.map((status) => {
@@ -66,6 +70,10 @@ export const increaseUnsuccesfulComplainsUrl = (residence, id) => {
 
 export const bookingsUrl = (residence, past) => {
   return `${baseApiUrl()}${residence}/room_booking/?past=${past}`
+}
+
+export const bookingsDownloadUrl = (residence) => {
+  return `${baseApiUrl()}${residence}/room_booking/download/`
 }
 
 export const yellowPagesUrl = (searchObject) => {
