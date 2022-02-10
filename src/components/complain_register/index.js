@@ -23,7 +23,7 @@ import './index.css';
 import { getComplains } from '../../actions/complains';
 import { addComplaint } from '../../actions/add_complaint';
 import { complainsUrl } from '../../urls';
-import { entries } from '../../constants';
+import { entries } from '../constants';
 
 
 class ComplainRegister extends React.Component {

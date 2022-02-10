@@ -30,7 +30,7 @@ import {
   increaseUnsuccesfulComplainsUrl,
   timeSlotsUrl,
 } from '../../urls'
-import { days, types, entries } from '../../constants'
+import { days, types, entries } from '../constants'
 
 import { toast } from 'react-semantic-toasts'
 import './index.css'
