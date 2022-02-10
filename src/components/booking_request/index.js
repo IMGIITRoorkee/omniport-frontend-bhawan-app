@@ -10,7 +10,7 @@ import {
 } from '../../actions/get-room-bookings'
 import { updateBooking } from '../../actions/book-room'
 
-import { statusBookingsUrl, specificBookingUrl } from '../../urls'
+import { statusBookingsUrl, specificBookingUrl, bookingsDownloadUrl } from '../../urls'
 
 import {
   Menu,
@@ -43,7 +43,8 @@ class BookingRequests extends Component {
     activePage: 1,
     openReject: false,
     presentLoading: true,
-    pastLoading: true
+    pastLoading: true,
+    bookingDownloadUrl: '',
   }
 
   componentDidMount() {
@@ -90,6 +91,9 @@ class BookingRequests extends Component {
         this.pastErrCallBack
       )
     }
+    this.setState({
+      bookingDownloadUrl: bookingsDownloadUrl(this.props.activeHostel)
+    })
   }
 
   close = () => this.setState({ open: false, openReject: false })
@@ -274,6 +278,7 @@ class BookingRequests extends Component {
       activePage,
       activeAprPage,
       presentLoading,
+      bookingDownloadUrl,
     } = this.state
     const {
       presentBookingRequests,
@@ -291,7 +296,16 @@ class BookingRequests extends Component {
         )}
         {this.state.success && <Message positive>{this.state.message}</Message>}
         <Container>
+          <div styleName="booking-header">
           <Header as='h4'>Room Bookings</Header>
+            <a href={bookingDownloadUrl} download>
+              <Button
+              primary
+              >
+                Download list
+              </Button>
+            </a>
+          </div>
           {!presentLoading?
             (
               <React.Fragment>

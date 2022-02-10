@@ -29,8 +29,9 @@ import {
   statusComplainsUrl,
   increaseUnsuccesfulComplainsUrl,
   timeSlotsUrl,
+  complainsDownloadUrl,
 } from '../../urls'
-import { days, types, entries } from '../../constants'
+import { days, types, entries } from '../constants'
 
 import { toast } from 'react-semantic-toasts'
 import './index.css'
@@ -57,6 +58,7 @@ class AdminComplains extends Component {
     foundId: 1,
     entryNo: '5',
     entryAprNo: '5',
+    complainsDownloadUrl: '',
   }
 
   componentDidMount() {
@@ -75,6 +77,9 @@ class AdminComplains extends Component {
       this.pastErrCallBack
     )
     this.props.getTimeSlots(this.props.activeHostel)
+    this.setState({
+      complainsDownloadUrl: complainsDownloadUrl(this.props.activeHostel)
+    })
   }
 
   show = (id) => {
@@ -316,13 +321,23 @@ class AdminComplains extends Component {
       pastLoading,
       entryNo,
       entryAprNo,
+      complainsDownloadUrl
     } = this.state
     const { pendingComplains, resolvedComplains, constants } = this.props
     return (
       <Grid container>
           <Grid.Column width={16}>
             <Container>
-              <Header as='h4'>Student Complains and Feedback</Header>
+              <div styleName="complain-header">
+                <Header as='h4'>Student Complains and Feedback</Header>
+                <a href={complainsDownloadUrl} download>
+                  <Button
+                  primary
+                  >
+                    Download list
+                  </Button>
+                </a>
+              </div>
               {!pendingLoading?
                 (
                   <React.Fragment>

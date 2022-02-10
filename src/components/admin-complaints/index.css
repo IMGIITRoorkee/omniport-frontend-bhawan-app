@@ -8,6 +8,11 @@
 .complain-menu {
     border-bottom: 1px solid transparent;
 }
+.complain-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
 .resolve-style {
     color: #00661D;
     cursor: pointer;
