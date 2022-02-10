@@ -13,6 +13,11 @@
     justify-content: space-between;
     align-items: baseline;
 }
+
+.complain-header > div {
+    margin-right: 0.5rem;
+}
+
 .resolve-style {
     color: #00661D;
     cursor: pointer;
