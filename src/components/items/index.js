@@ -19,7 +19,7 @@ import moment from 'moment'
 
 import { Loading } from "formula_one";
 
-import { itemsUrl, defaultItemsUrl,} from '../../urls'
+import { itemsUrl, defaultItemsUrl, itemsDownloadUrl} from '../../urls'
 
 import { getDefaultItems } from '../../actions/default-items'
 import { getItems } from '../../actions/items'
@@ -35,6 +35,7 @@ class Items extends Component {
     loading: true,
     entryNo: '5',
     itemName: '',
+    itemDownloadUrl: '',
   };
 
   componentDidMount() {
@@ -46,6 +47,9 @@ class Items extends Component {
       this.successCallBack,
       this.errCallBack
     )
+    this.setState({
+      itemDownloadUrl: itemsDownloadUrl(this.props.activeHostel)
+    })
   }
 
   handleChange = (event, { name, value }) => {
@@ -134,17 +138,40 @@ class Items extends Component {
       loading,
       entryNo,
       open,
-      itemName
+      itemName,
+      itemDownloadUrl
     } = this.state
     const { items, defaultItems, constants } = this.props
     
     return (
       <div>
-        <div styleName="item-header">
+        {/* <div styleName="item-header">
           <Header as='h4'>Complaint Items </Header>
             <Button primary onClick={this.show}>
               Add Item
             </Button>
+            <a href={itemDownloadUrl} download>
+              <Button
+                primary
+              >
+                Download list
+              </Button>
+            </a>
+        </div> */}
+        <div styleName="item-header">
+          <Header as='h4'>Complaint Items</Header>
+            <div styleName="item-header">
+              <Button basic onClick={this.show} color='blue'>
+                Add Item
+              </Button>
+              <a href={itemDownloadUrl} download>
+                <Button
+                  primary
+                >
+                  Download list
+                </Button>
+              </a>
+              </div>
         </div>
         <Container>
         {!loading?

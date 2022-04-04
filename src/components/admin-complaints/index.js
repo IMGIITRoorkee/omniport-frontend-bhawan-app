@@ -179,6 +179,7 @@ class AdminComplains extends Component {
       remark: this.state.remark,
     }
     {this.state.complaint_item.map((element, index) => {
+
       const data = {
         complaint: this.state.activeId,
         default_item: element.default_item,
@@ -439,7 +440,7 @@ class AdminComplains extends Component {
                     value={residentSearch}
                     onChange={this.handleResidentSearch}
                     icon="search"
-                    placeholder="Filter by Name/Enrollment no."
+                    placeholder="Search by Name/Enrollment no."
                   />
                   <a href={complainsDownloadUrl} download>
                     <Button
@@ -765,6 +766,7 @@ class AdminComplains extends Component {
                       id = {index}
                       type='number'
                       onChange={(event) => this.handleQuantityChange(index, event)}
+                      min={1}
                     />
                   </Form.Field>
                 </Form.Group>

@@ -63,6 +63,10 @@ export const itemsUrl = (residence) => {
   return `${baseApiUrl()}${residence}/item/`
 }
 
+export const itemsDownloadUrl = (residence) => {
+  return `${baseApiUrl()}${residence}/item/download/`
+}
+
 export const defaultItemsUrl = (residence) => {
   return `${baseApiUrl()}${residence}/default_item/`
 }
