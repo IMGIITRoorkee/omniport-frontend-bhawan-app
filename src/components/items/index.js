@@ -145,19 +145,6 @@ class Items extends Component {
     
     return (
       <div>
-        {/* <div styleName="item-header">
-          <Header as='h4'>Complaint Items </Header>
-            <Button primary onClick={this.show}>
-              Add Item
-            </Button>
-            <a href={itemDownloadUrl} download>
-              <Button
-                primary
-              >
-                Download list
-              </Button>
-            </a>
-        </div> */}
         <div styleName="item-header">
           <Header as='h4'>Complaint Items</Header>
             <div styleName="item-header">
