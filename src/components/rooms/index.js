@@ -80,21 +80,6 @@ class Rooms extends Component {
     }
   }
 
-  // handleSubmit = (e) => {
-  //   let data = {
-  //     name: this.state.itemName.trim(),
-  //   };
-  //   this.setState({
-  //     loading: true,
-  //   })
-  //   this.props.addDefaultItem(
-  //     data,
-  //     this.props.activeHostel,
-  //     this.defaultItemSuccessCallBack,
-  //     this.defaultItemErrCallBack
-  //   );
-  // };
-
   successCallBack = () => {
     this.setState({
       loading: false,
