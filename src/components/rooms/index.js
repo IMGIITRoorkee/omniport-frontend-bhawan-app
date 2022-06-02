@@ -19,10 +19,11 @@ import { toast } from 'react-semantic-toasts'
 
 import { Loading } from "formula_one";
 
-import { roomsUrl, studentAccommodationsUrl, specificUpdateRoomUrl} from '../../urls'
+import { roomsUrl, studentAccommodationsUrl, specificRoomUrl, specificAccommodationUrl} from '../../urls'
 import { getRooms } from '../../actions/rooms'
 import { getStudentAcccommodation } from '../../actions/student_accommodation'
 import { updateRooms } from '../../actions/update_rooms'
+import { updateStudentAccommodation } from '../../actions/update_student_accommodation'
 
 import './index.css'
 
@@ -33,8 +34,9 @@ class Rooms extends Component {
     message: '',
     loading: true,
     netAccommodation: [],
-    enableEdit: Array(15).fill(false),
-    changedData: []
+    enableEdit: Array(16).fill(false),
+    changedData: [],
+    changedStudentData: {},
   };
 
   componentDidMount() {
@@ -54,7 +56,7 @@ class Rooms extends Component {
     }
   }
 
-  calculateAccomodation() {
+  calculateAccommodation() {
     const { rooms, studentAccommodation, constants } = this.props
     if(constants && constants.room_occupancy_list.length>0 && rooms && rooms.length>0 && 
           studentAccommodation && studentAccommodation.length>0){
@@ -89,23 +91,29 @@ class Rooms extends Component {
   handleSubmit = () => {
       const {changedData} = this.state
       changedData.map((room,index) => {
-        const occupancy = room.name.slice(0,3)
-        const roomType = room.name.slice(3,6)
         const id = room.id
         if(room.value=='')
         room.value=0
         let data = {
-          occupancy: occupancy,
-          roomType: roomType,
           count: room.value
         }
         this.props.updateRooms(
-            specificUpdateRoomUrl(this.props.activeHostel, id),
+            specificRoomUrl(this.props.activeHostel, id),
             data,
             this.successUpdateCallBack,
             this.errUpdateCallBack
         )
       })
+      const {changedStudentData} = this.state
+      if(Object.keys(changedStudentData).length !== 0){
+          const id = changedStudentData.id
+          this.props.updateStudentAccommodation(
+            specificAccommodationUrl(this.props.activeHostel, id),
+            changedStudentData,
+            this.successUpdateCallBack,
+            this.errUpdateCallBack
+          )
+      }
   }
 
   successUpdateCallBack = (res) => {
@@ -119,19 +127,12 @@ class Rooms extends Component {
     )
     this.setState({
       netAccommodation: [],
+      changedStudentData: {},
       enableEdit: Array(15).fill(false),
       changedData: [],
       success: true,
       error: false,
       message: res.statusText,
-    })
-    toast({
-      type: 'success',
-      title: 'Accommodation Data Updated',
-      description: 'Accommodation Data Updated',
-      animation: 'fade up',
-      icon: 'smile outline',
-      time: 4000,
     })
   }
 
@@ -154,7 +155,6 @@ class Rooms extends Component {
     this.setState({
       loading: false,
     })
-    this.calculateAccomodation()
   }
 
   errCallBack = () => {
@@ -185,6 +185,15 @@ class Rooms extends Component {
     this.setState({ changedData : data })
   }
 
+  handleStudentEdit = (id, event, { name, value }) => {
+    let data = this.state.changedStudentData
+    data['id']=id
+    if(value=='')
+    value=0
+    data[name]=value
+    this.setState({ changedStudentData : data })
+  }
+
   render() {
     const {
       loading,
@@ -193,11 +202,11 @@ class Rooms extends Component {
       enableEdit,
     } = this.state
     const { rooms, studentAccommodation, constants } = this.props
-    this.calculateAccomodation()
+    this.calculateAccommodation()
     return (
       <div>
         <div styleName="item-header">
-          <Header as='h4'>Net Accomodation </Header>
+          <Header as='h4'>Net Accommodation </Header>
         </div>
         <Container>
         {!loading?
@@ -237,7 +246,6 @@ class Rooms extends Component {
                                                 name={`${room.occupancy}${room.roomType}`}
                                                 type='number'
                                                 defaultValue={room.count}
-                                                // onChange={this.handleEdit}
                                                 onChange={(event, value) => this.handleEdit(room.id, event, value)}
                                               />
                                             )
@@ -258,16 +266,39 @@ class Rooms extends Component {
                         return(
                           <Table.Row>
                           <Table.Cell>PRESENTLY RESIDING IN THE CAMPUS</Table.Cell>
-                          <Table.Cell>{accommodation.residingInSingle}</Table.Cell>
-                          <Table.Cell>{accommodation.residingInDouble}</Table.Cell>
-                          <Table.Cell>{accommodation.residingInTriple}</Table.Cell>
+                          {constants && constants.room_occupancy_list && constants.room_occupancy_list.map((occupancy,index) => {4
+                                let seat
+                                if(index==0)
+                                  seat='residingInSingle'
+                                else if(index==1)
+                                  seat='residingInDouble'
+                                else
+                                  seat='residingInTriple'
+                                return(
+                                  <Table.Cell onClick={() => this.changeEditable(12+index)}>
+                                    {(studentAccommodation && enableEdit[12+index])
+                                      ? 
+                                        (
+                                          <Input
+                                            name={seat}
+                                            type='number'
+                                            defaultValue={studentAccommodation[0][seat]}
+                                            onChange={(event, value) => this.handleStudentEdit(studentAccommodation[0].id, event, value)}
+                                          />
+                                        )
+                                      : studentAccommodation[0][seat]
+                                    }
+                                  </Table.Cell>
+                                )
+                            })
+                          }
                           <Table.Cell>{total_seats}</Table.Cell>
                           </Table.Row>
                         )
                       })   
                       }
                       <Table.Row>
-                          <Table.Cell>Net Accomodation for Students</Table.Cell>
+                          <Table.Cell>Net Accommodation for Students</Table.Cell>
                           {netAccommodation && netAccommodation.length > 0 && netAccommodation.map((accommodation,index) => {
                               return(
                                 <Table.Cell>{accommodation}</Table.Cell>
@@ -278,10 +309,10 @@ class Rooms extends Component {
                       <Table.Row>
                           <Table.Cell></Table.Cell>
                           {netAccommodation && netAccommodation.length > 0 && netAccommodation.map((accommodation,index) => {
-                              let total_net_accomodation=accommodation*(index+1)
+                              let total_net_accommodation=accommodation*(index+1)
                               if(index<3)
                               return(
-                                <Table.Cell>{accommodation}x{index+1}={total_net_accomodation}</Table.Cell>
+                                <Table.Cell>{accommodation}x{index+1}={total_net_accommodation}</Table.Cell>
                               )
                               else
                               return(
@@ -292,10 +323,23 @@ class Rooms extends Component {
                       </Table.Row>
                         <Table.Row>
                           <Table.Cell colSpan='4' textAlign='center'>NUMBER OF STUDENTS NEED ACCOMMODATION</Table.Cell>
-                          <Table.Cell>{studentAccommodation && studentAccommodation[0].totalNeedAccommodation}</Table.Cell>
+                          <Table.Cell onClick={() => this.changeEditable(15)}>
+                            {(studentAccommodation && enableEdit[15])
+                              ? 
+                                (
+                                  <Input
+                                    name='totalNeedAccommodation'
+                                    type='number'
+                                    defaultValue={studentAccommodation[0].totalNeedAccommodation}
+                                    onChange={(event, value) => this.handleStudentEdit(studentAccommodation[0].id, event, value)}
+                                  />
+                                )
+                              : studentAccommodation[0].totalNeedAccommodation
+                            }
+                          </Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                          <Table.Cell colSpan='4' textAlign='center'>NET SHORTAGE/VACANCY OF SEATS AFTER ACCOMODATING STUDENTS</Table.Cell>
+                          <Table.Cell colSpan='4' textAlign='center'>NET SHORTAGE/VACANCY OF SEATS AFTER ACCOMMODATING STUDENTS</Table.Cell>
                           <Table.Cell>{netAccommodation && netAccommodation.length > 0 && 
                                         netAccommodation[3]-studentAccommodation[0].totalNeedAccommodation}</Table.Cell>
                         </Table.Row>
@@ -311,7 +355,7 @@ class Rooms extends Component {
                 </div>
                 ):
                 (
-                  <Segment>No accomodation information found</Segment>
+                  <Segment>No accommodation information found</Segment>
                 )
               }
             </React.Fragment>
@@ -345,6 +389,11 @@ const mapDispatchToProps = (dispatch) => {
     updateRooms: (id, data, residence, successCallBack, errCallBack) => {
       dispatch(
         updateRooms(id, data, residence, successCallBack, errCallBack)
+      )
+    },
+    updateStudentAccommodation: (id, data, residence, successCallBack, errCallBack) => {
+      dispatch(
+        updateStudentAccommodation(id, data, residence, successCallBack, errCallBack)
       )
     },
   }

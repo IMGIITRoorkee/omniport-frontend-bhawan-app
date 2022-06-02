@@ -112,7 +112,7 @@ export const specificBookingUrl = (residence, id) => {
   return `${baseApiUrl()}${residence}/room_booking/${id}/`
 }
 
-export const specificUpdateRoomUrl = (residence, id) => {
+export const specificRoomUrl = (residence, id) => {
   return `${baseApiUrl()}${residence}/room/${id}/`
 }
 
@@ -144,33 +144,47 @@ export const facilitiesUrl = (residence) => {
 export const facilityUrl = (residence, id) => {
   return `${baseApiUrl()}${residence}/facility/${id}/`
 }
+
 export const authoritiesUrl = (residence) => {
   return `${baseApiUrl()}${residence}/admin/`
 }
+
 export const specificAuthoritiesUrl = (residence, id) => {
   return `${baseApiUrl()}${residence}/admin/${id}/`
 }
+
 export const residentSearchUrl = (residence, enrollmentNo) => {
   return `${baseApiUrl()}${residence}/resident/${enrollmentNo}/`
 }
+
 export const residentUrl = (residence) => {
   return `${baseApiUrl()}${residence}/resident/`
 }
+
 export const residentDownloadUrl = (residence) => {
   return `${baseApiUrl()}${residence}/resident/download/`
 }
+
 export const roomsUrl = (residence) => {
   return `${baseApiUrl()}${residence}/room/`
 }
+
 export const studentAccommodationsUrl = (residence) => {
   return `${baseApiUrl()}${residence}/student_accommodation/`
 }
+
+export const specificAccommodationUrl = (residence, id) => {
+  return `${baseApiUrl()}${residence}/student_accommodation/${id}/`
+}
+
 export const deregisterUrl = (residence, person) => {
   return `${baseApiUrl()}${residence}/resident/${person}/deregister/`
 }
+
 export const markInsideUrl = (residence, person) => {
   return `${baseApiUrl()}${residence}/resident/${person}/markin/`
 }
+
 export const markOutUrl = (residence, person) => {
   return `${baseApiUrl()}${residence}/resident/${person}/markout/`
 }

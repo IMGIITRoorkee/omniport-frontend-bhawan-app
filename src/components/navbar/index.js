@@ -315,7 +315,7 @@ class Nav extends Component {
               active={activeSubGroup == 'room'}
               onClick={() => this.handleGroupClick('room', '/bhawan_app/room')}
             >
-              Accomodation
+              Accommodation
             </Menu.Item>
           </Menu>
         ) : (
