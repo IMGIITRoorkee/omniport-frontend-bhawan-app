@@ -61,6 +61,7 @@ class Rooms extends Component {
     if(constants && constants.room_occupancy_list.length>0 && rooms && rooms.length>0 && 
           studentAccommodation && studentAccommodation.length>0){
       let total_seats=0,net_accommodation=[];
+      constants.room_occupancy_list.sort()
       constants.room_occupancy_list.map((seat,index) => {
         let netAccommodation=0;
         rooms.map((room,index) => {
@@ -171,7 +172,7 @@ class Rooms extends Component {
 
   handleEdit = (id, event, { name, value }) => {
     let data = this.state.changedData
-    const index = data.findIndex(room => room.name == name)
+    const index = data.findIndex(room => room.id == id)
     if(index==-1){
       data.push({
         id:id,
@@ -180,7 +181,7 @@ class Rooms extends Component {
       })
     }
     else{
-      data[index].value=parseInt(value)
+      data[index].value=value
     }
     this.setState({ changedData : data })
   }
@@ -227,9 +228,12 @@ class Rooms extends Component {
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                      {constants.room_types_list && constants.room_types_list.length > 0
+                      {constants.room_types_list && constants.room_types_list.length > 0 && rooms && rooms.length>0
                         ? constants.room_types_list.map((type, row_index) => {
                             let total_seats=0, occupancy=1
+                            rooms.sort(function(a, b) {
+                              return a.occupancy.localeCompare(b.occupancy);
+                            });
                             return (
                               <Table.Row key={row_index}>
                                 <Table.Cell>{constants.room_types[type]}</Table.Cell>
