@@ -20,6 +20,8 @@ import searchPersonResults from './searchPerson'
 import presentBookingRequests from './present-bookings'
 import searchResidentResult from './searchResident'
 import residents from './residents'
+import rooms from './rooms'
+import studentAccommodation from './studentAccommodation'
 import activeHostel from './active-hostel'
 import activePost from './active-post'
 import previousRecords from './previousRecords'
@@ -47,6 +49,8 @@ const rootReducers = combineReducers({
   searchPersonResults: searchPersonResults,
   searchResidentResult: searchResidentResult,
   residents: residents,
+  rooms: rooms,
+  studentAccommodation: studentAccommodation,
   previousRecords: previousRecords,
   activePost: activePost
 })

@@ -1,0 +1,23 @@
+.center{
+    display: flex !important;
+    justify-content: center;
+}
+.modalActions{
+    display: flex;
+}
+.table-overflow {
+    overflow-x: scroll;
+    width: auto;
+    display: block;
+    margin: 0.5em;
+}
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}

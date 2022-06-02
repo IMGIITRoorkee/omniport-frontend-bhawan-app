@@ -24,6 +24,7 @@ const AdminAuthorities = lazy(() => import("./admin_authorities/index"))
 const EditAuthorities = lazy(() => import("./edit-authorities/index"))
 const AddFacility = lazy(() => import("./add-facility/index"))
 const RegisterStudent = lazy(() => import("./register_student/index"))
+const Rooms = lazy(() => import("./rooms/index"))
 
 import { whoami } from "../actions/who_am_i";
 import { getConstants } from "../actions/get-constants";
@@ -330,7 +331,7 @@ class App extends React.Component {
                             />
                           )}
                         />
-                        <Route
+                      <Route
                           path={`${match.path}registration`}
                           render={(props) => (
                             <RegisterStudent
@@ -339,7 +340,19 @@ class App extends React.Component {
                              {...this.props}
                             />
                           )}
-                        />
+                      />
+                      <Route
+                          path={`${match.path}room`}
+                          exact
+                          render={(props) => (
+                            <Rooms
+                              who_am_i={who_am_i}
+                              constants={constants}
+                              setNavigation={this.setNavigation}
+                              {...props}
+                            />
+                          )}
+                      />  
                     </Switch>
                     <Switch>
                       <Route

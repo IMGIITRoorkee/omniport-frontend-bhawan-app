@@ -24,7 +24,8 @@ import {
   eventUrl,
   complainUrl,
   registrationUrl,
-  databaseUrl
+  databaseUrl,
+  roomUrl
 } from '../../urls'
 
 const hamburgerDefaultOptions = [
@@ -98,6 +99,12 @@ class Nav extends Component {
       case databaseUrl(): {
         this.setState({
           activeSubGroup: 'database'
+        })
+        return
+      }
+      case roomUrl(): {
+        this.setState({
+          activeSubGroup: 'rooms'
         })
         return
       }
@@ -299,6 +306,16 @@ class Nav extends Component {
               onClick={() => this.handleGroupClick('register', '/bhawan_app/registration')}
             >
               Register New Student
+            </Menu.Item>
+            <Menu.Item
+              size='mini'
+              name='room'
+              color='blue'
+              styleName='navCss.navColor'
+              active={activeSubGroup == 'room'}
+              onClick={() => this.handleGroupClick('room', '/bhawan_app/room')}
+            >
+              Accomodation
             </Menu.Item>
           </Menu>
         ) : (

@@ -45,6 +45,10 @@ export const registrationUrl = () => {
   return `${baseNavUrl('/registration')}`
 }
 
+export const roomUrl = () => {
+  return `${baseNavUrl('/room')}`
+}
+
 export const databaseUrl = () => {
   return `${baseNavUrl('/database')}`
 }
@@ -150,6 +154,12 @@ export const residentUrl = (residence) => {
 }
 export const residentDownloadUrl = (residence) => {
   return `${baseApiUrl()}${residence}/resident/download/`
+}
+export const roomsUrl = (residence) => {
+  return `${baseApiUrl()}${residence}/room/`
+}
+export const studentAccommodationsUrl = (residence) => {
+  return `${baseApiUrl()}${residence}/student_accommodation/`
 }
 export const deregisterUrl = (residence, person) => {
   return `${baseApiUrl()}${residence}/resident/${person}/deregister/`
