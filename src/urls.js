@@ -112,6 +112,10 @@ export const specificBookingUrl = (residence, id) => {
   return `${baseApiUrl()}${residence}/room_booking/${id}/`
 }
 
+export const specificUpdateRoomUrl = (residence, id) => {
+  return `${baseApiUrl()}${residence}/room/${id}/`
+}
+
 export const constantsUrl = () => {
   return `${baseApiUrl()}constants/`
 }

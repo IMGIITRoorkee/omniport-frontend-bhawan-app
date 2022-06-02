@@ -15,22 +15,26 @@ import {
    Form,
    Tab
   } from 'semantic-ui-react'
-
-import moment from 'moment'
+import { toast } from 'react-semantic-toasts'
 
 import { Loading } from "formula_one";
 
-import { roomsUrl, studentAccommodationsUrl} from '../../urls'
+import { roomsUrl, studentAccommodationsUrl, specificUpdateRoomUrl} from '../../urls'
 import { getRooms } from '../../actions/rooms'
 import { getStudentAcccommodation } from '../../actions/student_accommodation'
+import { updateRooms } from '../../actions/update_rooms'
 
 import './index.css'
 
 class Rooms extends Component {
   state = {
-    open: false,
+    success: false,
+    err: false,
+    message: '',
     loading: true,
-    net_accommodation: [],
+    netAccommodation: [],
+    enableEdit: Array(15).fill(false),
+    changedData: []
   };
 
   componentDidMount() {
@@ -54,30 +58,96 @@ class Rooms extends Component {
     const { rooms, studentAccommodation, constants } = this.props
     if(constants && constants.room_occupancy_list.length>0 && rooms && rooms.length>0 && 
           studentAccommodation && studentAccommodation.length>0){
-      let total_seats=0;
+      let total_seats=0,net_accommodation=[];
       constants.room_occupancy_list.map((seat,index) => {
-        let net_accommodation=0;
+        let netAccommodation=0;
         rooms.map((room,index) => {
           if(room.occupancy==seat){
             if(constants.room_types[room.roomType]=='TOTAL CONSTRUCTED ROOMS')
-              net_accommodation+=room.count
+              netAccommodation+=room.count
             else
-              net_accommodation-=room.count
+              netAccommodation-=room.count
           }
         })
         studentAccommodation.map((accommodation,index) => {
           if(constants.room_occupancy[seat]=='SINGLE')
-            net_accommodation-=accommodation.residingInSingle
+            netAccommodation-=accommodation.residingInSingle
           else if(constants.room_occupancy[seat]=='DOUBLE')
-            net_accommodation-=accommodation.residingInDouble
+            netAccommodation-=accommodation.residingInDouble
           else
-            net_accommodation-=accommodation.residingInTriple
+            netAccommodation-=accommodation.residingInTriple
         })
-        total_seats+=(net_accommodation*(index+1))
-        this.state.net_accommodation.push(net_accommodation)
+        total_seats+=(netAccommodation*(index+1))
+        net_accommodation.push(netAccommodation)
       })
-      this.state.net_accommodation.push(total_seats)
+      net_accommodation.push(total_seats)
+      if( JSON.stringify(this.state.netAccommodation) !== JSON.stringify(net_accommodation))
+      this.setState({ netAccommodation : net_accommodation})
     }
+  }
+
+  handleSubmit = () => {
+      const {changedData} = this.state
+      changedData.map((room,index) => {
+        const occupancy = room.name.slice(0,3)
+        const roomType = room.name.slice(3,6)
+        const id = room.id
+        if(room.value=='')
+        room.value=0
+        let data = {
+          occupancy: occupancy,
+          roomType: roomType,
+          count: room.value
+        }
+        this.props.updateRooms(
+            specificUpdateRoomUrl(this.props.activeHostel, id),
+            data,
+            this.successUpdateCallBack,
+            this.errUpdateCallBack
+        )
+      })
+  }
+
+  successUpdateCallBack = (res) => {
+    this.props.getRooms(
+      `${roomsUrl(this.props.activeHostel)}`,
+      this.successCallBack,
+      this.errCallBack
+    )
+    this.props.getStudentAcccommodation(
+      studentAccommodationsUrl(this.props.activeHostel),
+    )
+    this.setState({
+      netAccommodation: [],
+      enableEdit: Array(15).fill(false),
+      changedData: [],
+      success: true,
+      error: false,
+      message: res.statusText,
+    })
+    toast({
+      type: 'success',
+      title: 'Accommodation Data Updated',
+      description: 'Accommodation Data Updated',
+      animation: 'fade up',
+      icon: 'smile outline',
+      time: 4000,
+    })
+  }
+
+  errUpdateCallBack = (err) => {
+    this.setState({
+      error: true,
+      success: false,
+      message: err
+    })
+    toast({
+      type: 'error',
+      title: 'Unable to update accommodation data',
+      animation: 'fade up',
+      icon: 'frown outline',
+      time: 4000,
+    })
   }
 
   successCallBack = () => {
@@ -93,13 +163,34 @@ class Rooms extends Component {
     })
   }
 
-  close = () => this.setState({ open: false })
+  changeEditable = (index) => {
+    let newEnableEdit = this.state.enableEdit
+    newEnableEdit[index]=true
+    this.setState({ enableEdit : newEnableEdit })
+  }
+
+  handleEdit = (id, event, { name, value }) => {
+    let data = this.state.changedData
+    const index = data.findIndex(room => room.name == name)
+    if(index==-1){
+      data.push({
+        id:id,
+        name:name,
+        value:value
+      })
+    }
+    else{
+      data[index].value=parseInt(value)
+    }
+    this.setState({ changedData : data })
+  }
 
   render() {
     const {
       loading,
       open,
-      net_accommodation,
+      netAccommodation,
+      enableEdit,
     } = this.state
     const { rooms, studentAccommodation, constants } = this.props
     this.calculateAccomodation()
@@ -128,17 +219,31 @@ class Rooms extends Component {
                     </Table.Header>
                     <Table.Body>
                       {constants.room_types_list && constants.room_types_list.length > 0
-                        ? constants.room_types_list.map((type, index) => {
+                        ? constants.room_types_list.map((type, row_index) => {
                             let total_seats=0, occupancy=1
                             return (
-                              <Table.Row key={index}>
+                              <Table.Row key={row_index}>
                                 <Table.Cell>{constants.room_types[type]}</Table.Cell>
-                                {rooms && rooms.map((room,index) => {
+                                {rooms && rooms.map((room,col_index) => {
                                   if(room && room.roomType==type){
                                     total_seats+=(room.count*occupancy)
                                     occupancy+=1;
                                     return(
-                                      <Table.Cell>{room.count}</Table.Cell>
+                                      <Table.Cell onClick={() => this.changeEditable(col_index)}>
+                                        {(enableEdit[col_index])
+                                          ? 
+                                            (
+                                              <Input
+                                                name={`${room.occupancy}${room.roomType}`}
+                                                type='number'
+                                                defaultValue={room.count}
+                                                // onChange={this.handleEdit}
+                                                onChange={(event, value) => this.handleEdit(room.id, event, value)}
+                                              />
+                                            )
+                                          : room.count
+                                          }
+                                      </Table.Cell>
                                     )
                                   }
                                 })
@@ -163,7 +268,7 @@ class Rooms extends Component {
                       }
                       <Table.Row>
                           <Table.Cell>Net Accomodation for Students</Table.Cell>
-                          {net_accommodation && net_accommodation.length > 0 && net_accommodation.map((accommodation,index) => {
+                          {netAccommodation && netAccommodation.length > 0 && netAccommodation.map((accommodation,index) => {
                               return(
                                 <Table.Cell>{accommodation}</Table.Cell>
                               )
@@ -172,11 +277,11 @@ class Rooms extends Component {
                       </Table.Row>
                       <Table.Row>
                           <Table.Cell></Table.Cell>
-                          {net_accommodation && net_accommodation.length > 0 && net_accommodation.map((accommodation,index) => {
+                          {netAccommodation && netAccommodation.length > 0 && netAccommodation.map((accommodation,index) => {
                               let total_net_accomodation=accommodation*(index+1)
                               if(index<3)
                               return(
-                                <Table.Cell>{accommodation}*{index+1}={total_net_accomodation}</Table.Cell>
+                                <Table.Cell>{accommodation}x{index+1}={total_net_accomodation}</Table.Cell>
                               )
                               else
                               return(
@@ -191,11 +296,18 @@ class Rooms extends Component {
                         </Table.Row>
                         <Table.Row>
                           <Table.Cell colSpan='4' textAlign='center'>NET SHORTAGE/VACANCY OF SEATS AFTER ACCOMODATING STUDENTS</Table.Cell>
-                          <Table.Cell>{net_accommodation && net_accommodation.length > 0 && 
-                                        net_accommodation[3]-studentAccommodation[0].totalNeedAccommodation}</Table.Cell>
+                          <Table.Cell>{netAccommodation && netAccommodation.length > 0 && 
+                                        netAccommodation[3]-studentAccommodation[0].totalNeedAccommodation}</Table.Cell>
                         </Table.Row>
                     </Table.Body>
                   </Table>
+                      <div styleName='pagination-container'>
+                        <div>
+                        <Button primary onClick={this.handleSubmit}>
+                          Update
+                        </Button>
+                        </div>
+                      </div>
                 </div>
                 ):
                 (
@@ -229,6 +341,11 @@ const mapDispatchToProps = (dispatch) => {
     },
     getStudentAcccommodation: (url) => {
         dispatch(getStudentAcccommodation(url))
+    },
+    updateRooms: (id, data, residence, successCallBack, errCallBack) => {
+      dispatch(
+        updateRooms(id, data, residence, successCallBack, errCallBack)
+      )
     },
   }
 }

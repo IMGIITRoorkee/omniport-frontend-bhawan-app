@@ -2,9 +2,6 @@
     display: flex !important;
     justify-content: center;
 }
-.modalActions{
-    display: flex;
-}
 .table-overflow {
     overflow-x: scroll;
     width: auto;
@@ -13,7 +10,7 @@
 }
 .pagination-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
 }
 .item-header {
