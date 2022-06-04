@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { toast } from 'react-semantic-toasts'
+import moment from 'moment'
 
 import {
   Button,
@@ -37,6 +38,7 @@ class RegisterStudent extends React.Component {
       enrollmentNo: '',
       name: '',
       roomNo: '',
+      startDate: '',
       emailAddress : '',
       currentYear : '',
       department : '',
@@ -98,6 +100,7 @@ class RegisterStudent extends React.Component {
     this.setState({
       loading: false,
       roomNo: res.roomNumber,
+      startDate: moment(res.startDate).format('YYYY-MM-DDThh:mm:ss'),
       emailAddress : res.emailAddress,
       currentYear : res.currentYear,
       department : res.department,
@@ -148,6 +151,7 @@ class RegisterStudent extends React.Component {
       errMessage: '',
       registerLoading: false,
       roomNo: '',
+      startDate: '',
       enrollmentNo: '',
       feeStatus: '',
       insideCampus: '',
@@ -195,6 +199,7 @@ class RegisterStudent extends React.Component {
       errMessage: '',
       editLoading: false,
       roomNo: '',
+      startDate: '',
       enrollmentNo: '',
       feeStatus: '',
       insideCampus: '',
@@ -326,10 +331,12 @@ class RegisterStudent extends React.Component {
       mothersContact,
       insideCampus,
       feeStatus,
+      startDate,
     } = this.state
     let data = {
       "person" : selected.person.id,
       "room_number" : roomNo,
+      "start_date" : startDate,
       "is_living_in_campus" : insideCampus,
       "fee_type" : feeStatus,
       "fathers_name": fathersName,
@@ -357,9 +364,11 @@ class RegisterStudent extends React.Component {
       mothersContact,
       insideCampus,
       feeStatus,
+      startDate,
     } = this.state
     let data = {
       "room_number" : roomNo,
+      "start_date" : startDate,
       "is_living_in_campus" : insideCampus,
       "fee_type" : feeStatus,
       "fathers_name": fathersName,
@@ -390,6 +399,7 @@ class RegisterStudent extends React.Component {
       options,
       name,
       roomNo,
+      startDate,
       emailAddress,
       currentYear,
       department,
@@ -470,6 +480,16 @@ class RegisterStudent extends React.Component {
                   <Input
                     name='roomNo'
                     value={roomNo}
+                    onChange={this.fieldsChange}
+                    loading={loading}
+                  />
+                </Form.Field>
+                <Form.Field required>
+                  <label>Date of Joining</label>
+                  <Input
+                    name='startDate'
+                    type='datetime-local'
+                    value={startDate}
                     onChange={this.fieldsChange}
                     loading={loading}
                   />
@@ -675,25 +695,6 @@ class RegisterStudent extends React.Component {
                   Deregister
                 </Button>
               </div>
-              {/* <div>
-                <Button
-                  primary
-                  type='submit'
-
-                  onClick={this.markInCampus}
-                  disabled={!roomNo || !selected}
-                >
-                  Mark Inside Campus
-                </Button>
-                <Button
-                  secondary
-                  type='submit'
-                  onClick={this.markOutCampus}
-                  disabled={!roomNo || !selected}
-                >
-                  Mark Out of Campus
-                </Button>
-              </div> */}
             </Form>
           </Container>
         </Grid.Column>
