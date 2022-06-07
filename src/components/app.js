@@ -348,6 +348,7 @@ class App extends React.Component {
                             <Rooms
                               who_am_i={who_am_i}
                               constants={constants}
+                              activePost={activePost}
                               setNavigation={this.setNavigation}
                               {...props}
                             />

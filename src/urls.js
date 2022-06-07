@@ -169,6 +169,10 @@ export const roomsUrl = (residence) => {
   return `${baseApiUrl()}${residence}/room/`
 }
 
+export const accommodationDataDownloadUrl = () => {
+  return `${baseApiUrl()}accomodation_data/download/`
+}
+
 export const studentAccommodationsUrl = (residence) => {
   return `${baseApiUrl()}${residence}/student_accommodation/`
 }
