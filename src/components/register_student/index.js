@@ -672,7 +672,7 @@ class RegisterStudent extends React.Component {
                   type='submit'
                   loading={editLoading}
                   onClick={this.editStudent}
-                  disabled={!roomNo || !selected}
+                  disabled={!roomNo || !selected || !feeStatus}
                 >
                   Edit Resident
                 </Button>
@@ -681,7 +681,7 @@ class RegisterStudent extends React.Component {
                   type='submit'
                   loading={registerLoading}
                   onClick={this.registerStudent}
-                  disabled={!roomNo || !selected}
+                  disabled={!roomNo || !selected || !feeStatus}
                 >
                   Register
                 </Button>
