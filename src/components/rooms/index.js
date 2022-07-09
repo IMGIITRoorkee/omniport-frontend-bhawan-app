@@ -34,6 +34,7 @@ class Rooms extends Component {
     message: '',
     loading: true,
     netAccommodation: [],
+    availableRooms: [],
     enableEdit: Array(19).fill(false),
     changedData: [],
     changedStudentData: {},
@@ -60,7 +61,7 @@ class Rooms extends Component {
     const { rooms, studentAccommodation, constants } = this.props
     if (constants && constants.room_occupancy_list.length > 0 && rooms && rooms.length > 0 &&
       studentAccommodation && studentAccommodation.length > 0) {
-      let total_seats = 0, net_accommodation = [];
+      let total_seats = 0, total_rooms = 0, net_accommodation = [], available_rooms = [];
       constants.room_occupancy_list.sort()
       constants.room_occupancy_list.map((seat, index) => {
         let netAccommodation = 0;
@@ -72,6 +73,8 @@ class Rooms extends Component {
               netAccommodation -= room.count
           }
         })
+        total_rooms += netAccommodation * seat
+        available_rooms.push(netAccommodation)
         netAccommodation *= parseInt(seat)
         studentAccommodation.map((accommodation, index) => {
           if (constants.room_occupancy[seat] == 'SINGLE')
@@ -85,8 +88,11 @@ class Rooms extends Component {
         net_accommodation.push(netAccommodation)
       })
       net_accommodation.push(total_seats)
+      available_rooms.push(total_rooms)
       if (JSON.stringify(this.state.netAccommodation) !== JSON.stringify(net_accommodation))
         this.setState({ netAccommodation: net_accommodation })
+      if (JSON.stringify(this.state.availableRooms) !== JSON.stringify(available_rooms))
+        this.setState({ availableRooms: available_rooms })
     }
   }
 
@@ -201,6 +207,7 @@ class Rooms extends Component {
       loading,
       open,
       netAccommodation,
+      availableRooms,
       enableEdit,
     } = this.state
     const { rooms, studentAccommodation, constants, activePost } = this.props
@@ -215,7 +222,7 @@ class Rooms extends Component {
                 primary
               >
                 Download data for all bhawans
-            </Button>
+              </Button>
             </a>
           }
         </div>
@@ -275,6 +282,15 @@ class Rooms extends Component {
                               )
                             })
                             : null}
+                          <Table.Row>
+                            <Table.Cell>NET ACCOMMODATION FOR STUDENTS</Table.Cell>
+                            {availableRooms && availableRooms.length > 0 && availableRooms.map((room, index) => {
+                              return (
+                                <Table.Cell>{room}</Table.Cell>
+                              )
+                            }
+                            )}
+                          </Table.Row>
                         </Table.Body>
                         <Table.Header>
                           <Table.Row>
@@ -291,7 +307,6 @@ class Rooms extends Component {
                                   : (<Table.Cell>Non-Registered students presently residing in the campus</Table.Cell>)
                                 }
                                 {constants && constants.room_occupancy_list && constants.room_occupancy_list.map((occupancy, index) => {
-                                  4
                                   let seat
                                   if (index == 0)
                                     seat = 'residingInSingle'
@@ -323,7 +338,7 @@ class Rooms extends Component {
                           })
                           }
                           <Table.Row>
-                            <Table.Cell>Net Accommodation for Students</Table.Cell>
+                            <Table.Cell>Present vacant seats for Students</Table.Cell>
                             {netAccommodation && netAccommodation.length > 0 && netAccommodation.map((accommodation, index) => {
                               return (
                                 <Table.Cell>{accommodation}</Table.Cell>
@@ -368,7 +383,7 @@ class Rooms extends Component {
                         <div>
                           <Button primary onClick={this.handleSubmit}>
                             Update
-                        </Button>
+                          </Button>
                         </div>
                       </div>
                     </div>
