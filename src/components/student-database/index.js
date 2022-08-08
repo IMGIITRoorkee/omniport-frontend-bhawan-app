@@ -12,7 +12,8 @@ import {
   Checkbox,
   Input,
   Modal,
-  Image
+  Image,
+  Icon,
 } from 'semantic-ui-react'
 
 import moment from 'moment'
@@ -59,6 +60,7 @@ class StudentDatabase extends Component {
     fileReader: new FileReader(),
     is_maintainer: false,
     errMessage: "",
+    fileName: "Choose csv file"
   };
 
   componentDidMount() {
@@ -173,6 +175,7 @@ class StudentDatabase extends Component {
   handleFileChange = (e) => {
     this.setState({
       file: e.target.files[0],
+      fileName:  e.target.files[0].name,
     })
   };
 
@@ -338,13 +341,16 @@ class StudentDatabase extends Component {
           </div>
           {([...constants['global_council']].includes(activePost)) && this.state.is_maintainer &&
             <div styleName='upload-data'>
-              <div> Update bhawan data : </div>
-              <Input
-                type={"file"}
-                id={"csvFileInput"}
-                accept={".csv"}
-                onChange={this.handleFileChange}
-              />
+                <Button as="label" htmlFor="file" type="button" basic>
+                  <Button.Content >{this.state.fileName}</Button.Content>
+                </Button>
+                <input
+                  type="file"
+                  id="file"
+                  accept={".csv"}
+                  hidden
+                  onChange={this.handleFileChange}
+                />
               <Button
                 primary
                 onClick={(e) => {
