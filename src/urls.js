@@ -165,6 +165,10 @@ export const residentDownloadUrl = (residence) => {
   return `${baseApiUrl()}${residence}/resident/download/`
 }
 
+export const updateBhawanDataUrl = (residence) => {
+  return `${baseApiUrl()}${residence}/upload_bhawan_data/update_data/`
+}
+
 export const roomsUrl = (residence) => {
   return `${baseApiUrl()}${residence}/room/`
 }

@@ -2,26 +2,27 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import {
-   Header,
-   Table,
-   Container,
-   Dropdown,
-   Pagination,
-   Segment,
-   Button,
-   Checkbox,
-   Input,
-   Modal,
-   Image
-  } from 'semantic-ui-react'
+  Header,
+  Table,
+  Container,
+  Dropdown,
+  Pagination,
+  Segment,
+  Button,
+  Checkbox,
+  Input,
+  Modal,
+  Image
+} from 'semantic-ui-react'
 
 import moment from 'moment'
 
 import { Loading } from "formula_one";
 
-import { residentUrl, residentDownloadUrl, markInsideUrl, markOutUrl } from '../../urls'
+import { residentUrl, residentDownloadUrl, markInsideUrl, markOutUrl, updateBhawanDataUrl } from '../../urls'
 
 import { getResidents, downloadResidents, fetchPreviousRecords } from '../../actions/residents'
+import { updateBhawanData } from '../../actions/update_bhawan_data'
 
 import './index.css'
 
@@ -54,6 +55,10 @@ class StudentDatabase extends Component {
     activeResident: {},
     previousRecords: [],
     feeTypeFilter: "",
+    file: null,
+    fileReader: new FileReader(),
+    is_maintainer: false,
+    errMessage: "",
   };
 
   componentDidMount() {
@@ -65,50 +70,51 @@ class StudentDatabase extends Component {
     this.setState({
       currentResidentDownloadUrl: residentDownloadUrl(this.props.activeHostel)
     })
+    this.checkIfMaintainer()
   }
 
   onChange = (event, { name, value }) => {
     let filter = 'is_student=true&'
     if (this.state.hasOwnProperty(name)) {
       this.setState({ [name]: value }, () => {
-        
-      if (this.state.filterBranch != '') {
-        filter = `${filter}branch=${this.state.filterBranch}&`
-      } 
 
-      if (this.state.filterDegree != '') {
-        filter = `${filter}degree=${this.state.filterDegree}&`
-      } 
-         
-      if (this.state.filterYear != '') {
-        filter = `${filter}year=${this.state.filterYear}&`
-      }
-      if(this.state.inCampus !== "") {
-        filter = `${filter}is_living_in_campus=${this.state.inCampus}&`
-      }
+        if (this.state.filterBranch != '') {
+          filter = `${filter}branch=${this.state.filterBranch}&`
+        }
 
-      if (this.state.allResidents) {
-        filter = `${filter}all=${true}&`
-      }
-      
-      if(this.state.feeTypeFilter) [
-        filter = `${filter}feeType=${this.state.feeTypeFilter}&`
-      ]
+        if (this.state.filterDegree != '') {
+          filter = `${filter}degree=${this.state.filterDegree}&`
+        }
 
-      if (this.state.residentSearch.length >= 3) {
-        filter = `${filter}search=${this.state.residentSearch}&`
-      }
+        if (this.state.filterYear != '') {
+          filter = `${filter}year=${this.state.filterYear}&`
+        }
+        if (this.state.inCampus !== "") {
+          filter = `${filter}is_living_in_campus=${this.state.inCampus}&`
+        }
 
-      this.setState({
-        loading: true,
-        filter: filter
-      })
+        if (this.state.allResidents) {
+          filter = `${filter}all=${true}&`
+        }
 
-      this.props.getResidents(
-        `${residentUrl(this.props.activeHostel)}?${filter}`,
+        if (this.state.feeTypeFilter) [
+          filter = `${filter}feeType=${this.state.feeTypeFilter}&`
+        ]
+
+        if (this.state.residentSearch.length >= 3) {
+          filter = `${filter}search=${this.state.residentSearch}&`
+        }
+
+        this.setState({
+          loading: true,
+          filter: filter
+        })
+
+        this.props.getResidents(
+          `${residentUrl(this.props.activeHostel)}?${filter}`,
           this.successCallBack,
           this.errCallBack
-      )
+        )
 
         this.setState({
           activePage: 1,
@@ -164,6 +170,53 @@ class StudentDatabase extends Component {
     })
   }
 
+  handleFileChange = (e) => {
+    this.setState({
+      file: e.target.files[0],
+    })
+  };
+
+  handleDataUpload = (e) => {
+    e.preventDefault();
+    if (this.state.file) {
+      let formdata = new FormData();
+      formdata.append('csv_file',this.state.file)
+      this.props.updateBhawanData(
+        updateBhawanDataUrl(this.props.activeHostel),
+        formdata,
+        this.uploadSuccessCallBack,
+        this.uploadErrCallBack
+      )
+      this.setState({
+        errMessage: ""
+      })
+    } else {
+      this.setState({
+        errMessage: "Please upload file."
+      })
+    }
+
+  };
+
+  uploadSuccessCallBack = (res) => {
+    this.setState({
+      errMessage: res,
+    })
+  }
+
+  uploadErrCallBack = (message) => {
+    this.setState({
+      errMessage: message,
+    })
+  }
+
+
+  checkIfMaintainer = () => {
+    this.setState({
+      is_maintainer: this.props.who_am_i.isMaintainer,
+    })
+  }
+
   render() {
     const {
       activePage,
@@ -180,7 +233,7 @@ class StudentDatabase extends Component {
       activeResident,
       previousRecords
     } = this.state
-    const { residents, constants } = this.props
+    const { residents, constants, activePost, who_am_i } = this.props
     const LivingOptions = [
       {
         key: 0,
@@ -194,7 +247,7 @@ class StudentDatabase extends Component {
       },
     ]
     let feeOptions = []
-    for(const option in constants.statues.FEE_TYPES) {
+    for (const option in constants.statues.FEE_TYPES) {
       feeOptions = [
         ...feeOptions,
         {
@@ -212,7 +265,7 @@ class StudentDatabase extends Component {
         text: constants.branches[i].toString(),
       });
     }
-    
+
     let degreeOptions = [];
     for (const i in constants.degrees) {
       degreeOptions.push({
@@ -226,16 +279,20 @@ class StudentDatabase extends Component {
       <div>
         <Modal
           closeIcon
-          onClose={() => {this.setState({
-            open: false,
-            previousRecords: []
-          })}}
-          onOpen={() => {this.setState({
-            open: true
-          })}}
+          onClose={() => {
+            this.setState({
+              open: false,
+              previousRecords: []
+            })
+          }}
+          onOpen={() => {
+            this.setState({
+              open: true
+            })
+          }}
           open={open}
         >
-          
+
           <Modal.Header>Student Details</Modal.Header>
           <Modal.Content image>
             <Image size='medium' src={activeResident.displayPicture} wrapped />
@@ -248,7 +305,7 @@ class StudentDatabase extends Component {
               <div>Current Year: {activeResident.currentYear}</div>
               <div>Department: {activeResident.department}</div>
               <div>Date of Birth: {activeResident.dateOfBirth}</div>
-              <div>Inside Campus: {activeResident.isLivingInCampus? "Yes": "No"}</div>
+              <div>Inside Campus: {activeResident.isLivingInCampus ? "Yes" : "No"}</div>
               <div>Fathers Name: {activeResident.fathersName}</div>
               <div>Fathers Contact: {activeResident.fathersContact}</div>
               <div>Mothers Name: {activeResident.mothersName}</div>
@@ -264,9 +321,9 @@ class StudentDatabase extends Component {
                 {previousRecords.map((record, ind) => {
                   return (
                     <div>
-                      {constants.hostels[record.hostel]} : 
-                      {record.startDate && moment(record.startDate).format('DD/MM/YY')} - 
-                      {record.endDate && (moment(record.endDate).format('DD/MM/YY'))} 
+                      {constants.hostels[record.hostel]} :
+                      {record.startDate && moment(record.startDate).format('DD/MM/YY')} -
+                      {record.endDate && (moment(record.endDate).format('DD/MM/YY'))}
                     </div>
                   )
                 })}
@@ -279,6 +336,28 @@ class StudentDatabase extends Component {
           <div>
             Total Count: {residents.count}
           </div>
+          {([...constants['global_council']].includes(activePost)) && this.state.is_maintainer &&
+            <div styleName='upload-data'>
+              <div> Update bhawan data : </div>
+              <Input
+                type={"file"}
+                id={"csvFileInput"}
+                accept={".csv"}
+                onChange={this.handleFileChange}
+              />
+              <Button
+                primary
+                onClick={(e) => {
+                  this.handleDataUpload(e);
+                }}
+              >
+                Update student data
+              </Button>
+              <br />
+              {this.state.errMessage}
+            </div>
+
+          }
           <div styleName='filter-container'>
             <Dropdown
               name="filterYear"
@@ -329,7 +408,7 @@ class StudentDatabase extends Component {
               options={LivingOptions}
               selection
             />
-            </div>
+          </div>
           <div styleName='filter-container'>
             <Dropdown
               name="feeTypeFilter"
@@ -348,86 +427,86 @@ class StudentDatabase extends Component {
                 this.onChange(e, { name: name, value: checked })
               }
             />
-          <a href={currentResidentDownloadUrl} download>
-            <Button
-            primary
-            >
-              Download list
+            <a href={currentResidentDownloadUrl} download>
+              <Button
+                primary
+              >
+                Download list
             </Button>
-          </a>
-        </div>
-        {!loading?
-          (
-            <React.Fragment>
-              {(residents.results && residents.results.length > 0)
-                ?
-                (
-                  <div styleName = "table-overflow">
-                    <Table unstackable celled>
-                    <Table.Header>
-                      <Table.Row>
-                      <Table.HeaderCell>Enrollment No</Table.HeaderCell>
-                        <Table.HeaderCell>Name</Table.HeaderCell>
-                        <Table.HeaderCell>Room No.</Table.HeaderCell>
-                        <Table.HeaderCell>Contact No.</Table.HeaderCell>
-                        <Table.HeaderCell>Email Address</Table.HeaderCell>
-                        <Table.HeaderCell>Current Year</Table.HeaderCell>
-                        <Table.HeaderCell>Department</Table.HeaderCell>
-                        <Table.HeaderCell>Date of Joining</Table.HeaderCell>
-                        <Table.HeaderCell>Inside Campus</Table.HeaderCell>
-                        <Table.HeaderCell>Fee Status</Table.HeaderCell>
-                        <Table.HeaderCell>Hostel</Table.HeaderCell>
-                        <Table.HeaderCell>Details</Table.HeaderCell>
-                      </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                      {residents.results && residents.results.length > 0
-                        ? residents.results.map((resident, index) => {
-                            return (
-                              <Table.Row key={index}>
-                                <Table.Cell>{resident.enrolmentNumber}</Table.Cell>
-                                <Table.Cell>{resident.residentName}</Table.Cell>
-                                <Table.Cell>{resident.roomNumber}</Table.Cell>
-                                <Table.Cell>{resident.phoneNumber}</Table.Cell>
-                                <Table.Cell>{resident.emailAddress}</Table.Cell>
-                                <Table.Cell>{resident.currentYear}</Table.Cell>
-                                <Table.Cell>{resident.department}</Table.Cell>
-                                <Table.Cell>{resident.startDate && moment(resident.startDate).format('DD/MM/YY')}</Table.Cell>
-                                <Table.Cell>{resident.isLivingInCampus? "Yes": "No"}</Table.Cell>
-                                <Table.Cell>{constants.statues.FEE_TYPES[resident.feeType]}</Table.Cell>
-                                <Table.Cell>{constants.hostels[resident.hostelCode]}</Table.Cell>
-                                <Table.Cell >
-                                  <Button onClick={() => {this.showResidentDetails(resident)}}>
-                                    Show
+            </a>
+          </div>
+          {!loading ?
+            (
+              <React.Fragment>
+                {(residents.results && residents.results.length > 0)
+                  ?
+                  (
+                    <div styleName="table-overflow">
+                      <Table unstackable celled>
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell>Enrollment No</Table.HeaderCell>
+                            <Table.HeaderCell>Name</Table.HeaderCell>
+                            <Table.HeaderCell>Room No.</Table.HeaderCell>
+                            <Table.HeaderCell>Contact No.</Table.HeaderCell>
+                            <Table.HeaderCell>Email Address</Table.HeaderCell>
+                            <Table.HeaderCell>Current Year</Table.HeaderCell>
+                            <Table.HeaderCell>Department</Table.HeaderCell>
+                            <Table.HeaderCell>Date of Joining</Table.HeaderCell>
+                            <Table.HeaderCell>Inside Campus</Table.HeaderCell>
+                            <Table.HeaderCell>Fee Status</Table.HeaderCell>
+                            <Table.HeaderCell>Hostel</Table.HeaderCell>
+                            <Table.HeaderCell>Details</Table.HeaderCell>
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {residents.results && residents.results.length > 0
+                            ? residents.results.map((resident, index) => {
+                              return (
+                                <Table.Row key={index}>
+                                  <Table.Cell>{resident.enrolmentNumber}</Table.Cell>
+                                  <Table.Cell>{resident.residentName}</Table.Cell>
+                                  <Table.Cell>{resident.roomNumber}</Table.Cell>
+                                  <Table.Cell>{resident.phoneNumber}</Table.Cell>
+                                  <Table.Cell>{resident.emailAddress}</Table.Cell>
+                                  <Table.Cell>{resident.currentYear}</Table.Cell>
+                                  <Table.Cell>{resident.department}</Table.Cell>
+                                  <Table.Cell>{resident.startDate && moment(resident.startDate).format('DD/MM/YY')}</Table.Cell>
+                                  <Table.Cell>{resident.isLivingInCampus ? "Yes" : "No"}</Table.Cell>
+                                  <Table.Cell>{constants.statues.FEE_TYPES[resident.feeType]}</Table.Cell>
+                                  <Table.Cell>{constants.hostels[resident.hostelCode]}</Table.Cell>
+                                  <Table.Cell >
+                                    <Button onClick={() => { this.showResidentDetails(resident) }}>
+                                      Show
                                   </Button>
-                                </Table.Cell>
-                              </Table.Row>
-                            )
-                          })
-                        : null}
-                    </Table.Body>
-                  </Table>
-                  {residents.count > 5 ? (
-                    <Pagination
-                      activePage={activePage}
-                      onPageChange={this.handlePaginationChange}
-                      totalPages={Math.ceil(residents.count / 5)}
-                    />
-                  ) : null}
-                  </div>
-                ):
-                (
-                  <Segment>No Student with applied filters found</Segment>
-                )
-              }
-            </React.Fragment>
-          ):
-          (
-            <Loading />
-          )
-        }
+                                  </Table.Cell>
+                                </Table.Row>
+                              )
+                            })
+                            : null}
+                        </Table.Body>
+                      </Table>
+                      {residents.count > 5 ? (
+                        <Pagination
+                          activePage={activePage}
+                          onPageChange={this.handlePaginationChange}
+                          totalPages={Math.ceil(residents.count / 5)}
+                        />
+                      ) : null}
+                    </div>
+                  ) :
+                  (
+                    <Segment>No Student with applied filters found</Segment>
+                  )
+                }
+              </React.Fragment>
+            ) :
+            (
+              <Loading />
+            )
+          }
         </Container>
-      </div>
+      </div >
     );
   }
 }
@@ -450,6 +529,9 @@ const mapDispatchToProps = (dispatch) => {
     fetchPreviousRecords: (url, prevSuccessCallBack, prevErrCallBack) => {
       dispatch(fetchPreviousRecords(url, prevSuccessCallBack, prevErrCallBack))
     },
+    updateBhawanData: (url, data, successCallBack, errCallBack) => {
+      dispatch(updateBhawanData(url, data, successCallBack, errCallBack))
+    }
   }
 }
 

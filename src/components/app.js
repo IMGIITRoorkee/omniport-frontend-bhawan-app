@@ -57,6 +57,11 @@ const creators = [
     link: "https://github.com/vaishnavi-gupta18/",
   },
   {
+    name: "Pooja Allampallewar",
+    role: "Developer",
+    link: "https://github.com/poojasa7182/",
+  },
+  {
     name: "Ritvik Jain",
     role: "Developer",
     link: "https://github.com/ritvikjain99/",
@@ -327,6 +332,7 @@ class App extends React.Component {
                             <StudentDatabase
                              who_am_i={who_am_i}
                              setNavigation={this.setNavigation}
+                             activePost={activePost}
                              {...this.props}
                             />
                           )}
