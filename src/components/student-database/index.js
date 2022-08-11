@@ -60,7 +60,8 @@ class StudentDatabase extends Component {
     fileReader: new FileReader(),
     is_maintainer: false,
     errMessage: "",
-    fileName: "Choose csv file"
+    fileName: "Choose csv file",
+    csvData:"",
   };
 
   componentDidMount() {
@@ -204,7 +205,7 @@ class StudentDatabase extends Component {
 
   uploadSuccessCallBack = (res) => {
     this.setState({
-      errMessage: res,
+      csvData:res,
       loading:false,
       file:"",
       fileName:"Choose csv file",
@@ -225,6 +226,17 @@ class StudentDatabase extends Component {
     })
   }
 
+  downloadFile = () => {
+    const url = window.URL.createObjectURL(new Blob([this.state.csvData])) 
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', 'logs')
+    document.body.appendChild(link)
+    link.click()
+    this.setState({
+      csvData:"",
+    })
+}
 
   checkIfMaintainer = () => {
     this.setState({
@@ -246,7 +258,8 @@ class StudentDatabase extends Component {
       inCampus,
       open,
       activeResident,
-      previousRecords
+      previousRecords,
+      csvData
     } = this.state
     const { residents, constants, activePost, who_am_i } = this.props
     const LivingOptions = [
@@ -372,8 +385,10 @@ class StudentDatabase extends Component {
               >
                 Update student data
               </Button>
-              <br />
               {this.state.errMessage}
+              {csvData &&
+              <Button onClick={this.downloadFile}>Download log file</Button>
+              }
             </div>
 
           }
