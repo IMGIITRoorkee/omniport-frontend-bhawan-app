@@ -230,6 +230,11 @@ class ComplainRegister extends React.Component {
                         </Table.Cell>
                         <Table.Cell>
                           {constants.statues.COMLAINT_STATUSES[complain.status]}
+                          {constants.statues.COMLAINT_STATUSES[complain.status]=='INPROCESS' && complain.remark && 
+                            <>
+                              : {complain.remark}
+                            </>
+                          }
                         </Table.Cell>
                         <Table.Cell>
                           {moment(

@@ -58,6 +58,7 @@ class AdminComplains extends Component {
     type: '',
     remark: '',
     activeId: null,
+    activeStatus:"",
     activeItem: 'apr',
     activePage: 1,
     activeAprPage: 1,
@@ -76,7 +77,7 @@ class AdminComplains extends Component {
   componentDidMount() {
     this.props.setNavigation('Student Complains')
     this.props.getPendingComplains(
-      statusComplainsUrl(this.props.activeHostel, ['pending']),
+      statusComplainsUrl(this.props.activeHostel, ['pending','inprocess']),
       this.pendingSuccessCallBack,
       this.pendingErrCallBack
     )
@@ -116,14 +117,21 @@ class AdminComplains extends Component {
 
   }
 
-  show = (id) => {
+  show = (id,data,remark) => {
     this.setState({
       open: true,
       activeId: id,
+      activeStatus: data.value,
+      remark:remark,
     })
   }
 
-  close = () => this.setState({ open: false })
+  close = () => this.setState({ 
+    open: false,
+    remark: "", 
+    activeId: null, 
+    activeStatus: "" 
+  })
 
   togglePastIcon = () => {
     const pastComplainIcon = this.state.pastComplainIcon
@@ -175,11 +183,11 @@ class AdminComplains extends Component {
 
   resolveComplaint = () => {
     const body = {
-      status: 'res',
+      status: this.state.activeStatus,
       remark: this.state.remark,
     }
     {this.state.complaint_item.map((element, index) => {
-
+      if(element.default_item!=null){
       const data = {
         complaint: this.state.activeId,
         default_item: element.default_item,
@@ -191,7 +199,7 @@ class AdminComplains extends Component {
         this.resolveSuccessCallBack,
         this.errCallBack
       )
-      })}
+    }})}
     this.props.resolveComplain(
       this.state.activeId,
       body,
@@ -209,7 +217,7 @@ class AdminComplains extends Component {
       message: '',
     })
     this.props.getPendingComplains(
-      statusComplainsUrl(this.props.activeHostel, ['pending']),
+      statusComplainsUrl(this.props.activeHostel, ['pending','inprocess']),
       this.pendingSuccessCallBack,
       this.pendingErrCallBack
     )
@@ -225,6 +233,10 @@ class AdminComplains extends Component {
     let complaint_item = [{default_item:null, quantity:null}]
     this.setState({ complaint_item })
     
+  }
+
+  errCallBack = () =>{
+
   }
 
   pendingSuccessCallBack = (res) => {
@@ -311,7 +323,7 @@ class AdminComplains extends Component {
     })
     this.props.getPendingComplains(
       `${statusComplainsUrl(this.props.activeHostel, [
-        'PENDING',
+        'PENDING','INPROCESS'
       ])}search=${value}`,
       this.pendingSuccessCallBack,
       this.pendingErrCallBack
@@ -340,7 +352,7 @@ class AdminComplains extends Component {
     })
     this.props.getPendingComplains(
       `${statusComplainsUrl(this.props.activeHostel, [
-        'PENDING',
+        'PENDING','INPROCESS'
       ])}page=${activePage}`,
       this.pendingSuccessCallBack,
       this.pendingErrCallBack
@@ -369,7 +381,7 @@ class AdminComplains extends Component {
     })
     this.props.getPendingComplains(
       `${statusComplainsUrl(this.props.activeHostel, [
-        'PENDING',
+        'PENDING','INPROCESS'
       ])}page=${this.state.activePage}&perPage=${value}`,
       this.pendingSuccessCallBack,
       this.pendingErrCallBack
@@ -427,7 +439,14 @@ class AdminComplains extends Component {
       residentSearchApr
     } = this.state
     const { pendingComplains, resolvedComplains, defaultItems, constants } = this.props
-
+    let complaint_status_options = [];
+    for (var i in constants.statues['COMLAINT_STATUSES']) {
+      complaint_status_options.push({
+        key: i.toString(),
+        text: constants.statues['COMLAINT_STATUSES'][i].toString(),
+        value: i.toString(),
+      });
+    }
     return (
       <Grid container>
           <Grid.Column width={16}>
@@ -472,7 +491,7 @@ class AdminComplains extends Component {
                             <Table.HeaderCell>
                               Unsuccesful attempts to solve
                             </Table.HeaderCell>
-                            <Table.HeaderCell>Mark as resolved</Table.HeaderCell>
+                            <Table.HeaderCell>Complaint status</Table.HeaderCell>
                           </Table.Row>
                         </Table.Header>
                         <Table.Body>
@@ -508,11 +527,16 @@ class AdminComplains extends Component {
                                       {complain.failedAttempts}
                                       <span styleName='cursor' styleName="plus-icon">
                                         <Icon name="add circle" color="grey" size="large" />
-                                        
                                       </span>
                                     </Table.Cell>
-                                    <Table.Cell onClick={() => this.show(complain.id)}>
-                                      <span styleName='resolve-style'>Resolve</span>
+                                    <Table.Cell>
+                                      <Dropdown 
+                                        value={complain.status} 
+                                        onChange={(e,data) => this.show(complain.id,data,complain.remark)} 
+                                        search 
+                                        selection 
+                                        options={complaint_status_options} 
+                                      />
                                     </Table.Cell>
                                   </Table.Row>
                                 )
@@ -738,7 +762,7 @@ class AdminComplains extends Component {
               )}
             </Container>
             <Modal size='mini' open={open} onClose={this.close}>
-              <Modal.Header styleName='center'>Resolve Complain?</Modal.Header>
+              <Modal.Header styleName='center'>Change complain status?</Modal.Header>
               <Modal.Content>
               <Form>
               <Form.Group styleName='item-container'>

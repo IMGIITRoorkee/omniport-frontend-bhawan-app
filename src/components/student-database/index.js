@@ -191,11 +191,12 @@ class StudentDatabase extends Component {
         this.uploadErrCallBack
       )
       this.setState({
-        errMessage: ""
+        errMessage: "",
+        loading:true,
       })
     } else {
       this.setState({
-        errMessage: "Please upload file."
+        errMessage: "Please upload file.",
       })
     }
 
@@ -204,12 +205,23 @@ class StudentDatabase extends Component {
   uploadSuccessCallBack = (res) => {
     this.setState({
       errMessage: res,
+      loading:false,
+      file:"",
+      fileName:"Choose csv file",
     })
+    this.props.getResidents(
+      `${residentUrl(this.props.activeHostel)}?is_student=true`,
+      this.successCallBack,
+      this.errCallBack
+    )
   }
 
   uploadErrCallBack = (message) => {
     this.setState({
       errMessage: message,
+      loading:false,
+      file:"",
+      fileName:"Choose csv file",
     })
   }
 
@@ -353,6 +365,7 @@ class StudentDatabase extends Component {
                 />
               <Button
                 primary
+                loading={loading}
                 onClick={(e) => {
                   this.handleDataUpload(e);
                 }}
