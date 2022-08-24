@@ -436,7 +436,8 @@ class AdminComplains extends Component {
       remark,
       complainsDownloadUrl,
       residentSearch,
-      residentSearchApr
+      residentSearchApr,
+      activeStatus,
     } = this.state
     const { pendingComplains, resolvedComplains, defaultItems, constants } = this.props
     let complaint_status_options = [];
@@ -780,6 +781,7 @@ class AdminComplains extends Component {
                       name='default_item'
                       placeholder='Replace or repair items'
                       selection
+                      disabled={activeStatus!='res'}
                       options={options}
                       onChange={(event, value) => this.handleDefaultItemChange(index, event, value)}
                     />
@@ -789,6 +791,7 @@ class AdminComplains extends Component {
                       name='quantity'
                       id = {index}
                       type='number'
+                      disabled={activeStatus!='res'}
                       onChange={(event) => this.handleQuantityChange(index, event)}
                       min={1}
                     />
@@ -796,7 +799,7 @@ class AdminComplains extends Component {
                 </Form.Group>
               ))}
               <div styleName='right-align'>
-              <Header as='h5' onClick={this.addItemField} styleName='cursor'>
+              <Header as='h5' disabled={activeStatus!='res'} onClick={activeStatus=='res'?this.addItemField:''} styleName='cursor'>
                   <span>+</span>
                   Add Item
               </Header>

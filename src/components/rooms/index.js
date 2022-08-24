@@ -24,6 +24,7 @@ import { getRooms } from '../../actions/rooms'
 import { getStudentAcccommodation } from '../../actions/student_accommodation'
 import { updateRooms } from '../../actions/update_rooms'
 import { updateStudentAccommodation } from '../../actions/update_student_accommodation'
+import moment from 'moment'
 
 import './index.css'
 
@@ -404,7 +405,7 @@ class Rooms extends Component {
                           </Table.Row>
                         </Table.Body>
                       </Table>
-                      Last Modified: {last_modified.toString()}
+                      Last Modified: {moment(last_modified).format('DD/MM/YY, hh:mm a')}
                       <div styleName='pagination-container'>
                         <div>
                           <Button primary onClick={this.handleSubmit}>
