@@ -38,6 +38,7 @@ class Rooms extends Component {
     enableEdit: Array(19).fill(false),
     changedData: [],
     changedStudentData: {},
+    last_modified: new Date('December 25, 2000 01:30:00'),
   };
 
   componentDidMount() {
@@ -202,6 +203,27 @@ class Rooms extends Component {
     this.setState({ changedStudentData: data })
   }
 
+  lastModified = (rooms, studentAccommodation) => {
+    var date = new Date('December 25, 2000 01:30:00')
+    for(var i = 0 ; i < rooms.length ; i++){
+      var new_date = new Date(rooms[i].datetimeModified)
+      if(new_date>date){
+        date = new_date;
+      }
+    }
+    for(var i = 0 ; i < studentAccommodation.length ; i++){
+      var new_date = new Date(studentAccommodation[i].datetimeModified)
+      if(new_date>date){
+        date = new_date;
+      }
+    }
+    if((JSON.stringify(this.state.last_modified)!== JSON.stringify(date)) && rooms){
+      this.setState({
+        last_modified:date,
+      })
+    }
+  }
+
   render() {
     const {
       loading,
@@ -209,9 +231,12 @@ class Rooms extends Component {
       netAccommodation,
       availableRooms,
       enableEdit,
+      last_modified,
     } = this.state
     const { rooms, studentAccommodation, constants, activePost } = this.props
     this.calculateAccommodation()
+    this.lastModified(rooms, studentAccommodation)
+    
     return (
       <div>
         <div styleName="item-header">
@@ -379,6 +404,7 @@ class Rooms extends Component {
                           </Table.Row>
                         </Table.Body>
                       </Table>
+                      Last Modified: {last_modified.toString()}
                       <div styleName='pagination-container'>
                         <div>
                           <Button primary onClick={this.handleSubmit}>
