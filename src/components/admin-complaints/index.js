@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { TimeInput } from 'semantic-ui-calendar-react'
+import { TimeInput, DatesRangeInput } from 'semantic-ui-calendar-react'
 import {
   Grid,
   Header,
@@ -62,6 +62,10 @@ class AdminComplains extends Component {
     activeItem: 'apr',
     activePage: 1,
     activeAprPage: 1,
+    datesRange: '',
+    dateFilterActive: false,
+    pastDatesRange: '',
+    pastDateFilterActive: false,
     found: false,
     foundType: false,
     foundId: 1,
@@ -72,6 +76,7 @@ class AdminComplains extends Component {
     complaint_item : [{default_item:null, quantity:1}],
     residentSearch: "",
     residentSearchApr: "",
+
   }
 
   componentDidMount() {
@@ -403,6 +408,99 @@ class AdminComplains extends Component {
     )   
   }
 
+  dateFormatMatch = (dates) => {
+    if (
+      /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01]) - \d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test(
+        dates
+      )
+    ) {
+      dates = dates.split(' ')
+      let start = dates[0]
+      let end = dates[2]
+
+      var dateRange = start + '/' + end
+      return dateRange
+    } else {
+      return null
+    }
+  }
+
+  handleDateFilterChange = (e, { value }) => {
+    this.setState({ datesRange: value })
+
+    if (value) this.setState({ dateFilterActive: true })
+
+    let dateRange
+    dateRange = this.dateFormatMatch(value)
+
+    if (dateRange) {
+      this.setState({
+        pendingLoading: true,
+      })
+      this.props.getPendingComplains(
+        `${statusComplainsUrl(this.props.activeHostel, [
+          'PENDING',
+          'INPROCESS',
+        ])}date=${dateRange}`,
+        this.pendingSuccessCallBack,
+        this.pendingErrCallBack
+      )
+    }
+  }
+
+  handlePastDateFilterChange = (e, { value }) => {
+    this.setState({ pastDatesRange: value })
+
+    if (value) this.setState({ pastDateFilterActive: true })
+
+    let dateRange
+    dateRange = this.dateFormatMatch(value)
+
+    if (dateRange) {
+      this.setState({
+        pastLoading: true,
+      })
+      this.props.getResolvedComplains(
+        `${statusComplainsUrl(this.props.activeHostel, [
+          'RESOLVED',
+          'UNRESOLVED',
+        ])}date=${dateRange}`,
+        this.pastSuccessCallBack,
+        this.pastErrCallBack
+      )
+    }
+  }
+
+  handleDateDelete = () => {
+    this.setState({ dateFilterActive: false, datesRange: '' })
+    this.setState({
+      pendingLoading: true,
+    })
+    this.props.getPendingComplains(
+      `${statusComplainsUrl(this.props.activeHostel, [
+        'PENDING',
+        'INPROCESS',
+      ])}`,
+      this.pendingSuccessCallBack,
+      this.pendingErrCallBack
+    )
+  }
+
+  handlePastDateDelete = () => {
+    this.setState({ pastDateFilterActive: false, pastDatesRange: '' })
+    this.setState({
+      pastLoading: true,
+    })
+    this.props.getResolvedComplains(
+      `${statusComplainsUrl(this.props.activeHostel, [
+        'RESOLVED',
+        'UNRESOLVED',
+      ])}`,
+      this.pastSuccessCallBack,
+      this.pastErrCallBack
+    )
+  }
+
   handleDefaultItemChange = (i, event, {value}) => {
     let complaint_item = [...this.state.complaint_item]
     complaint_item[i].default_item = parseInt(value)
@@ -438,6 +536,10 @@ class AdminComplains extends Component {
       residentSearch,
       residentSearchApr,
       activeStatus,
+      datesRange,
+      dateFilterActive,
+      pastDatesRange,
+      pastDateFilterActive,
     } = this.state
     const { pendingComplains, resolvedComplains, defaultItems, constants } = this.props
     let complaint_status_options = [];
@@ -455,6 +557,34 @@ class AdminComplains extends Component {
               <div styleName="complain-header">
                 <Header as='h4'>Student Complains and Feedback</Header>
                 <div styleName="complain-header">
+                  {dateFilterActive ? (
+                    <DatesRangeInput
+                      name='datesRange'
+                      placeholder='Date: From - To'
+                      closable={true}
+                      closeOnMouseLeave={true}
+                      value={datesRange}
+                      dateFormat='YYYY-MM-DD'
+                      onChange={this.handleDateFilterChange}
+                      icon={
+                        <Icon
+                          name='delete'
+                          link
+                          onClick={this.handleDateDelete}
+                        />
+                      }
+                    />
+                  ) : (
+                    <DatesRangeInput
+                      name='datesRange'
+                      placeholder='Date: From - To'
+                      closable={true}
+                      closeOnMouseLeave={true}
+                      value={datesRange}
+                      dateFormat='YYYY-MM-DD'
+                      onChange={this.handleDateFilterChange}
+                    />
+                  )}
                   <Input
                     name="residentSearch"
                     value={residentSearch}
@@ -628,13 +758,43 @@ class AdminComplains extends Component {
                   Past Complains and Feedback
                   <Icon name={pastComplainIcon} onClick={this.togglePastIcon} />
                 </Header>
+                <div styleName='complain-header'>
+                {pastDateFilterActive ? (
+                  <DatesRangeInput
+                    name='pastDatesRange'
+                    placeholder='Date: From - To'
+                    closable={true}
+                    closeOnMouseLeave={true}
+                    value={pastDatesRange}
+                    dateFormat='YYYY-MM-DD'
+                    onChange={this.handlePastDateFilterChange}
+                    icon={
+                      <Icon
+                        name='delete'
+                        link
+                        onClick={this.handlePastDateDelete}
+                      />
+                    }
+                  />
+                ) : (
+                  <DatesRangeInput
+                    name='pastDatesRange'
+                    placeholder='Date: From - To'
+                    closable={true}
+                    closeOnMouseLeave={true}
+                    value={pastDatesRange}
+                    dateFormat='YYYY-MM-DD'
+                    onChange={this.handlePastDateFilterChange}
+                  />
+                )}
                 <Input
-                  name="residentSearchApr"
+                  name='residentSearchApr'
                   value={residentSearchApr}
                   onChange={this.handlePastResidentSearch}
-                  icon="search"
-                  placeholder="Filter by Name/Enrollment no."
+                  icon='search'
+                  placeholder='Filter by Name/Enrollment no.'
                 />
+              </div>
               </div>
               {pastComplainIcon === 'angle down' && (
                 <React.Fragment>
