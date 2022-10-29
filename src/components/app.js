@@ -31,7 +31,7 @@ import { getConstants } from "../actions/get-constants";
 import { setActiveHostel } from "../actions/set-active-hostel";
 import { setActivePost } from "../actions/set-active-post"
 import { constantsUrl } from "../urls";
-
+import AdminRoute from "./routes/adminRoute"
 import main from "formula_one/src/css/app.css";
 import blocks from "../css/app.css";
 
@@ -47,6 +47,11 @@ const creators = [
     link: "https://github.com/SuyashSalampuria/",
   },
   {
+    name: "Ritvik Jain",
+    role: "Developer",
+    link: "https://github.com/ritvikjain99/",
+  },
+  {
     name: "Gauransh Dingwani",
     role: "Developer",
     link: "https://github.com/gauransh7/",
@@ -60,11 +65,6 @@ const creators = [
     name: "Pooja Allampallewar",
     role: "Developer",
     link: "https://github.com/poojasa7182/",
-  },
-  {
-    name: "Ritvik Jain",
-    role: "Developer",
-    link: "https://github.com/ritvikjain99/",
   },
 ];
 
@@ -222,49 +222,29 @@ class App extends React.Component {
                         />
                       )}
                     />
-                    <Route
+                    <AdminRoute
                       path={`${match.path}admin_complain`}
                       exact
-                      render={(props) => (
-                        <AdminComplains
-                          who_am_i={who_am_i}
-                          constants={constants}
-                          setNavigation={this.setNavigation}
-                          {...props}
-                        />
-                      )}
+                      component={AdminComplains}
+                      setNavigation={this.setNavigation}
+                      {...this.props}
                     />
-                    <Route
+                    <AdminRoute
                       path={`${match.path}item`}
                       exact
-                      render={(props) => (
-                        <Items
-                          who_am_i={who_am_i}
-                          constants={constants}
-                          setNavigation={this.setNavigation}
-                          {...props}
-                        />
-                      )}
+                      component={Items}
+                      setNavigation={this.setNavigation}
+                      {...this.props}
                     />
-                    <Route
+                    <AdminRoute
                       path={`${match.path}create-authority`}
-                      render={(props) => (
-                        <AdminAuthorities
-                          who_am_i={who_am_i}
-                          constants={constants}
-                          {...props}
-                        />
-                      )}
+                      component={AdminAuthorities}
+                      {...this.props}
                     />
-                    <Route
+                    <AdminRoute
                       path={`${match.path}edit-authority`}
-                      render={(props) => (
-                        <EditAuthorities
-                          who_am_i={who_am_i}
-                          constants={constants}
-                          {...props}
-                        />
-                      )}
+                      component={EditAuthorities}
+                      {...this.props}
                     />
                     <Switch>
                       <Route
@@ -294,11 +274,11 @@ class App extends React.Component {
                           />
                         )}
                       />
-                      <Route
+                      <AdminRoute
                         path={`${match.path}add/facility`}
-                        render={(props) => <AddFacility who_am_i={who_am_i} {...this.props} />}
+                        component={AddFacility}
+                        {...this.props}
                       />
-
                       <Route
                         path={`${match.path}`}
                         exact
@@ -326,40 +306,25 @@ class App extends React.Component {
                           />
                         )}
                       />
-                      <Route
-                          path={`${match.path}database`}
-                          render={(props) => (
-                            <StudentDatabase
-                             who_am_i={who_am_i}
-                             setNavigation={this.setNavigation}
-                             activePost={activePost}
-                             {...this.props}
-                            />
-                          )}
-                        />
-                      <Route
-                          path={`${match.path}registration`}
-                          render={(props) => (
-                            <RegisterStudent
-                             who_am_i={who_am_i}
-                             setNavigation={this.setNavigation}
-                             {...this.props}
-                            />
-                          )}
+                      <AdminRoute
+                        path={`${match.path}database`}
+                        component={StudentDatabase}
+                        setNavigation={this.setNavigation}
+                        {...this.props}
                       />
-                      <Route
-                          path={`${match.path}room`}
-                          exact
-                          render={(props) => (
-                            <Rooms
-                              who_am_i={who_am_i}
-                              constants={constants}
-                              activePost={activePost}
-                              setNavigation={this.setNavigation}
-                              {...props}
-                            />
-                          )}
-                      />  
+                      <AdminRoute
+                        path={`${match.path}registration`}
+                        component={RegisterStudent}
+                        setNavigation={this.setNavigation}
+                        {...this.props}
+                      />
+                      <AdminRoute
+                        path={`${match.path}room`}
+                        exact
+                        component={Rooms}
+                        setNavigation={this.setNavigation}
+                        {...this.props}
+                      />
                     </Switch>
                     <Switch>
                       <Route
