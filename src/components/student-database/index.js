@@ -110,7 +110,8 @@ class StudentDatabase extends Component {
 
         this.setState({
           loading: true,
-          filter: filter
+          filter: filter,
+          currentResidentDownloadUrl: `${this.state.currentResidentDownloadUrl}?${filter}`
         })
 
         this.props.getResidents(
