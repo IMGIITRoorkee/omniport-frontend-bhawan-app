@@ -62,6 +62,7 @@ class StudentDatabase extends Component {
     errMessage: "",
     fileName: "Choose csv file",
     csvData:"",
+    checked:false,
   };
 
   componentDidMount() {
@@ -180,11 +181,18 @@ class StudentDatabase extends Component {
     })
   };
 
+  handleCheckboxChange = (e) => {
+    this.setState({
+      checked: !this.state.checked
+    })
+  }
+
   handleDataUpload = (e) => {
     e.preventDefault();
     if (this.state.file) {
       let formdata = new FormData();
       formdata.append('csv_file',this.state.file)
+      formdata.append('complete_list',this.state.checked)
       this.props.updateBhawanData(
         updateBhawanDataUrl(this.props.activeHostel),
         formdata,
@@ -259,7 +267,8 @@ class StudentDatabase extends Component {
       open,
       activeResident,
       previousRecords,
-      csvData
+      csvData,
+      checked
     } = this.state
     const { residents, constants, activePost, who_am_i } = this.props
     const LivingOptions = [
@@ -376,6 +385,10 @@ class StudentDatabase extends Component {
                   hidden
                   onChange={this.handleFileChange}
                 />
+                <Checkbox 
+                  checked={checked}
+                  onChange={(e)=>this.handleCheckboxChange(e)} 
+                  label={{ children: 'Complete list' }} />
               <Button
                 primary
                 loading={loading}
