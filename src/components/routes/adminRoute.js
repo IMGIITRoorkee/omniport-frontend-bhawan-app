@@ -1,9 +1,6 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { Loading } from 'formula_one'
-import { connect } from 'react-redux'
-
-import { whoami } from "../../actions/who_am_i";
 
 class AdminRoute extends React.Component {
 
@@ -11,41 +8,24 @@ class AdminRoute extends React.Component {
         isAdmin: 'checking'
     }
 
-    componentDidMount() {
-        this.props.whoami(this.successCallBack, this.errCallBack)
-    }
-
-    successCallBack() {
-        this.setState({
-            isAdmin: this.props.who_am_i.isAdmin
-        })
-    }
-
-    errCallBack() {
-
-    }
-
-    componentDidUpdate(prevprops) {
-        if (prevprops.who_am_i !== this.props.who_am_i) {
-            this.setState({
-                isAdmin: this.props.who_am_i.isAdmin
-            })
-        }
-    }
-
     render() {
-        const { component: C, 
-                props: cProps, 
-                constants, 
-                who_am_i, 
-                setNavigation, 
-                activePost, 
-                activeHostel, 
-                ...rest 
-            } = this.props
+        const { component: C,
+            props: cProps,
+            constants,
+            who_am_i,
+            setNavigation,
+            activePost,
+            activeHostel,
+            ...rest
+        } = this.props
         const { isAdmin } = this.state
 
         if (isAdmin == 'checking') {
+            if (who_am_i.isAdmin===true||who_am_i.isAdmin===false) {
+                this.setState({
+                    isAdmin: who_am_i.isAdmin
+                })
+            }
             return <Loading />
         }
 
@@ -66,18 +46,4 @@ class AdminRoute extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        who_am_i: state.who_am_i,
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        whoami: (successCallBack, errCallBack) => {
-            dispatch(whoami(successCallBack, errCallBack))
-        },
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AdminRoute)
+export default AdminRoute
