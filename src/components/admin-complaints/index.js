@@ -99,7 +99,7 @@ class AdminComplains extends Component {
     )
     this.props.getTimeSlots(this.props.activeHostel)
     this.setState({
-      complainsDownloadUrl: complainsDownloadUrl(this.props.activeHostel)
+      complainsDownloadUrl: `${complainsDownloadUrl(this.props.activeHostel)}?`
     })
 
   }
@@ -326,6 +326,9 @@ class AdminComplains extends Component {
     this.setState({
       pendingLoading: true
     })
+    this.setState({
+      complainsDownloadUrl: `${this.state.complainsDownloadUrl}&search=${value}`
+    })
     this.props.getPendingComplains(
       `${statusComplainsUrl(this.props.activeHostel, [
         'PENDING','INPROCESS'
@@ -434,6 +437,9 @@ class AdminComplains extends Component {
     dateRange = this.dateFormatMatch(value)
 
     if (dateRange) {
+      this.setState({
+        complainsDownloadUrl: `${this.state.complainsDownloadUrl}&date=${dateRange}`
+      })
       this.setState({
         pendingLoading: true,
       })
