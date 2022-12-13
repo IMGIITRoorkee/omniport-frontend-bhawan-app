@@ -198,6 +198,7 @@ class ComplainRegister extends React.Component {
           </Button>
         </Form>
         <Header as='h3'>My Complains and Feedback</Header>
+        
         {!complainsLoading?
           (
             <React.Fragment>
@@ -230,9 +231,9 @@ class ComplainRegister extends React.Component {
                         </Table.Cell>
                         <Table.Cell>
                           {constants.statues.COMLAINT_STATUSES[complain.status]}
-                          {constants.statues.COMLAINT_STATUSES[complain.status]=='INPROCESS' && complain.remark && 
+                          {constants.statues.COMLAINT_STATUSES[complain.status]!='RESOLVED' && complain.remark && 
                             <>
-                              : {complain.remark}
+                              <br/> ( {complain.remark} )
                             </>
                           }
                         </Table.Cell>

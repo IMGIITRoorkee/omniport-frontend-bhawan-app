@@ -668,6 +668,11 @@ class AdminComplains extends Component {
                                         selection 
                                         options={complaint_status_options} 
                                       />
+                                      {constants.statues.COMLAINT_STATUSES[complain.status]!='RESOLVED' && complain.remark && 
+                                        <>
+                                          <br/> ( {complain.remark} )
+                                        </>
+                                      }
                                     </Table.Cell>
                                   </Table.Row>
                                 )
@@ -856,6 +861,11 @@ class AdminComplains extends Component {
                                             constants.statues.COMLAINT_STATUSES[
                                               complain.status
                                             ]
+                                          }
+                                          {constants.statues.COMLAINT_STATUSES[complain.status]!='RESOLVED' && complain.remark && 
+                                            <>
+                                              <br/> ( {complain.remark} )
+                                            </>
                                           }
                                         </Table.Cell>
                                         <Table.Cell>
