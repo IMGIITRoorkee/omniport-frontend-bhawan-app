@@ -61,19 +61,30 @@ class StudentDatabase extends Component {
     is_maintainer: false,
     errMessage: "",
     fileName: "Choose csv file",
-    csvData:"",
-    checked:false,
+    csvData: "",
+    checked: false,
+    nonResident: false,
   };
 
   componentDidMount() {
-    this.props.getResidents(
-      `${residentUrl(this.props.activeHostel)}?is_student=true`,
-      this.successCallBack,
-      this.errCallBack
-    )
+    let url = `${residentUrl(this.props.activeHostel)}?is_student=true`
+
     this.setState({
       currentResidentDownloadUrl: residentDownloadUrl(this.props.activeHostel)
     })
+
+    if (this.props.activeHostel == 'nor') {
+      this.setState({ nonResident: true })
+      url += `&is_resident=false`
+      this.setState({
+        currentResidentDownloadUrl: `${residentDownloadUrl(this.props.activeHostel)}?is_resident=false`
+      })
+    }
+    this.props.getResidents(
+      url,
+      this.successCallBack,
+      this.errCallBack
+    )
     this.checkIfMaintainer()
   }
 
@@ -107,6 +118,10 @@ class StudentDatabase extends Component {
 
         if (this.state.residentSearch.length >= 3) {
           filter = `${filter}search=${this.state.residentSearch}&`
+        }
+
+        if (this.state.nonResident) {
+          filter = `${filter}is_resident=${!this.state.nonResident}&`
         }
 
         this.setState({
@@ -177,7 +192,7 @@ class StudentDatabase extends Component {
   handleFileChange = (e) => {
     this.setState({
       file: e.target.files[0],
-      fileName:  e.target.files[0].name,
+      fileName: e.target.files[0].name,
     })
   };
 
@@ -191,8 +206,8 @@ class StudentDatabase extends Component {
     e.preventDefault();
     if (this.state.file) {
       let formdata = new FormData();
-      formdata.append('csv_file',this.state.file)
-      formdata.append('complete_list',this.state.checked)
+      formdata.append('csv_file', this.state.file)
+      formdata.append('complete_list', this.state.checked)
       this.props.updateBhawanData(
         updateBhawanDataUrl(this.props.activeHostel),
         formdata,
@@ -201,7 +216,7 @@ class StudentDatabase extends Component {
       )
       this.setState({
         errMessage: "",
-        loading:true,
+        loading: true,
       })
     } else {
       this.setState({
@@ -213,10 +228,10 @@ class StudentDatabase extends Component {
 
   uploadSuccessCallBack = (res) => {
     this.setState({
-      csvData:res,
-      loading:false,
-      file:"",
-      fileName:"Choose csv file",
+      csvData: res,
+      loading: false,
+      file: "",
+      fileName: "Choose csv file",
     })
     this.props.getResidents(
       `${residentUrl(this.props.activeHostel)}?is_student=true`,
@@ -228,23 +243,23 @@ class StudentDatabase extends Component {
   uploadErrCallBack = (message) => {
     this.setState({
       errMessage: message,
-      loading:false,
-      file:"",
-      fileName:"Choose csv file",
+      loading: false,
+      file: "",
+      fileName: "Choose csv file",
     })
   }
 
   downloadFile = () => {
-    const url = window.URL.createObjectURL(new Blob([this.state.csvData])) 
+    const url = window.URL.createObjectURL(new Blob([this.state.csvData]))
     const link = document.createElement('a')
     link.href = url
     link.setAttribute('download', 'logs')
     document.body.appendChild(link)
     link.click()
     this.setState({
-      csvData:"",
+      csvData: "",
     })
-}
+  }
 
   checkIfMaintainer = () => {
     this.setState({
@@ -268,7 +283,8 @@ class StudentDatabase extends Component {
       activeResident,
       previousRecords,
       csvData,
-      checked
+      checked,
+      nonResident
     } = this.state
     const { residents, constants, activePost, who_am_i } = this.props
     const LivingOptions = [
@@ -375,20 +391,20 @@ class StudentDatabase extends Component {
           </div>
           {([...constants['global_council']].includes(activePost)) && this.state.is_maintainer &&
             <div styleName='upload-data'>
-                <Button as="label" htmlFor="file" type="button" basic>
-                  <Button.Content >{this.state.fileName}</Button.Content>
-                </Button>
-                <input
-                  type="file"
-                  id="file"
-                  accept={".csv"}
-                  hidden
-                  onChange={this.handleFileChange}
-                />
-                <Checkbox 
-                  checked={checked}
-                  onChange={(e)=>this.handleCheckboxChange(e)} 
-                  label={{ children: 'Complete list' }} />
+              <Button as="label" htmlFor="file" type="button" basic>
+                <Button.Content >{this.state.fileName}</Button.Content>
+              </Button>
+              <input
+                type="file"
+                id="file"
+                accept={".csv"}
+                hidden
+                onChange={this.handleFileChange}
+              />
+              <Checkbox
+                checked={checked}
+                onChange={(e) => this.handleCheckboxChange(e)}
+                label={{ children: 'Complete list' }} />
               <Button
                 primary
                 loading={loading}
@@ -400,7 +416,7 @@ class StudentDatabase extends Component {
               </Button>
               {this.state.errMessage}
               {csvData &&
-              <Button onClick={this.downloadFile}>Download log file</Button>
+                <Button onClick={this.downloadFile}>Download log file</Button>
               }
             </div>
 
@@ -466,20 +482,22 @@ class StudentDatabase extends Component {
               options={feeOptions}
               selection
             />
-            <Checkbox
-              name="allResidents"
-              checked={allResidents}
-              label="All residents"
-              onChange={(e, { name, checked }) =>
-                this.onChange(e, { name: name, value: checked })
-              }
-            />
+            {!nonResident &&
+              <Checkbox
+                name="allResidents"
+                checked={allResidents}
+                label="All residents"
+                onChange={(e, { name, checked }) =>
+                  this.onChange(e, { name: name, value: checked })
+                }
+              />
+            }
             <a href={currentResidentDownloadUrl} download>
               <Button
                 primary
               >
                 Download list
-            </Button>
+              </Button>
             </a>
           </div>
           {!loading ?
@@ -525,7 +543,7 @@ class StudentDatabase extends Component {
                                   <Table.Cell >
                                     <Button onClick={() => { this.showResidentDetails(resident) }}>
                                       Show
-                                  </Button>
+                                    </Button>
                                   </Table.Cell>
                                 </Table.Row>
                               )
