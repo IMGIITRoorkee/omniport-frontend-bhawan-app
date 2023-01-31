@@ -22,20 +22,20 @@ import moment from 'moment'
 import { Loading } from "formula_one"
 
 import {
-  getPendingComplains,
-  getResolvedComplains,
+  getPendingComplaints,
+  getResolvedComplaints,
   increaseUnsuccefulAttempts,
-} from '../../actions/complains'
+} from '../../actions/complaints'
 import { getDefaultItems } from '../../actions/default-items'
 import { getTimeSlots, changeTimeSlot } from '../../actions/time-slots'
-import { resolveComplain } from '../../actions/resolveComplain'
+import { resolveComplaint } from '../../actions/resolveComplaint'
 import { addItem } from '../../actions/add_item'
 import {
-  statusComplainsUrl,
+  statusComplaintsUrl,
   defaultItemsUrl,
-  increaseUnsuccesfulComplainsUrl,
+  increaseUnsuccesfulComplaintsUrl,
   timeSlotsUrl,
-  complainsDownloadUrl,
+  complaintsDownloadUrl,
 } from '../../urls'
 import { days, types, entries } from '../constants'
 
@@ -43,10 +43,10 @@ import { toast } from 'react-semantic-toasts'
 import './index.css'
 
 
-class AdminComplains extends Component {
+class AdminComplaints extends Component {
   state = {
     open: false,
-    pastComplainIcon: 'angle up',
+    pastComplaintIcon: 'angle up',
     from: '',
     to: '',
     success: false,
@@ -71,7 +71,7 @@ class AdminComplains extends Component {
     foundId: 1,
     entryNo: '5',
     entryAprNo: '5',
-    complainsDownloadUrl: '',
+    complaintsDownloadUrl: '',
     options: [],
     complaint_item : [{default_item:null, quantity:1}],
     residentSearch: "",
@@ -80,14 +80,14 @@ class AdminComplains extends Component {
   }
 
   componentDidMount() {
-    this.props.setNavigation('Student Complains')
-    this.props.getPendingComplains(
-      statusComplainsUrl(this.props.activeHostel, ['pending','inprocess']),
+    this.props.setNavigation('Student Complaints')
+    this.props.getPendingComplaints(
+      statusComplaintsUrl(this.props.activeHostel, ['pending','inprocess']),
       this.pendingSuccessCallBack,
       this.pendingErrCallBack
     )
-    this.props.getResolvedComplains(
-      statusComplainsUrl(this.props.activeHostel, [
+    this.props.getResolvedComplaints(
+      statusComplaintsUrl(this.props.activeHostel, [
         'resolved',
         'unresolved',
       ]),
@@ -99,7 +99,7 @@ class AdminComplains extends Component {
     )
     this.props.getTimeSlots(this.props.activeHostel)
     this.setState({
-      complainsDownloadUrl: complainsDownloadUrl(this.props.activeHostel)
+      complaintsDownloadUrl: complaintsDownloadUrl(this.props.activeHostel)
     })
 
   }
@@ -139,10 +139,10 @@ class AdminComplains extends Component {
   })
 
   togglePastIcon = () => {
-    const pastComplainIcon = this.state.pastComplainIcon
-    pastComplainIcon === 'angle down'
-      ? this.setState({ pastComplainIcon: 'angle up' })
-      : this.setState({ pastComplainIcon: 'angle down' })
+    const pastComplaintIcon = this.state.pastComplaintIcon
+    pastComplaintIcon === 'angle down'
+      ? this.setState({ pastComplaintIcon: 'angle up' })
+      : this.setState({ pastComplaintIcon: 'angle down' })
   }
 
   handleChange = (event, { name, value }) => {
@@ -205,7 +205,7 @@ class AdminComplains extends Component {
         this.errCallBack
       )
     }})}
-    this.props.resolveComplain(
+    this.props.resolveComplaint(
       this.state.activeId,
       body,
       this.props.activeHostel,
@@ -221,13 +221,13 @@ class AdminComplains extends Component {
       error: false,
       message: '',
     })
-    this.props.getPendingComplains(
-      statusComplainsUrl(this.props.activeHostel, ['pending','inprocess']),
+    this.props.getPendingComplaints(
+      statusComplaintsUrl(this.props.activeHostel, ['pending','inprocess']),
       this.pendingSuccessCallBack,
       this.pendingErrCallBack
     )
-    this.props.getResolvedComplains(
-      statusComplainsUrl(this.props.activeHostel, [
+    this.props.getResolvedComplaints(
+      statusComplaintsUrl(this.props.activeHostel, [
         'resolved',
         'unresolved',
       ]),
@@ -326,8 +326,8 @@ class AdminComplains extends Component {
     this.setState({
       pendingLoading: true
     })
-    this.props.getPendingComplains(
-      `${statusComplainsUrl(this.props.activeHostel, [
+    this.props.getPendingComplaints(
+      `${statusComplaintsUrl(this.props.activeHostel, [
         'PENDING','INPROCESS'
       ])}search=${value}`,
       this.pendingSuccessCallBack,
@@ -340,8 +340,8 @@ class AdminComplains extends Component {
     this.setState({
       pastLoading: true
     })
-    this.props.getResolvedComplains(
-      `${statusComplainsUrl(this.props.activeHostel, [
+    this.props.getResolvedComplaints(
+      `${statusComplaintsUrl(this.props.activeHostel, [
         'RESOLVED',
         'UNRESOLVED',
       ])}search=${value}`,
@@ -355,8 +355,8 @@ class AdminComplains extends Component {
     this.setState({
       pendingLoading: true
     })
-    this.props.getPendingComplains(
-      `${statusComplainsUrl(this.props.activeHostel, [
+    this.props.getPendingComplaints(
+      `${statusComplaintsUrl(this.props.activeHostel, [
         'PENDING','INPROCESS'
       ])}page=${activePage}`,
       this.pendingSuccessCallBack,
@@ -369,8 +369,8 @@ class AdminComplains extends Component {
     this.setState({
       pastLoading: true
     })
-    this.props.getResolvedComplains(
-      `${statusComplainsUrl(this.props.activeHostel, [
+    this.props.getResolvedComplaints(
+      `${statusComplaintsUrl(this.props.activeHostel, [
         'RESOLVED',
         'UNRESOLVED',
       ])}&page=${activePage}`,
@@ -384,8 +384,8 @@ class AdminComplains extends Component {
     this.setState({
       pendingLoading: true
     })
-    this.props.getPendingComplains(
-      `${statusComplainsUrl(this.props.activeHostel, [
+    this.props.getPendingComplaints(
+      `${statusComplaintsUrl(this.props.activeHostel, [
         'PENDING','INPROCESS'
       ])}page=${this.state.activePage}&perPage=${value}`,
       this.pendingSuccessCallBack,
@@ -398,8 +398,8 @@ class AdminComplains extends Component {
     this.setState({
       pastLoading: true
     })
-    this.props.getResolvedComplains(
-      `${statusComplainsUrl(this.props.activeHostel, [
+    this.props.getResolvedComplaints(
+      `${statusComplaintsUrl(this.props.activeHostel, [
         'RESOLVED',
         'UNRESOLVED',
       ])}&page=${this.state.activeAprPage}&perPage=${value}`,
@@ -437,8 +437,8 @@ class AdminComplains extends Component {
       this.setState({
         pendingLoading: true,
       })
-      this.props.getPendingComplains(
-        `${statusComplainsUrl(this.props.activeHostel, [
+      this.props.getPendingComplaints(
+        `${statusComplaintsUrl(this.props.activeHostel, [
           'PENDING',
           'INPROCESS',
         ])}date=${dateRange}`,
@@ -460,8 +460,8 @@ class AdminComplains extends Component {
       this.setState({
         pastLoading: true,
       })
-      this.props.getResolvedComplains(
-        `${statusComplainsUrl(this.props.activeHostel, [
+      this.props.getResolvedComplaints(
+        `${statusComplaintsUrl(this.props.activeHostel, [
           'RESOLVED',
           'UNRESOLVED',
         ])}date=${dateRange}`,
@@ -476,8 +476,8 @@ class AdminComplains extends Component {
     this.setState({
       pendingLoading: true,
     })
-    this.props.getPendingComplains(
-      `${statusComplainsUrl(this.props.activeHostel, [
+    this.props.getPendingComplaints(
+      `${statusComplaintsUrl(this.props.activeHostel, [
         'PENDING',
         'INPROCESS',
       ])}`,
@@ -491,8 +491,8 @@ class AdminComplains extends Component {
     this.setState({
       pastLoading: true,
     })
-    this.props.getResolvedComplains(
-      `${statusComplainsUrl(this.props.activeHostel, [
+    this.props.getResolvedComplaints(
+      `${statusComplaintsUrl(this.props.activeHostel, [
         'RESOLVED',
         'UNRESOLVED',
       ])}`,
@@ -512,9 +512,9 @@ class AdminComplains extends Component {
     this.setState({ complaint_item })
   }
 
-  increaseUnsuccesfulComplains = (id) => {
+  increaseUnsuccesfulComplaints = (id) => {
     this.props.increaseUnsuccefulAttempts(
-      increaseUnsuccesfulComplainsUrl(this.props.activeHostel, id),
+      increaseUnsuccesfulComplaintsUrl(this.props.activeHostel, id),
       this.resolveSuccessCallBack,
       this.errCallBack
     )
@@ -524,7 +524,7 @@ class AdminComplains extends Component {
     const {
       open,
       options,
-      pastComplainIcon,
+      pastComplaintIcon,
       activePage,
       activeAprPage,
       pendingLoading,
@@ -532,7 +532,7 @@ class AdminComplains extends Component {
       entryNo,
       entryAprNo,
       remark,
-      complainsDownloadUrl,
+      complaintsDownloadUrl,
       residentSearch,
       residentSearchApr,
       activeStatus,
@@ -541,12 +541,12 @@ class AdminComplains extends Component {
       pastDatesRange,
       pastDateFilterActive,
     } = this.state
-    const { pendingComplains, resolvedComplains, defaultItems, constants } = this.props
+    const { pendingComplaints, resolvedComplaints, defaultItems, constants } = this.props
     let complaint_status_options = [];
-    for (var i in constants.statues['COMLAINT_STATUSES']) {
+    for (var i in constants.statues['COMPLAINT_STATUSES']) {
       complaint_status_options.push({
         key: i.toString(),
-        text: constants.statues['COMLAINT_STATUSES'][i].toString(),
+        text: constants.statues['COMPLAINT_STATUSES'][i].toString(),
         value: i.toString(),
       });
     }
@@ -554,9 +554,9 @@ class AdminComplains extends Component {
       <Grid container>
           <Grid.Column width={16}>
             <Container>
-              <div styleName="complain-header">
-                <Header as='h4'>Student Complains and Feedback</Header>
-                <div styleName="complain-header">
+              <div styleName="complaint-header">
+                <Header as='h4'>Student Complaints and Feedback</Header>
+                <div styleName="complaint-header">
                   {dateFilterActive ? (
                     <DatesRangeInput
                       name='datesRange'
@@ -592,7 +592,7 @@ class AdminComplains extends Component {
                     icon="search"
                     placeholder="Search by Name/Enrollment no."
                   />
-                  <a href={complainsDownloadUrl} download>
+                  <a href={complaintsDownloadUrl} download>
                     <Button
                     primary
                     >
@@ -604,8 +604,8 @@ class AdminComplains extends Component {
               {!pendingLoading?
                 (
                   <React.Fragment>
-                  {(pendingComplains.results &&
-                    pendingComplains.results.length >0)?
+                  {(pendingComplaints.results &&
+                    pendingComplaints.results.length >0)?
                     (
                       <React.Fragment>
                       <div styleName="table-height table-overflow">
@@ -626,51 +626,51 @@ class AdminComplains extends Component {
                           </Table.Row>
                         </Table.Header>
                         <Table.Body>
-                          {pendingComplains.results &&
-                            pendingComplains.results.length > 0
-                            ? pendingComplains.results.map((complain, index) => {
+                          {pendingComplaints.results &&
+                            pendingComplaints.results.length > 0
+                            ? pendingComplaints.results.map((complaint, index) => {
                                 return (
                                   <Table.Row key={index}>
                                     <Table.Cell>
                                       {entryNo * (activePage - 1) + index + 1}
                                     </Table.Cell>
-                                    <Table.Cell>{complain.description}</Table.Cell>
-                                    <Table.Cell>{complain.complainant}</Table.Cell>
+                                    <Table.Cell>{complaint.description}</Table.Cell>
+                                    <Table.Cell>{complaint.complainant}</Table.Cell>
                                     <Table.Cell>
                                       {moment(
-                                        complain.datetimeCreated
+                                        complaint.datetimeCreated
                                       ).format('DD/MM/YY, hh:mm a')}
                                     </Table.Cell>
                                     <Table.Cell>
                                       {
                                         constants.complaint_types[
-                                          complain.complaintType
+                                          complaint.complaintType
                                         ]
                                       }
                                     </Table.Cell>
-                                    <Table.Cell>{complain.phoneNumber}</Table.Cell>
-                                    <Table.Cell>{complain.roomNo}</Table.Cell>
+                                    <Table.Cell>{complaint.phoneNumber}</Table.Cell>
+                                    <Table.Cell>{complaint.roomNo}</Table.Cell>
                                     <Table.Cell
                                       onClick={() =>
-                                        this.increaseUnsuccesfulComplains(complain.id)
+                                        this.increaseUnsuccesfulComplaints(complaint.id)
                                       }
                                     >
-                                      {complain.failedAttempts}
+                                      {complaint.failedAttempts}
                                       <span styleName='cursor' styleName="plus-icon">
                                         <Icon name="add circle" color="grey" size="large" />
                                       </span>
                                     </Table.Cell>
                                     <Table.Cell>
                                       <Dropdown 
-                                        value={complain.status} 
-                                        onChange={(e,data) => this.show(complain.id,data,complain.remark)} 
+                                        value={complaint.status} 
+                                        onChange={(e,data) => this.show(complaint.id,data,complaint.remark)} 
                                         search 
                                         selection 
                                         options={complaint_status_options} 
                                       />
-                                      {constants.statues.COMLAINT_STATUSES[complain.status]!='RESOLVED' && complain.remark && 
+                                      {constants.statues.COMPLAINT_STATUSES[complaint.status]!='RESOLVED' && complaint.remark && 
                                         <>
-                                          <br/> ( {complain.remark} )
+                                          <br/> ( {complaint.remark} )
                                         </>
                                       }
                                     </Table.Cell>
@@ -684,11 +684,11 @@ class AdminComplains extends Component {
                       <div styleName='pagination-container'>
                         
                         <div>
-                          {pendingComplains.count > entryNo ? (
+                          {pendingComplaints.count > entryNo ? (
                             <Pagination
                               activePage={activePage}
                               onPageChange={this.handlePaginationChange}
-                              totalPages={Math.ceil(pendingComplains.count / entryNo)}
+                              totalPages={Math.ceil(pendingComplaints.count / entryNo)}
                             />
                           ) : null}
                         </div>
@@ -707,7 +707,7 @@ class AdminComplains extends Component {
                       </React.Fragment>
                     ):
                     (
-                      <Segment>No pending complains found</Segment>
+                      <Segment>No pending complaints found</Segment>
                     )
                   }
                   </React.Fragment>
@@ -730,14 +730,14 @@ class AdminComplains extends Component {
                 from
                   <span styleName="info-icon">
                   <Popup
-                    content='Set the time to send emails automatically for this type of complain'
+                    content='Set the time to send emails automatically for this type of complaint'
                     trigger={
                       <Icon
                         name='info'
                         size="small"
                         color="blue"
                         circular
-                        aria-label='Set the time to send emails automatically for this type of complain'
+                        aria-label='Set the time to send emails automatically for this type of complaint'
                       />
                     }
                   />
@@ -758,12 +758,12 @@ class AdminComplains extends Component {
                   />
                 <Button primary onClick={this.changeTiming}>Change</Button>
               </Header>
-              <div styleName="complain-header">
+              <div styleName="complaint-header">
                 <Header as='h4'>
-                  Past Complains and Feedback
-                  <Icon name={pastComplainIcon} onClick={this.togglePastIcon} />
+                  Past Complaints and Feedback
+                  <Icon name={pastComplaintIcon} onClick={this.togglePastIcon} />
                 </Header>
-                <div styleName='complain-header'>
+                <div styleName='complaint-header'>
                 {pastDateFilterActive ? (
                   <DatesRangeInput
                     name='pastDatesRange'
@@ -801,12 +801,12 @@ class AdminComplains extends Component {
                 />
               </div>
               </div>
-              {pastComplainIcon === 'angle down' && (
+              {pastComplaintIcon === 'angle down' && (
                 <React.Fragment>
                   {!pastLoading?
                     (
                       <React.Fragment>
-                        {(resolvedComplains.results && resolvedComplains.results.length > 0) ?
+                        {(resolvedComplaints.results && resolvedComplaints.results.length > 0) ?
                       (
                       <React.Fragment>
                         <div styleName="table-height">
@@ -823,54 +823,54 @@ class AdminComplains extends Component {
                                 <Table.HeaderCell>
                                   Unsuccesful attempts to solve
                                 </Table.HeaderCell>
-                                <Table.HeaderCell>Complain Status</Table.HeaderCell>
+                                <Table.HeaderCell>Complaint Status</Table.HeaderCell>
                                 <Table.HeaderCell>Items</Table.HeaderCell>
                                 <Table.HeaderCell>Remark</Table.HeaderCell>
                               </Table.Row>
                             </Table.Header>
                             <Table.Body>
-                              {resolvedComplains.results &&
-                              resolvedComplains.results.length > 0
-                                ? resolvedComplains.results.map((complain, index) => {
+                              {resolvedComplaints.results &&
+                              resolvedComplaints.results.length > 0
+                                ? resolvedComplaints.results.map((complaint, index) => {
                                     return (
                                       <Table.Row key={index}>
                                         <Table.Cell>
                                           {entryAprNo * (activeAprPage - 1) + index + 1}
                                         </Table.Cell>
-                                        <Table.Cell>{complain.description}</Table.Cell>
-                                        <Table.Cell>{complain.complainant}</Table.Cell>
+                                        <Table.Cell>{complaint.description}</Table.Cell>
+                                        <Table.Cell>{complaint.complainant}</Table.Cell>
                                         <Table.Cell>
                                           {moment(
-                                            complain.datetimeCreated
+                                            complaint.datetimeCreated
                                           ).format('DD/MM/YY, hh:mm a')}
                                         </Table.Cell>
                                         <Table.Cell>
                                           {
                                             constants.complaint_types[
-                                              complain.complaintType
+                                              complaint.complaintType
                                             ]
                                           }
                                         </Table.Cell>
-                                        <Table.Cell>{complain.phoneNumber}</Table.Cell>
-                                        <Table.Cell>{complain.roomNo}</Table.Cell> 
+                                        <Table.Cell>{complaint.phoneNumber}</Table.Cell>
+                                        <Table.Cell>{complaint.roomNo}</Table.Cell> 
                                         <Table.Cell>
-                                          {complain.failedAttempts}
+                                          {complaint.failedAttempts}
                                         </Table.Cell>
                                         <Table.Cell>
                                           {
-                                            constants.statues.COMLAINT_STATUSES[
-                                              complain.status
+                                            constants.statues.COMPLAINT_STATUSES[
+                                              complaint.status
                                             ]
                                           }
-                                          {constants.statues.COMLAINT_STATUSES[complain.status]!='RESOLVED' && complain.remark && 
+                                          {constants.statues.COMPLAINT_STATUSES[complaint.status]!='RESOLVED' && complaint.remark && 
                                             <>
-                                              <br/> ( {complain.remark} )
+                                              <br/> ( {complaint.remark} )
                                             </>
                                           }
                                         </Table.Cell>
                                         <Table.Cell>
-                                          {complain.items.length > 0 
-                                            ? complain.items.map((item,index) => {
+                                          {complaint.items.length > 0 
+                                            ? complaint.items.map((item,index) => {
                                             return(
                                               <Table.Row>
                                                 <Table.Cell>
@@ -887,8 +887,8 @@ class AdminComplains extends Component {
                                         )}
                                         </Table.Cell>
                                         <Table.Cell>
-                                            {complain.remark && complain.remark.trim() != '' 
-                                              ? complain.remark : 'None'}
+                                            {complaint.remark && complaint.remark.trim() != '' 
+                                              ? complaint.remark : 'None'}
                                         </Table.Cell>
                                       </Table.Row>
                                     )
@@ -899,11 +899,11 @@ class AdminComplains extends Component {
                         </div>
                         <div styleName='pagination-container'>
                         <div>
-                          {resolvedComplains.count > entryAprNo ? (
+                          {resolvedComplaints.count > entryAprNo ? (
                             <Pagination
                               activePage={activeAprPage}
                               onPageChange={this.handlePastPaginationChange}
-                              totalPages={Math.ceil(resolvedComplains.count / entryAprNo)}
+                              totalPages={Math.ceil(resolvedComplaints.count / entryAprNo)}
                             />
                           ) : null}
                         </div>
@@ -921,7 +921,7 @@ class AdminComplains extends Component {
                       </div>
                       </React.Fragment>
                     ):
-                    <Segment>No resolved complains found</Segment>
+                    <Segment>No resolved complaints found</Segment>
                   }
                       </React.Fragment>
                     ):
@@ -933,7 +933,7 @@ class AdminComplains extends Component {
               )}
             </Container>
             <Modal size='mini' open={open} onClose={this.close}>
-              <Modal.Header styleName='center'>Change complain status?</Modal.Header>
+              <Modal.Header styleName='center'>Change complaint status?</Modal.Header>
               <Modal.Content>
               <Form>
               <Form.Group styleName='item-container'>
@@ -1002,8 +1002,8 @@ class AdminComplains extends Component {
 
 function mapStateToProps(state) {
   return {
-    pendingComplains: state.pendingComplains,
-    resolvedComplains: state.resolvedComplains,
+    pendingComplaints: state.pendingComplaints,
+    resolvedComplaints: state.resolvedComplaints,
     defaultItems: state.defaultItems,
     timeSlots: state.timeSlots,
     activeHostel: state.activeHostel
@@ -1012,11 +1012,11 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getPendingComplains: (url, successCallBack, errCallBack) => {
-      dispatch(getPendingComplains(url, successCallBack, errCallBack))
+    getPendingComplaints: (url, successCallBack, errCallBack) => {
+      dispatch(getPendingComplaints(url, successCallBack, errCallBack))
     },
-    getResolvedComplains: (url, successCallBack, errCallBack) => {
-      dispatch(getResolvedComplains(url, successCallBack, errCallBack))
+    getResolvedComplaints: (url, successCallBack, errCallBack) => {
+      dispatch(getResolvedComplaints(url, successCallBack, errCallBack))
     },
     getDefaultItems: (url) => {
       dispatch(getDefaultItems(url))
@@ -1046,9 +1046,9 @@ const mapDispatchToProps = (dispatch) => {
     increaseUnsuccefulAttempts: (url, successCallBack, errCallBack) => {
       dispatch(increaseUnsuccefulAttempts(url, successCallBack, errCallBack))
     },
-    resolveComplain: (id, data, residence, successCallBack, errCallBack) => {
+    resolveComplaint: (id, data, residence, successCallBack, errCallBack) => {
       dispatch(
-        resolveComplain(id, data, residence, successCallBack, errCallBack)
+        resolveComplaint(id, data, residence, successCallBack, errCallBack)
       )
     },
     addItem: (data, residence, successCallBack, errCallBack) => {
@@ -1059,4 +1059,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminComplains)
+export default connect(mapStateToProps, mapDispatchToProps)(AdminComplaints)

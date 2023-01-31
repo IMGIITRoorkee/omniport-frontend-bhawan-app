@@ -6,7 +6,7 @@ import { Icon, Menu } from "semantic-ui-react";
 
 import {
   homePageUrl,
-  complainUrl,
+  complaintUrl,
   profilePageUrl,
   bookingUrl,
   eventUrl
@@ -31,9 +31,9 @@ class MenuBar extends Component {
         })
         return
       }
-      case complainUrl(): {
+      case complaintUrl(): {
         this.setState({
-          activeSubGroup: 'complains'
+          activeSubGroup: 'complaints'
         })
         return
       }
@@ -92,15 +92,15 @@ class MenuBar extends Component {
               Book a Room
             </Menu.Item>
           </Link>
-          <Link to={complainUrl()}>
+          <Link to={complaintUrl()}>
             <Menu.Item
-              name="complains"
+              name="complaints"
               onClick={this.handleItemClick}
-              active={activeSubGroup === 'complains'}
+              active={activeSubGroup === 'complaints'}
               className={["menu-icon-bar", "menu-items"].join(" ")}
             >
               <Icon name="book" />
-              Make a Complain
+              Make a complaint
             </Menu.Item>
           </Link>
           <Link to={profilePageUrl()}>

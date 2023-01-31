@@ -17,8 +17,8 @@ export const facilityPageUrl = () => {
   return `${baseNavUrl('/facility')}`
 }
 
-export const complainUrl = () => {
-  return `${baseNavUrl('/complain')}`
+export const complaintUrl = () => {
+  return `${baseNavUrl('/complaint')}`
 }
 
 export const itemUrl = () => {
@@ -29,8 +29,8 @@ export const defaultItemUrl = () => {
   return `${baseNavUrl('/default_item')}`
 }
 
-export const adminComplainUrl = () => {
-  return `${baseNavUrl('/admin_complain')}`
+export const adminComplaintUrl = () => {
+  return `${baseNavUrl('/admin_complaint')}`
 }
 
 export const bookingUrl = () => {
@@ -59,7 +59,7 @@ export const baseApiUrl = () => {
   return `/api/bhawan_app/`
 }
 
-export const complainsUrl = (residence) => {
+export const complaintsUrl = (residence) => {
   return `${baseApiUrl()}${residence}/complaint/`
 }
 
@@ -75,11 +75,11 @@ export const defaultItemsUrl = (residence) => {
   return `${baseApiUrl()}${residence}/default_item/`
 }
 
-export const complainsDownloadUrl = (residence) => {
+export const complaintsDownloadUrl = (residence) => {
   return `${baseApiUrl()}${residence}/complaint/download/`
 }
 
-export const statusComplainsUrl = (residence, statuses) => {
+export const statusComplaintsUrl = (residence, statuses) => {
   let allStatus = '?'
   statuses.map((status) => {
     status = status.toUpperCase()
@@ -88,7 +88,7 @@ export const statusComplainsUrl = (residence, statuses) => {
   return `${baseApiUrl()}${residence}/complaint/${allStatus}`
 }
 
-export const increaseUnsuccesfulComplainsUrl = (residence, id) => {
+export const increaseUnsuccesfulComplaintsUrl = (residence, id) => {
   return `${baseApiUrl()}${residence}/complaint/${id}/unsuccessful/`
 }
 

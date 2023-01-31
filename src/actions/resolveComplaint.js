@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { getCookie } from 'formula_one/src/utils'
 
-export const resolveComplain = (
+export const resolveComplaint = (
   id,
   data,
   residence,

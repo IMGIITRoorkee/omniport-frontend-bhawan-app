@@ -1,8 +1,8 @@
 const initialState = {}
 
-const complains = (state = initialState, action) => {
+const complaints = (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_ALL_COMPLAINS':
+    case 'GET_ALL_COMPLAINTS':
       return action.payload
     case 'ADD_COMPLAINT': {
       state.count++
@@ -15,4 +15,4 @@ const complains = (state = initialState, action) => {
   }
 }
 
-export default complains
+export default complaints

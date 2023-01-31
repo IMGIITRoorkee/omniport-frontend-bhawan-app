@@ -6,12 +6,12 @@ import {  Divider, Menu, Grid } from 'semantic-ui-react';
 import { getFacilities } from '../../actions/facilities';
 import UpcomingBookings from '../upcoming_bookings/index';
 import PastBookings from '../past_bookings/index';
-import Complains from '../complains/index';
+import Complaints from '../complaints/index';
 
 import facilities from './index.css';
 import blocks from '../../css/app.css';
 
-import { complainsUrl } from '../../urls';
+import { complaintsUrl } from '../../urls';
 
 class MyProfile extends React.Component {
   state = { activeItem: 'upcoming' };
@@ -27,7 +27,7 @@ class MyProfile extends React.Component {
     const { who_am_i, constants } = this.props;
     return (
         <Grid.Column width={16}>
-          <Complains {...this.props} />
+          <Complaints {...this.props} />
           <Divider />
           <Menu compact icon='labeled'>
             <Menu.Item
@@ -60,7 +60,7 @@ class MyProfile extends React.Component {
 }
 function mapStateToProps(state) {
   return {
-    complains: state.complains,
+    complaints: state.complaints,
     activeHostel: state.activeHostel
   };
 }

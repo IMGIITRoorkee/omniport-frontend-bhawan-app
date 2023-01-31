@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const getComplains = (url, successCallBack, errCallBack) => {
+export const getComplaints = (url, successCallBack, errCallBack) => {
   return (dispatch) => {
     axios({
       method: 'get',
@@ -10,7 +10,7 @@ export const getComplains = (url, successCallBack, errCallBack) => {
         successCallBack(response)
         let item = response.data
         dispatch({
-          type: 'GET_ALL_COMPLAINS',
+          type: 'GET_ALL_COMPLAINTS',
           payload: item
         })
       })
@@ -19,7 +19,7 @@ export const getComplains = (url, successCallBack, errCallBack) => {
       })
   }
 }
-export const getPendingComplains = (url, successCallBack, errCallBack) => {
+export const getPendingComplaints = (url, successCallBack, errCallBack) => {
   return (dispatch) => {
     axios({
       method: 'get',
@@ -29,7 +29,7 @@ export const getPendingComplains = (url, successCallBack, errCallBack) => {
         successCallBack(response)
         let item = response.data
         dispatch({
-          type: 'GET_PENDING_COMPLAINS',
+          type: 'GET_PENDING_COMPLAINTS',
           payload: item
         })
       })
@@ -38,7 +38,7 @@ export const getPendingComplains = (url, successCallBack, errCallBack) => {
       })
   }
 }
-export const getResolvedComplains = (url, successCallBack, errCallBack) => {
+export const getResolvedComplaints = (url, successCallBack, errCallBack) => {
   return (dispatch) => {
     axios({
       method: 'get',
@@ -48,7 +48,7 @@ export const getResolvedComplains = (url, successCallBack, errCallBack) => {
         successCallBack(response)
         let item = response.data
         dispatch({
-          type: 'GET_RESOLVED_COMPLAINS',
+          type: 'GET_RESOLVED_COMPLAINTS',
           payload: item
         })
       })

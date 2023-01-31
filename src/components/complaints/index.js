@@ -4,34 +4,34 @@ import { Table, Header, Pagination, Segment, Dropdown } from 'semantic-ui-react'
 
 import { Loading } from "formula_one"
 
-import { getComplains } from '../../actions/complains'
+import { getComplaints } from '../../actions/complaints'
 import { addComplaint } from '../../actions/add_complaint'
-import { complainsUrl } from '../../urls'
+import { complaintsUrl } from '../../urls'
 import { entries } from '../constants'
 import moment from 'moment'
 import './index.css'
 
 
-class Complains extends React.Component {
+class Complaints extends React.Component {
   state = {
-    complainAgainID: null,
+    complaintAgainID: null,
     activePage: 1,
-    complainsLoading: true,
+    complaintsLoading: true,
     entryNo: '5',
   }
   componentDidMount() {
-    this.props.getComplains(
-      `${complainsUrl(this.props.activeHostel)}?me=True`,
-      this.complainsSuccessCallBack,
-      this.complainsErrCallBack
+    this.props.getComplaints(
+      `${complaintsUrl(this.props.activeHostel)}?me=True`,
+      this.complaintsSuccessCallBack,
+      this.complaintsErrCallBack
     )
   }
   handlePaginationChange = (e, { activePage }) => {
-    this.setState({ activePage, complainsLoading: true })
-    this.props.getComplains(
-      `${complainsUrl(this.props.activeHostel)}?page=${activePage}`,
-      this.complainsSuccessCallBack,
-      this.complainsErrCallBack
+    this.setState({ activePage, complaintsLoading: true })
+    this.props.getComplaints(
+      `${complaintsUrl(this.props.activeHostel)}?page=${activePage}`,
+      this.complaintsSuccessCallBack,
+      this.complaintsErrCallBack
     )
   }
 
@@ -40,36 +40,36 @@ class Complains extends React.Component {
     this.setState({
       pendingLoading: true
     })
-    this.props.getComplains(
-      `${complainsUrl(this.props.activeHostel)}?page=${this.state.activePage}&perPage=${value}`,
-      this.complainsSuccessCallBack,
-      this.complainsErrCallBack
+    this.props.getComplaints(
+      `${complaintsUrl(this.props.activeHostel)}?page=${this.state.activePage}&perPage=${value}`,
+      this.complaintsSuccessCallBack,
+      this.complaintsErrCallBack
     )
   }
 
-  complainsSuccessCallBack = (res) => {
+  complaintsSuccessCallBack = (res) => {
     this.setState({
-      complainsLoading: false,
+      complaintsLoading: false,
     })
   }
 
-  complainsErrCallBack = (err) => {
+  complaintsErrCallBack = (err) => {
     this.setState({
-      complainsLoading: false,
+      complaintsLoading: false,
     })
   }
 
   render() {
-    const { complains, constants } = this.props
-    const { activePage, complainsLoading, entryNo } = this.state
+    const { complaints, constants } = this.props
+    const { activePage, complaintsLoading, entryNo } = this.state
 
     return (
       <React.Fragment>
-          <Header as='h3'>My Complains</Header>
-          {!complainsLoading?
+          <Header as='h3'>My Complaints</Header>
+          {!complaintsLoading?
             (
               <React.Fragment>
-                {(complains.results && complains.results.length > 0)?
+                {(complaints.results && complaints.results.length > 0)?
             (
               <React.Fragment>
                 <div styleName="table-height"> 
@@ -78,30 +78,30 @@ class Complains extends React.Component {
                     <Table.Row>
                       <Table.HeaderCell>ID</Table.HeaderCell>
                       <Table.HeaderCell>Complaint Description</Table.HeaderCell>
-                      <Table.HeaderCell>Complain Type</Table.HeaderCell>
-                      <Table.HeaderCell>Complain Status</Table.HeaderCell>
-                      <Table.HeaderCell>Complain Date and Time</Table.HeaderCell>
+                      <Table.HeaderCell>complaint Type</Table.HeaderCell>
+                      <Table.HeaderCell>complaint Status</Table.HeaderCell>
+                      <Table.HeaderCell>complaint Date and Time</Table.HeaderCell>
                       <Table.HeaderCell>Applicant Room</Table.HeaderCell>
                       <Table.HeaderCell>Items</Table.HeaderCell>
                       <Table.HeaderCell>Remark</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
-                    {complains.results && complains.results.length > 0
-                      ? complains.results.map((complain, index) => {
+                    {complaints.results && complaints.results.length > 0
+                      ? complaints.results.map((complaint, index) => {
                           return (
                             <Table.Row>
                               <Table.Cell>
                                 {entryNo * (activePage - 1) + index + 1}
                               </Table.Cell>
-                              <Table.Cell>{complain.description}</Table.Cell>
-                              <Table.Cell>{constants.complaint_types[complain.complaintType]}</Table.Cell>
-                              <Table.Cell>{constants.statues.COMLAINT_STATUSES[complain.status]}</Table.Cell>
-                              <Table.Cell>{moment(complain.datetimeCreated).format('DD/MM/YY, hh:mm a')}</Table.Cell>
-                              <Table.Cell>{complain.roomNo}</Table.Cell>
+                              <Table.Cell>{complaint.description}</Table.Cell>
+                              <Table.Cell>{constants.complaint_types[complaint.complaintType]}</Table.Cell>
+                              <Table.Cell>{constants.statues.COMPLAINT_STATUSES[complaint.status]}</Table.Cell>
+                              <Table.Cell>{moment(complaint.datetimeCreated).format('DD/MM/YY, hh:mm a')}</Table.Cell>
+                              <Table.Cell>{complaint.roomNo}</Table.Cell>
                               <Table.Cell>
-                                {complain.items.length > 0 
-                                  ? complain.items.map((item,index) => {
+                                {complaint.items.length > 0 
+                                  ? complaint.items.map((item,index) => {
                                     return(
                                       <Table.Row>
                                         <Table.Cell>
@@ -119,8 +119,8 @@ class Complains extends React.Component {
                                 }
                               </Table.Cell>
                               <Table.Cell>
-                                  {complain.remark && complain.remark.trim() != '' 
-                                    ? complain.remark : 'None'}
+                                  {complaint.remark && complaint.remark.trim() != '' 
+                                    ? complaint.remark : 'None'}
                               </Table.Cell>
                             </Table.Row>
                           )
@@ -131,11 +131,11 @@ class Complains extends React.Component {
                 </div>
                 <div styleName='pagination-container'>
                   <div>
-                    {complains.count > entryNo ? (
+                    {complaints.count > entryNo ? (
                       <Pagination
                         activePage={activePage}
                         onPageChange={this.handlePaginationChange}
-                        totalPages={Math.ceil(complains.count / entryNo)}
+                        totalPages={Math.ceil(complaints.count / entryNo)}
                       />
                     ) : null}
                   </div>
@@ -154,7 +154,7 @@ class Complains extends React.Component {
                     </React.Fragment>
                   ):
                   (
-                    <Segment>No Complains made yet</Segment>
+                    <Segment>No Complaints made yet</Segment>
                   )
                 }
                     </React.Fragment>
@@ -170,15 +170,15 @@ class Complains extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    complains: state.complains,
+    complaints: state.complaints,
     activePage: state.activePage
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getComplains: (url, successCallBack, errCallBack) => {
-      dispatch(getComplains(url, successCallBack, errCallBack))
+    getComplaints: (url, successCallBack, errCallBack) => {
+      dispatch(getComplaints(url, successCallBack, errCallBack))
     },
     addComplaint: () => {
       dispatch(addComplaint())
@@ -186,4 +186,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Complains)
+export default connect(mapStateToProps, mapDispatchToProps)(Complaints)

@@ -18,11 +18,11 @@ const MenuBar = lazy(() => import("../menubar/index"))
 
 import {
   homePageUrl,
-  adminComplainUrl,
+  adminComplaintUrl,
   itemUrl,
   bookingUrl,
   eventUrl,
-  complainUrl,
+  complaintUrl,
   registrationUrl,
   databaseUrl,
   roomUrl
@@ -66,9 +66,9 @@ class Nav extends Component {
         })
         return
       }
-      case adminComplainUrl(): {
+      case adminComplaintUrl(): {
         this.setState({
-          activeSubGroup: 'complains'
+          activeSubGroup: 'complaints'
         })
         return
       }
@@ -207,12 +207,12 @@ class Nav extends Component {
               <Menu.Item styleName='blocks.zero-padding'>
                 <Button
                   styleName={
-                    location.pathname === complainUrl()
+                    location.pathname === complaintUrl()
                       ? 'blocks.disactive-button'
                       : 'blocks.active-button'
                   }
                   onClick={() => {
-                    this.props.history.push(complainUrl())
+                    this.props.history.push(complaintUrl())
                   }}
                 >
                   Register a Complaint
@@ -225,12 +225,12 @@ class Nav extends Component {
           <Menu size='mini' secondary styleName='navCss.lower_menu'>
             <Menu.Item
               size='mini'
-              name='complains'
+              name='complaints'
               color='blue'
               styleName='navCss.navColor'
-              active={activeSubGroup == 'complains'}
+              active={activeSubGroup == 'complaints'}
               onClick={() =>
-                this.handleGroupClick('complains', adminComplainUrl())
+                this.handleGroupClick('complaints', adminComplaintUrl())
               }
             >
               Complaints and Feedback

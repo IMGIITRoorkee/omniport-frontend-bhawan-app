@@ -4,7 +4,7 @@ import activeAuthority from './active-authority'
 import activeFacility from './active-facility'
 import authorities from './authorities'
 import facilities from './facilities'
-import complains from './complains'
+import complaints from './complaints'
 import items from './items'
 import defaultItems from './default-items'
 import constants from './constants'
@@ -13,8 +13,8 @@ import events from './events'
 import bookingRequests from './roomBookings'
 import timeSlots from './time-slots'
 import facility from './facility'
-import pendingComplains from './pendingComplains'
-import resolvedComplains from './resolvedComplains'
+import pendingComplaints from './pendingComplaints'
+import resolvedComplaints from './resolvedComplaints'
 import pastBookingRequests from './past-bookings'
 import searchPersonResults from './searchPerson'
 import presentBookingRequests from './present-bookings'
@@ -33,7 +33,7 @@ const rootReducers = combineReducers({
   authorities: authorities,
   constants: constants,
   facilities: facilities,
-  complains: complains,
+  complaints: complaints,
   items: items,
   defaultItems: defaultItems,
   who_am_i: whoAmI,
@@ -41,8 +41,8 @@ const rootReducers = combineReducers({
   bookingRequests: bookingRequests,
   timeSlots: timeSlots,
   facility: facility,
-  pendingComplains: pendingComplains,
-  resolvedComplains: resolvedComplains,
+  pendingComplaints: pendingComplaints,
+  resolvedComplaints: resolvedComplaints,
   pastBookingRequests: pastBookingRequests,
   activeHostel: activeHostel,
   presentBookingRequests: presentBookingRequests,

@@ -8,14 +8,14 @@ import { AppHeader, AppFooter, Loading } from "formula_one"
 
 const Nav = lazy(() => import("./navbar/index"))
 const BookRoom = lazy(() => import("./book_room/index"))
-const ComplainRegister = lazy(() => import("./complain_register/index"))
+const ComplaintRegister = lazy(() => import("./complaint_register/index"))
 const Authorities = lazy(() => import("./authorities/index"))
 const Facilities = lazy(() => import("./facilities/index"))
 const MyInfo = lazy(() => import("./my_info/index"))
 const StudentDatabase = lazy(() => import("./student-database/index"))
 const EventsCard = lazy(() => import("./events-card/index"))
 const Events = lazy(() => import("./events/index"))
-const AdminComplains = lazy(() => import("./admin-complaints/index"))
+const AdminComplaints = lazy(() => import("./admin-complaints/index"))
 const Items = lazy(() => import("./items/index"))
 const BookingRequests = lazy(() => import("./booking_request/index"))
 const Facility = lazy(() => import("./facility/index"))
@@ -223,9 +223,9 @@ class App extends React.Component {
                       )}
                     />
                     <AdminRoute
-                      path={`${match.path}admin_complain`}
+                      path={`${match.path}admin_complaint`}
                       exact
-                      component={AdminComplains}
+                      component={AdminComplaints}
                       setNavigation={this.setNavigation}
                       {...this.props}
                     />
@@ -263,10 +263,10 @@ class App extends React.Component {
                         }
                       />
                       <Route
-                        path={`${match.path}complain`}
+                        path={`${match.path}complaint`}
                         exact
                         render={(props) => (
-                          <ComplainRegister
+                          <ComplaintRegister
                             who_am_i={who_am_i}
                             constants={constants}
                             setNavigation={this.setNavigation}
@@ -335,9 +335,9 @@ class App extends React.Component {
                             <MyInfo {...props} who_am_i={who_am_i} constants={constants} activeHostel={activeHostel}/>
                             <EventsCard {...props} who_am_i={who_am_i} activeHostel={activeHostel} />
                             { constants['student_council'].includes(activePost) ? (
-                              <Link to="/bhawan_app/admin_complain">
-                                <Button fluid styleName="blocks.student-complains">
-                                  Student Complains
+                              <Link to="/bhawan_app/admin_complaint">
+                                <Button fluid styleName="blocks.student-complaints">
+                                  Student Complaints
                                 </Button>
                               </Link>
                             ) : null}
@@ -345,7 +345,7 @@ class App extends React.Component {
                         )}
                       />
                       <Route
-                        path={`${match.path}complain`}
+                        path={`${match.path}complaint`}
                         exact
                         render={(props) => (
                           <Grid.Column width={3} floated="right" styleName="blocks.side-info">

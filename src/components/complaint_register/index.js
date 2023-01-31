@@ -20,47 +20,47 @@ import { Loading } from "formula_one"
 
 import './index.css';
 
-import { getComplains } from '../../actions/complains';
+import { getComplaints } from '../../actions/complaints';
 import { addComplaint } from '../../actions/add_complaint';
-import { complainsUrl } from '../../urls';
+import { complaintsUrl } from '../../urls';
 import { entries } from '../constants';
 
 
-class ComplainRegister extends React.Component {
+class ComplaintRegister extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      complain: '',
+      complaint: '',
       category: '',
       loading: false,
       success: false,
       error: false,
       message: '',
       activePage: 1,
-      complainsLoading: true,
+      complaintsLoading: true,
       entryNo: '5',
     };
   }
 
   componentDidMount() {
-    this.props.setNavigation('Register a Complain');
+    this.props.setNavigation('Register a Complaint');
 
-    this.props.getComplains(
-      `${complainsUrl(this.props.activeHostel)}?me=True`,
-      this.complainsSuccessCallBack,
-      this.complainsErrCallBack
+    this.props.getComplaints(
+      `${complaintsUrl(this.props.activeHostel)}?me=True`,
+      this.complaintsSuccessCallBack,
+      this.complaintsErrCallBack
     );
   }
 
-  complainsSuccessCallBack = (res) => {
+  complaintsSuccessCallBack = (res) => {
     this.setState({
-      complainsLoading: false,
+      complaintsLoading: false,
     })
   }
 
-  complainsErrCallBack = (err) => {
+  complaintsErrCallBack = (err) => {
     this.setState({
-      complainsLoading: false,
+      complaintsLoading: false,
     })
   }
 
@@ -71,11 +71,11 @@ class ComplainRegister extends React.Component {
   };
 
   handlePaginationChange = (e, { activePage }) => {
-    this.setState({ activePage, complainsLoading: true });
-    this.props.getComplains(
-      `${complainsUrl(this.props.activeHostel)}?page=${activePage}`,
-      this.complainsSuccessCallBack,
-      this.complainsErrCallBack
+    this.setState({ activePage, complaintsLoading: true });
+    this.props.getComplaints(
+      `${complaintsUrl(this.props.activeHostel)}?page=${activePage}`,
+      this.complaintsSuccessCallBack,
+      this.complaintsErrCallBack
     );
   };
 
@@ -84,17 +84,17 @@ class ComplainRegister extends React.Component {
     this.setState({
       pendingLoading: true
     })
-    this.props.getComplains(
-      `${complainsUrl(this.props.activeHostel)}?page=${this.state.activePage}&perPage=${value}`,
-      this.complainsSuccessCallBack,
-      this.complainsErrCallBack
+    this.props.getComplaints(
+      `${complaintsUrl(this.props.activeHostel)}?page=${this.state.activePage}&perPage=${value}`,
+      this.complaintsSuccessCallBack,
+      this.complaintsErrCallBack
     );
   }
 
   handleSubmit = (e) => {
     let data = {
       complaintType: this.state.category,
-      description: this.state.complain.trim(),
+      description: this.state.complaint.trim(),
     };
     this.setState({
       loading: true,
@@ -114,14 +114,14 @@ class ComplainRegister extends React.Component {
       message: res.statusText,
       loading: false,
       convenientTime: '',
-      complain: '',
+      complaint: '',
       category: '',
-      complainsLoading: true,
+      complaintsLoading: true,
     });
-    this.props.getComplains(
-      complainsUrl(this.props.activeHostel),
-      this.complainsSuccessCallBack,
-      this.complainsErrCallBack
+    this.props.getComplaints(
+      complaintsUrl(this.props.activeHostel),
+      this.complaintsSuccessCallBack,
+      this.complaintsErrCallBack
     );
   };
 
@@ -135,8 +135,8 @@ class ComplainRegister extends React.Component {
     });
   };
   render() {
-    const { complains, constants } = this.props;
-    const { activePage, loading, complainsLoading, complain, category, entryNo } = this.state;
+    const { complaints, constants } = this.props;
+    const { activePage, loading, complaintsLoading, complaint, category, entryNo } = this.state;
     let options = [];
     for (var i in constants.complaint_types) {
       options.push({
@@ -150,11 +150,11 @@ class ComplainRegister extends React.Component {
         {this.state.error && (
           <Message warning>
             <Icon name='warning' />
-            Your complain could not be made. Please try again
+            Your complaint could not be made. Please try again
           </Message>
         )}
         {this.state.success && (
-          <Message positive>Your complain has been made succesfully</Message>
+          <Message positive>Your complaint has been made succesfully</Message>
         )}
         <Form>
           <Form.Field required>
@@ -176,8 +176,8 @@ class ComplainRegister extends React.Component {
             </div>
           </div>
           <Form.Field
-            name='complain'
-            value={complain}
+            name='complaint'
+            value={complaint}
             onChange={this.handleChange}
             control={TextArea}
             label='Complaint Description / Feedback'
@@ -192,17 +192,17 @@ class ComplainRegister extends React.Component {
             onClick={this.handleSubmit}
             width={3}
             loading={loading}
-            disabled={complain.trim()=='' || category==''}
+            disabled={complaint.trim()=='' || category==''}
           >
             Submit
           </Button>
         </Form>
-        <Header as='h3'>My Complains and Feedback</Header>
+        <Header as='h3'>My Complaints and Feedback</Header>
         
-        {!complainsLoading?
+        {!complaintsLoading?
           (
             <React.Fragment>
-              {(complains.results && complains.results.length > 0)?
+              {(complaints.results && complaints.results.length > 0)?
           (
             <React.Fragment>
           <div styleName="table-height">
@@ -211,38 +211,38 @@ class ComplainRegister extends React.Component {
               <Table.Row>
                 <Table.HeaderCell>ID</Table.HeaderCell>
                 <Table.HeaderCell>Complaint Description</Table.HeaderCell>
-                <Table.HeaderCell>Complain Type</Table.HeaderCell>
-                <Table.HeaderCell>Complain Status</Table.HeaderCell>
-                <Table.HeaderCell>Complain Date and Time</Table.HeaderCell>
+                <Table.HeaderCell>complaint Type</Table.HeaderCell>
+                <Table.HeaderCell>complaint Status</Table.HeaderCell>
+                <Table.HeaderCell>complaint Date and Time</Table.HeaderCell>
                 <Table.HeaderCell>Applicant Room</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {complains.results && complains.results.length > 0
-                ? complains.results.map((complain, index) => {
+              {complaints.results && complaints.results.length > 0
+                ? complaints.results.map((complaint, index) => {
                     return (
                       <Table.Row>
                         <Table.Cell>
                           {entryNo * (activePage - 1) + index + 1}
                         </Table.Cell>
-                        <Table.Cell>{complain.description}</Table.Cell>
+                        <Table.Cell>{complaint.description}</Table.Cell>
                         <Table.Cell>
-                          {constants.complaint_types[complain.complaintType]}
+                          {constants.complaint_types[complaint.complaintType]}
                         </Table.Cell>
                         <Table.Cell>
-                          {constants.statues.COMLAINT_STATUSES[complain.status]}
-                          {constants.statues.COMLAINT_STATUSES[complain.status]!='RESOLVED' && complain.remark && 
+                          {constants.statues.COMPLAINT_STATUSES[complaint.status]}
+                          {constants.statues.COMPLAINT_STATUSES[complaint.status]!='RESOLVED' && complaint.remark && 
                             <>
-                              <br/> ( {complain.remark} )
+                              <br/> ( {complaint.remark} )
                             </>
                           }
                         </Table.Cell>
                         <Table.Cell>
                           {moment(
-                            complain.datetimeCreated
+                            complaint.datetimeCreated
                           ).format('DD/MM/YY, hh:mm a')}
                         </Table.Cell>
-                        <Table.Cell>{complain.roomNo}</Table.Cell>
+                        <Table.Cell>{complaint.roomNo}</Table.Cell>
                       </Table.Row>
                     );
                   })
@@ -252,11 +252,11 @@ class ComplainRegister extends React.Component {
           </div>
           <div styleName='pagination-container'>
             <div>
-              {complains.count > entryNo ? (
+              {complaints.count > entryNo ? (
                 <Pagination
                   activePage={activePage}
                     onPageChange={this.handlePaginationChange}
-                    totalPages={Math.ceil(complains.count / entryNo)}
+                    totalPages={Math.ceil(complaints.count / entryNo)}
                 />
               ) : null}
             </div>
@@ -275,7 +275,7 @@ class ComplainRegister extends React.Component {
         </React.Fragment>
           ):
           (
-            <Segment>No Complains or Feedback Yet</Segment>
+            <Segment>No Complaints or Feedback Yet</Segment>
           )
         }
             </React.Fragment>
@@ -291,15 +291,15 @@ class ComplainRegister extends React.Component {
 }
 function mapStateToProps(state) {
   return {
-    complains: state.complains,
+    complaints: state.complaints,
     activeHostel: state.activeHostel
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getComplains: (url, successCallBack, errCallBack) => {
-      dispatch(getComplains(url, successCallBack, errCallBack));
+    getComplaints: (url, successCallBack, errCallBack) => {
+      dispatch(getComplaints(url, successCallBack, errCallBack));
     },
     addComplaint: (data, residence, successCallBack, errCallBack) => {
       dispatch(addComplaint(data, residence, successCallBack, errCallBack));
@@ -307,4 +307,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ComplainRegister);
+export default connect(mapStateToProps, mapDispatchToProps)(ComplaintRegister);
