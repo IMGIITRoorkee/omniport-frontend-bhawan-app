@@ -119,7 +119,7 @@ class ComplaintRegister extends React.Component {
       complaintsLoading: true,
     });
     this.props.getComplaints(
-      complaintsUrl(this.props.activeHostel),
+      `${complaintsUrl(this.props.activeHostel)}?me=True`,
       this.complaintsSuccessCallBack,
       this.complaintsErrCallBack
     );
