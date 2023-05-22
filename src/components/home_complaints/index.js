@@ -7,11 +7,10 @@ import { Loading } from "formula_one";
 import locals from "./index.css";
 import styles from "core/index.css";
 
-import { complaintsUrl } from "../../urls";
+import { complaintsUrl, urlStaticBase } from "../../urls";
 import { getComplaints } from "../../actions/complaints";
 import { addComplaint } from "../../actions/add_complaint";
-import moment from "moment";
-import { urlStaticBase } from "../../urls";
+import ComplaintCard from "../complaint_card/index";
 
 class HomeComplaints extends React.Component {
   constructor(props) {
@@ -100,34 +99,13 @@ class HomeComplaints extends React.Component {
                 <tbody>
                   {complaints.results && complaints.results.length > 0 ? (
                     complaints.results.map((complaint, index) => {
-                      const bgColorClass =
-                        index % 2 == 0 ? "bg-indigo-100" : "bg-white";
-
                       return (
-                        <tr key={index} className={`${styles[bgColorClass]}`}>
-                          <td
-                            className={`${styles["p-2"]} ${styles["rounded-l-md"]}`}
-                          >
-                            <span className={locals["dot"]}></span>
-                          </td>
-                          <td className={styles["p-2"]}>
-                            {complaint.description}
-                          </td>
-                          <td className={styles["p-2"]}>
-                            {moment(complaint.datetimeCreated).format(
-                              "DD/MM/YY, hh:mm a"
-                            )}
-                          </td>
-                          <td
-                            className={`${styles["p-2"]} ${styles["rounded-r-md"]}`}
-                          >
-                            {
-                              constants.statuses.COMPLAINT_STATUSES[
-                                complaint.status
-                              ]
-                            }
-                          </td>
-                        </tr>
+                        <ComplaintCard
+                          index={index}
+                          key={index}
+                          complaint={complaint}
+                          constants={constants}
+                        />
                       );
                     })
                   ) : (

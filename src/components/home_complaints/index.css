@@ -11,14 +11,6 @@
   background-color: #133bc5 !important;
 }
 
-.dot {
-  height: 8px;
-  width: 8px;
-  background-color: blue;
-  border-radius: 50%;
-  display: inline-block;
-}
-
 .gap-16 {
   gap: 16px;
 }
