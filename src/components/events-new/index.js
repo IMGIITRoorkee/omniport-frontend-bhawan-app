@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, lazy } from 'react';
 import { tailwindWrapper } from "../../../../../formula_one/src/utils/tailwindWrapper";
-import EventCard from '../events-card-new';
+
+const EventCard = lazy(() => import("../events-card-new/index"))
 class NewEvents extends Component {
   constructor(props) {
     super(props);
