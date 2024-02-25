@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import { tailwindWrapper } from "../../../../../formula_one/src/utils/tailwindWrapper";
 
 class EventCard extends Component {
