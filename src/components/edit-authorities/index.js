@@ -157,7 +157,7 @@ class EditAuthorities extends React.Component {
                       onSearchChange={this.onSearchChange}
                       onChange={this.onChange}
                       value={selected}
-                      search
+                      search={(options, _) => {return options}}
                       selection
                       closeOnChange
                       options={options}
