@@ -35,6 +35,7 @@ import { constantsUrl } from "../urls";
 import AdminRoute from "./routes/adminRoute"
 import main from "formula_one/src/css/app.css";
 import blocks from "../css/app.css";
+import ComplaintForm from "./complaints-new"
 
 const creators = [
   {
@@ -267,7 +268,13 @@ class App extends React.Component {
                         path={`${match.path}complaint`}
                         exact
                         render={(props) => (
-                          <ComplaintRegister
+                          // <ComplaintRegister
+                          //   who_am_i={who_am_i}
+                          //   constants={constants}
+                          //   setNavigation={this.setNavigation}
+                          //   {...props}
+                          // />
+                          <ComplaintForm
                             who_am_i={who_am_i}
                             constants={constants}
                             setNavigation={this.setNavigation}
