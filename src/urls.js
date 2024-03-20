@@ -196,3 +196,7 @@ export const markInsideUrl = (residence, person) => {
 export const markOutUrl = (residence, person) => {
   return `${baseApiUrl()}${residence}/resident/${person}/markout/`
 }
+
+export const urlStaticBase = () => {
+  return `/static/assets`
+}
