@@ -5,7 +5,7 @@ import { Switch, Route, Link } from "react-router-dom"
 import { Grid, Button, Segment } from "semantic-ui-react"
 
 import { AppHeader, AppFooter, Loading } from "formula_one"
-
+const GuestHouseBooking =lazy(()=> import('./room-new/index'))
 const Nav = lazy(() => import("./navbar/index"))
 const BookRoom = lazy(() => import("./book_room/index"))
 const ComplaintRegister = lazy(() => import("./complaint_register/index"))
@@ -252,7 +252,7 @@ class App extends React.Component {
                         exact
                         render={(props) =>
                           ![...constants['administrative_council'],...constants['global_council']].includes(activePost) ? (
-                            <BookRoom
+                            <GuestHouseBooking
                               who_am_i={who_am_i}
                               constants={constants}
                               setNavigation={this.setNavigation}
@@ -294,6 +294,12 @@ class App extends React.Component {
                               constants={constants}
                               {...this.props}
                             />
+                            <GuestHouseBooking 
+                            who_am_i={who_am_i}
+                              constants={constants}
+                              {...this.props}
+                              {...props} 
+                              />
                           </Grid.Column>
                         )}
                       />
