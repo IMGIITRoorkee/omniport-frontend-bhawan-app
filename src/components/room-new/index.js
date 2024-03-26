@@ -51,8 +51,8 @@ class GuestHouseBooking extends Component{
         <div className={tailwindWrapper('flex')}>
           <div className={tailwindWrapper('text-[#133BC5] mt-20 text-2xl font-semibold')}>Guest House</div>
         </div>
-        <div className={tailwindWrapper(' my-8')}>Room Bookings</div>
-        <div className={tailwindWrapper('flex  flex-col gap-5')}>
+        <div className={tailwindWrapper('my-8')}>Room Bookings</div>
+        <div className={tailwindWrapper('flex flex-col gap-5')}>
             <div className={tailwindWrapper('flex item-center justify-around font-extralight text-[#304FFE]')}>
               <div>Visitor Name</div>
               <div>Relation</div> 
@@ -76,18 +76,18 @@ class GuestHouseBooking extends Component{
             Want to book a guest house for your parents or relative<br/>
             Book here
             </span>
-            <button className={tailwindWrapper('bg-[#133BC5] self-start rounded-md text-white px-28 py-3')} onClick={() => {
+            <button className={tailwindWrapper('bg-[#133BC5] self-start rounded-md text-white px-28 py-3 mb-10')} onClick={() => {
               window.alert("book button clicked")
             }}>Book here</button>
         </div>
 
     </>) 
     :
-      (<>
-        <div className={tailwindWrapper('')}>
+      (
+        <div>
           There are no current guest house bookings
         </div>
-      </>)
+        )
     }
       </>
     )
