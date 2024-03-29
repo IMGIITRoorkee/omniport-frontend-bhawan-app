@@ -7,7 +7,7 @@ import { Grid, Button, Segment } from "semantic-ui-react"
 import { AppHeader, AppFooter, Loading } from "formula_one"
 
 const Nav = lazy(() => import("./navbar/index"))
-const BookRoom = lazy(() => import("./book_room/index"))
+const BookRoom = lazy(() => import("./book-room-new/index"))
 const ComplaintRegister = lazy(() => import("./complaint_register/index"))
 const Authorities = lazy(() => import("./authorities/index"))
 const Facilities = lazy(() => import("./facilities/index"))
@@ -26,6 +26,7 @@ const AddFacility = lazy(() => import("./add-facility/index"))
 const RegisterStudent = lazy(() => import("./register_student/index"))
 const Rooms = lazy(() => import("./rooms/index"))
 const NewEvents = lazy(() => import("./events-new/index"))
+const FeedbackForm = lazy(() => import("./Feedback/index"))
 
 import { whoami } from "../actions/who_am_i";
 import { getConstants } from "../actions/get-constants";
@@ -282,6 +283,17 @@ class App extends React.Component {
                           />
                         )}
                       />
+                      <Route
+                        path={`${match.path}feedback`}
+                        exact
+                        render={(props) => (
+                          <FeedbackForm
+                            who_am_i={who_am_i}
+                            constants={constants}
+                            {...this.props}
+                          />
+                        )}
+                      />
                       <AdminRoute
                         path={`${match.path}add/facility`}
                         component={AddFacility}
@@ -365,6 +377,29 @@ class App extends React.Component {
                           </Grid.Column>
                         )}
                       />
+                      <Route
+                        path={`${match.path}feedback`}
+                        exact
+                        render={(props) => (
+                          <Grid.Column width={3} floated="right" styleName="blocks.side-info">
+                            <MyInfo {...props} who_am_i={who_am_i} constants={constants} activeHostel={activeHostel} />
+                            <EventsCard {...props} who_am_i={who_am_i} activeHostel={activeHostel} />
+                          </Grid.Column>
+                        )}
+                      />
+                       <Route
+                        path={`${match.path}feedback`}
+                        exact
+                        render={(props) => (
+                          <Grid.Column width={3} styleName="blocks.side-info" style={{ position: 'relative' }}>
+                            <MyInfo {...props} who_am_i={who_am_i} constants={constants} activeHostel={activeHostel} />
+
+                            <FeedbackForm {...props} who_am_i={who_am_i} activeHostel={activeHostel} />
+
+                          </Grid.Column>
+                        )}
+                      /> 
+
                       {![...constants['administrative_council'], ...constants['global_council']].includes(activePost) && (
                         <Route
                           path={`${match.path}book_room`}
