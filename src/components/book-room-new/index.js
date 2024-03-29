@@ -13,7 +13,7 @@ class BookRoom extends React.Component {
             endDate: '',
             endTime: '',
             loading: false,
-            visitors: [{ title: '', firstName: '', lastName: '', mobile: '', proof: null }],
+            visitors: [{ title: '', firstName: '', lastName: '', mobile: '', proof: null, relation: "" }],
         };
     }
 
@@ -23,14 +23,23 @@ class BookRoom extends React.Component {
 
     handleChange = (event, index) => {
         const { name, value } = event.target;
-        const visitors = [...this.state.visitors];
-        visitors[index][name] = value;
-        this.setState({ visitors });
+        // If the name is either 'fromDate' or 'endDate', directly set the value
+        if (name === 'fromDate' || name === 'endDate') {
+            this.setState({
+                [name]: value
+            });
+        } else {
+            // For other inputs, update the visitors array
+            const visitors = [...this.state.visitors];
+            visitors[index][name] = value;
+            this.setState({ visitors });
+        }
     };
+
 
     increaseVisitor = () => {
         this.setState((prevState) => ({
-            visitors: [...prevState.visitors, { title: '', firstName: '', lastName: '', mobile: '', proof: null }],
+            visitors: [...prevState.visitors, { title: '', firstName: '', lastName: '', mobile: '', proof: null, relation: "" }],
         }));
     };
 
@@ -40,9 +49,71 @@ class BookRoom extends React.Component {
         this.setState({ visitors });
     };
 
+    handleFileInputChange = (event, index) => {
+        const file = event.target.files[0];
+        this.setState({ selectedFile: file });
+    };
+
     handleSubmit = (e) => {
+        console.log(this.state.fromDate, this.state.endDate, this.state.visitors);
+
         e.preventDefault();
-        // Handle form submission
+
+        // Create a new FormData object
+        let formData = new FormData();
+
+        // Convert fromDate and endDate to desired format and append to formData
+        formData.append(
+            'requestedFrom',
+            moment(this.state.fromDate, 'YYYY-MM-DD').format('YYYY-MM-DD')
+        );
+        formData.append(
+            'requestedTill',
+            moment(this.state.endDate, 'YYYY-MM-DD').format('YYYY-MM-DD')
+        );
+
+        // Iterate over visitors array and append visitor data to formData
+        this.state.visitors.forEach((visitor, index) => {
+            console.log(index)
+            formData.append(
+                `visitors[${index}][full_name]`,
+                `${visitor.title} ${visitor.firstName} ${visitor.lastName}`
+            );
+            formData.append(
+                `visitors[${index}][relation]`,
+                visitor.relation
+            );
+            formData.append(
+                `visitors[${index}][country_code]`,
+                visitor.countryCode
+            );
+            formData.append(
+                `visitors[${index}][mobile]`,
+                visitor.mobile
+            );
+            // Assuming proof is an array of File objects
+            if (this.state.proof && this.state.proof[index]) {
+                formData.append(
+                    `visitors[${index}][proof]`,
+                    this.state.proof[index],
+                    this.state.proof[index].name
+                );
+            }
+
+        });
+
+        // Set loading to true
+        this.setState({
+            loading: true,
+        });
+
+        // Call the bookRoom action with formData
+        this.props.bookRoom(
+            formData,
+            this.props.activeHostel,
+            this.successCallBack,
+            this.errCallBack
+        );
     };
 
     render() {
@@ -85,46 +156,105 @@ class BookRoom extends React.Component {
                     {/* Visitors Section */}
                     {visitors.map((visitor, index) => (
                         <div key={index}>
-                            <div className={tailwindWrapper('grid grid-cols-3 gap-4')}>
-                                <input
-                                    type="text"
-                                    name="title"
-                                    value={visitor.title}
-                                    onChange={(e) => this.handleChange(e, index)}
-                                    placeholder="Title (Mr., Mrs., etc.)"
-                                    className={tailwindWrapper('appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline')}
-                                />
-                                <input
-                                    type="text"
-                                    name="firstName"
-                                    value={visitor.firstName}
-                                    onChange={(e) => this.handleChange(e, index)}
-                                    placeholder="First Name"
-                                    className={tailwindWrapper('appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline')}
-                                />
-                                <input
-                                    type="text"
-                                    name="lastName"
-                                    value={visitor.lastName}
-                                    onChange={(e) => this.handleChange(e, index)}
-                                    placeholder="Last Name"
-                                    className={tailwindWrapper('appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline')}
-                                />
-                                <input
-                                    type="text"
-                                    name="mobile"
-                                    value={visitor.mobile}
-                                    onChange={(e) => this.handleChange(e, index)}
-                                    placeholder="Mobile Number"
-                                    className={tailwindWrapper('appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline')}
-                                />
-                                {/* Add file input for proof */}
-                                <input
-                                    type="file"
-                                    name="proof"
-                                    onChange={(e) => this.handleFileChange(e, index)}
-                                    className={tailwindWrapper('appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline')}
-                                />
+                            <div className={tailwindWrapper('')}>
+                                <div className={tailwindWrapper("flex gap-4 mt-4")}>
+                                    <div className={tailwindWrapper("flex flex-col")}>
+                                        <label htmlFor='title' className={tailwindWrapper('block text-[#0B2274] text-sm font-bold mb-2')}>
+                                            Title
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="title"
+                                            value={visitor.title}
+                                            onChange={(e) => this.handleChange(e, index)}
+                                            placeholder="Mr"
+                                            className={tailwindWrapper('appearance-none border rounded py-4 text-center w-[70px] text-gray-700 leading-tight focus:outline-none focus:shadow-outline')}
+                                        />
+                                    </div>
+                                    <div className={tailwindWrapper("flex flex-col")}>
+                                        <label htmlFor='firstName' className={tailwindWrapper('block text-[#0B2274] text-sm font-bold mb-2')}>
+                                            First Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="firstName"
+                                            value={visitor.firstName}
+                                            onChange={(e) => this.handleChange(e, index)}
+                                            placeholder="First Name"
+                                            className={tailwindWrapper('appearance-none border rounded py-4 px-6 text-gray-700 leading-tight focus:outline-none focus:shadow-outline')}
+                                        />
+                                    </div>
+                                    <div className={tailwindWrapper("flex flex-col")}>
+                                        <label htmlFor='lastName' className={tailwindWrapper('block text-[#0B2274] text-sm font-bold mb-2')}>
+                                            Last Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="lastName"
+                                            value={visitor.lastName}
+                                            onChange={(e) => this.handleChange(e, index)}
+                                            placeholder="Last Name"
+                                            className={tailwindWrapper('appearance-none border rounded py-4 px-6 text-gray-700 leading-tight focus:outline-none focus:shadow-outline')}
+                                        />
+                                    </div>
+                                </div>
+                                <div className={tailwindWrapper("flex gap-4 mt-4")}>
+                                    <div className={tailwindWrapper("flex flex-col")}>
+                                        <label htmlFor='relation' className={tailwindWrapper('block text-[#0B2274] text-sm font-bold mb-2')}>
+                                            Relation
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="relation"
+                                            value={visitor.relation}
+                                            onChange={(e) => this.handleChange(e, index)}
+                                            placeholder="Relation"
+                                            className={tailwindWrapper('appearance-none border rounded py-4 px-6 text-gray-700 leading-tight focus:outline-none focus:shadow-outline')}
+                                        />
+                                    </div>
+                                    <div className={tailwindWrapper("flex flex-col")}>
+                                        <label htmlFor='proof' className={tailwindWrapper('block text-[#0B2274] text-sm font-bold mb-2')}>
+                                            Identiti Proof
+                                        </label>
+                                        <input
+                                            type="file"
+                                            name="proof"
+                                            value={visitor.proof}
+                                            onChange={(e) => this.handleFileInputChange(e, index)}
+                                            className={tailwindWrapper('appearance-none border rounded py-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline')}
+                                        />
+                                    </div>
+                                </div>
+                                <div className={tailwindWrapper('flex mt-4 gap-4')}>
+                                    <div className={tailwindWrapper('mr-2')}>
+                                        <label htmlFor='countryCode' className={tailwindWrapper('block text-[#0B2274] text-sm font-bold mb-2')}>
+                                            Country Code
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="countryCode"
+                                            value={visitor.countryCode}
+                                            onChange={(e) => this.handleChange(e, index)}
+                                            placeholder="Country Code"
+                                            className={tailwindWrapper('appearance-none border rounded py-4 px-6 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full')}
+                                        />
+                                    </div>
+                                    <div className={tailwindWrapper('')}>
+                                        <label htmlFor='mobile' className={tailwindWrapper('block text-[#0B2274] text-sm font-bold mb-2')}>
+                                            Mobile
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="mobile"
+                                            value={visitor.mobile}
+                                            onChange={(e) => this.handleChange(e, index)}
+                                            placeholder="Mobile Number"
+                                            className={tailwindWrapper('appearance-none border rounded py-4 px-6 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full')}
+                                        />
+                                    </div>
+                                </div>
+
+
                             </div>
                             {index > 0 && (
                                 <button
@@ -137,17 +267,19 @@ class BookRoom extends React.Component {
                             )}
                         </div>
                     ))}
-                    <button type="button" onClick={this.increaseVisitor} className={tailwindWrapper('text-blue-500')}>
-                        Add Visitor
-                    </button>
+                    <div className={tailwindWrapper("my-8")}>
+                        <button type="button" onClick={this.increaseVisitor} className={tailwindWrapper('text-[#0B2274] text-xl font-bold')}>
+                            + Add Visitor
+                        </button>
+                    </div>
 
                     {/* Submit Button */}
                     <button
                         type="submit"
                         disabled={loading}
-                        className={tailwindWrapper('bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline')}
+                        className={tailwindWrapper('bg-[#0B2274]  text-white font-bold py-2 px-16 rounded focus:outline-none focus:shadow-outline')}
                     >
-                        {loading ? 'Submitting...' : 'Submit'}
+                        {loading ? 'Booking...' : 'Book'}
                     </button>
                 </form>
             </div>
