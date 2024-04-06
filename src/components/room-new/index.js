@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { getRoomBookings } from '../../actions/get-room-bookings';
 
 import { bookingsUrl } from '../../urls';
+import { roomsUrl, studentAccommodationsUrl, specificRoomUrl, specificAccommodationUrl, accommodationDataDownloadUrl } from '../../urls'
+import { getRooms } from '../../actions/rooms'
+import { getStudentAcccommodation } from '../../actions/student_accommodation'
+import { updateRooms } from '../../actions/update_rooms'
+import { updateStudentAccommodation } from '../../actions/update_student_accommodation'
 
 import { tailwindWrapper } from '../../../../../formula_one/src/utils/tailwindWrapper';
 
@@ -46,7 +52,7 @@ class GuestHouseBooking extends Component{
     
     return(
       <>
-      {bookingRequests.results && bookingRequests.results.length == 0
+      {bookingRequests.results && bookingRequests.results.length > 0
     ?(<>
         <div className={tailwindWrapper('flex')}>
           <div className={tailwindWrapper('text-[#133BC5] mt-20 text-2xl font-semibold')}>Guest House</div>
@@ -65,7 +71,7 @@ class GuestHouseBooking extends Component{
                 <div className={tailwindWrapper('flex item-center justify-around font-extralight text-xs')}>
                   <div className={tailwindWrapper('max-w-20')}>{request.bookedBy}</div>
                   <div className={tailwindWrapper('max-w-20')} >To be decided</div>
-                  <div className={tailwindWrapper('max-w-20')}>{request.requestedFrom}-{request.requestedTill}</div>
+                  <div className={tailwindWrapper('max-w-20')}>{request.requestedFrom} to {request.requestedTill}</div>
                   <div className={tailwindWrapper('max-w-20')} >
                   Pending
                   </div>
@@ -76,9 +82,11 @@ class GuestHouseBooking extends Component{
             Want to book a guest house for your parents or relative<br/>
             Book here
             </span>
-            <button className={tailwindWrapper('bg-[#133BC5] self-start rounded-md text-white px-28 py-3 mb-10')} onClick={() => {
-              window.alert("book button clicked")
-            }}>Book here</button>
+            <Link to="/bhawan_app/book_room">
+                <button className={tailwindWrapper('bg-[#133BC5] self-start rounded-md text-white px-28 py-3 mb-10')} 
+                  >Book here  
+                </button>
+              </Link>
         </div>
 
     </>) 

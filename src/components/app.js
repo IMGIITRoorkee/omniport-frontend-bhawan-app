@@ -26,6 +26,7 @@ const AddFacility = lazy(() => import("./add-facility/index"))
 const RegisterStudent = lazy(() => import("./register_student/index"))
 const Rooms = lazy(() => import("./rooms/index"))
 const NewEvents = lazy(() => import("./events-new/index"))
+const EventCalendar = lazy(() => import("./events-calendar-new/index"))
 
 import { whoami } from "../actions/who_am_i";
 import { getConstants } from "../actions/get-constants";
@@ -253,7 +254,7 @@ class App extends React.Component {
                         exact
                         render={(props) =>
                           ![...constants['administrative_council'],...constants['global_council']].includes(activePost) ? (
-                            <GuestHouseBooking
+                            <BookRoom
                               who_am_i={who_am_i}
                               constants={constants}
                               setNavigation={this.setNavigation}
@@ -263,6 +264,15 @@ class App extends React.Component {
                           )
                         }
                       />
+                      {/* <Route
+                        path={`${match.path}events`}
+                        render={(props) => (
+                          <EventCalendar
+                            who_am_i={who_am_i}
+                            setNavigation={this.setNavigation}
+                          />
+                        )}
+                      /> */}
                       <Route
                         path={`${match.path}complaint`}
                         exact
@@ -285,7 +295,7 @@ class App extends React.Component {
                         exact
                         render={(props) => (
                           <Grid.Column width={this.state.columns} floated="left">
-                            {/* <Facilities
+                            <Facilities
                               who_am_i={who_am_i}
                               setNavigation={this.setNavigation}
                               {...this.props}
@@ -294,7 +304,7 @@ class App extends React.Component {
                               who_am_i={who_am_i}
                               constants={constants}
                               {...this.props}
-                            /> */}
+                            />
                             <GuestHouseBooking
                             who_am_i={who_am_i}
                             constants={constants}
@@ -306,6 +316,7 @@ class App extends React.Component {
                           </Grid.Column>
                         )}
                       />
+                      {/*  */}
                       <Route
                         path={`${match.path}events`}
                         render={(props) => (
