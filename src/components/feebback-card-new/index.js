@@ -15,6 +15,7 @@ class FeedbackTable extends Component {
                         </tr>
                     </thead>
                     <tbody >
+                        {/* real data will be done after feedback actions */}
                         <tr className={tailwindWrapper("grid grid-cols-5")}>
                             <td className={tailwindWrapper("border px-4 py-2 col-span-2")}>Some feedback text</td>
                             <td className={tailwindWrapper("border px-4 py-2")}>Attachment</td>
