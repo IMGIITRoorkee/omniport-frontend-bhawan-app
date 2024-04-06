@@ -23,7 +23,7 @@ class ComplaintsRegisterNew extends React.Component {
 
     componentDidMount() {
         this.props.getComplaints(
-            `${complaintsUrl(this.props.activeHostel)}?me=True`,
+            `${complaintsUrl(this.props.activeHostel)}`,
             this.complaintsSuccessCallBack,
             this.complaintsErrCallBack
         );
@@ -46,8 +46,11 @@ class ComplaintsRegisterNew extends React.Component {
     }
 
     render() {
-        const { complaints, constants } = this.props;
+        const { complaints } = this.props;
+        const links=[complaints.links]
+
         const { complaintsLoading } = this.state;
+        console.log(complaints,links)
 
         return (
             <div className={tailwindWrapper("w-full")}>

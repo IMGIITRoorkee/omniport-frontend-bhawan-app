@@ -23,13 +23,11 @@ class BookRoom extends React.Component {
 
     handleChange = (event, index) => {
         const { name, value } = event.target;
-        // If the name is either 'fromDate' or 'endDate', directly set the value
         if (name === 'fromDate' || name === 'endDate') {
             this.setState({
                 [name]: value
             });
         } else {
-            // For other inputs, update the visitors array
             const visitors = [...this.state.visitors];
             visitors[index][name] = value;
             this.setState({ visitors });
@@ -59,10 +57,8 @@ class BookRoom extends React.Component {
 
         e.preventDefault();
 
-        // Create a new FormData object
         let formData = new FormData();
 
-        // Convert fromDate and endDate to desired format and append to formData
         formData.append(
             'requestedFrom',
             moment(this.state.fromDate, 'YYYY-MM-DD').format('YYYY-MM-DD')
@@ -71,8 +67,6 @@ class BookRoom extends React.Component {
             'requestedTill',
             moment(this.state.endDate, 'YYYY-MM-DD').format('YYYY-MM-DD')
         );
-
-        // Iterate over visitors array and append visitor data to formData
         this.state.visitors.forEach((visitor, index) => {
             console.log(index)
             formData.append(
@@ -91,7 +85,7 @@ class BookRoom extends React.Component {
                 `visitors[${index}][mobile]`,
                 visitor.mobile
             );
-            // Assuming proof is an array of File objects
+           
             if (this.state.proof && this.state.proof[index]) {
                 formData.append(
                     `visitors[${index}][proof]`,
@@ -102,12 +96,12 @@ class BookRoom extends React.Component {
 
         });
 
-        // Set loading to true
+    
         this.setState({
             loading: true,
         });
 
-        // Call the bookRoom action with formData
+    
         this.props.bookRoom(
             formData,
             this.props.activeHostel,
@@ -121,9 +115,9 @@ class BookRoom extends React.Component {
 
         return (
             <div className={tailwindWrapper('w-2/3')}>
-                {/* Form */}
+               
                 <form onSubmit={this.handleSubmit} className={tailwindWrapper('px-8 pt-6 pb-8 mb-4')}>
-                    {/* Date Inputs */}
+                
                     <div className={tailwindWrapper('mb-4 w-full flex gap-3')}>
                         <div >
                             <label htmlFor='fromDate' className={tailwindWrapper('block text-[#0B2274] text-sm font-bold mb-2')}>
@@ -153,7 +147,7 @@ class BookRoom extends React.Component {
                         </div>
                     </div>
 
-                    {/* Visitors Section */}
+                
                     {visitors.map((visitor, index) => (
                         <div key={index}>
                             <div className={tailwindWrapper('')}>
@@ -273,7 +267,7 @@ class BookRoom extends React.Component {
                         </button>
                     </div>
 
-                    {/* Submit Button */}
+        
                     <button
                         type="submit"
                         disabled={loading}

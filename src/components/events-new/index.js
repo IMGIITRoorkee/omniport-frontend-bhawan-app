@@ -29,7 +29,6 @@ class NewEvents extends Component {
 
   fetchEvents = async () => {
     try {
-      console.log(this.props.activeHostel)
       const response = await getEvents(eventsUrl(this.props.activeHostel));
       this.setState({
         events: response.data,
@@ -42,7 +41,6 @@ class NewEvents extends Component {
   };
 
 
-  // Method to check if there's an event this month
   checkIfEventThisMonth = () => {
     const today = new Date();
     const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -59,7 +57,6 @@ class NewEvents extends Component {
   };
 
 
-  // this is for the client
   handleRegister = (eventName) => {
     alert(`You have registered for ${eventName}`);
   }

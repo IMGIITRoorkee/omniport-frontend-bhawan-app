@@ -8,6 +8,7 @@ export const getComplaints = (url, successCallBack, errCallBack) => {
     })
       .then((response) => {
         successCallBack(response)
+        console.log(response.data)
         let item = response.data
         dispatch({
           type: 'GET_ALL_COMPLAINTS',

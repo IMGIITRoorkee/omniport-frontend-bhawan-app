@@ -79,7 +79,7 @@ class ComplaintForm extends Component {
                 <form onSubmit={this.handleSubmit} className={tailwindWrapper("  mb-8")}>
                     <div className={tailwindWrapper("mb-4")}>
                         <Link to="/bhawan_app/complaints" className={tailwindWrapper("text-[#133BC5] font-bold text-xl")}>Complaints</Link>
-                        <span>{"   |   "}</span>
+                        <span>{"|"}</span>
                         <Link to="/bhawan_app/feedback" className={tailwindWrapper("text-[#7D7777]")}>Feedbacks</Link>
                     </div>
                     <div className={tailwindWrapper("mb-4")}>
