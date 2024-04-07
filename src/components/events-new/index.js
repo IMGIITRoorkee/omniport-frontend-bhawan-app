@@ -1,51 +1,99 @@
-import React, { Component, lazy } from 'react';
+import React, { Component, lazy } from "react";
+import { eventsUrl } from "../../urls";
+import { getEvents } from "../../actions/events";
 
 import { tailwindWrapper } from "../../../../../formula_one/src/utils/tailwindWrapper";
 
-const EventCard = lazy(() => import("../events-card-new/index"))
+const EventCard = lazy(() => import("../events-card-new/index"));
 
 class NewEvents extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      max_length: 3,
+      events: [],
       loading: true,
+      hasEventThisMonth: false,
     };
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.setState({ loading: false });
-    }, 2000);
+    this.fetchEvents();
   }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.activeHostel !== this.props.activeHostel) {
+      this.fetchEvents();
+    }
+  }
+
+  fetchEvents = async () => {
+    try {
+      const response = await getEvents(eventsUrl(this.props.activeHostel));
+      this.setState({
+        events: response.data,
+        loading: false,
+      });
+      this.checkIfEventThisMonth();
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    }
+  };
+
+  checkIfEventThisMonth = () => {
+    const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    const eventsThisMonth = this.state.events.some((event) => {
+      const eventDate = new Date(event.date);
+      return eventDate >= startOfMonth && eventDate <= endOfMonth;
+    });
+
+    this.setState({
+      hasEventThisMonth: eventsThisMonth,
+    });
+  };
 
   handleRegister = (eventName) => {
     alert(`You have registered for ${eventName}`);
-  }
+  };
 
   render() {
-    const { loading } = this.state;
+    const { loading, hasEventThisMonth } = this.state;
     return (
       <div className={tailwindWrapper("container mx-auto mb-4")}>
-        <h2 className={tailwindWrapper("text-2xl text-[#133BC5] font-bold mb-2")}>Events</h2>
+        <h2
+          className={tailwindWrapper("text-2xl text-[#133BC5] font-bold mb-2")}
+        >
+          Events
+        </h2>
         <div className={tailwindWrapper("flex justify-between mb-2")}>
-          <p className={tailwindWrapper("text-lg font-bold")}>Upcoming Bhawan Events</p>
-          <p className={tailwindWrapper("font-bold text-[#133BC5]")}>View More</p>
+          <p className={tailwindWrapper("text-lg font-bold")}>
+            Upcoming Bhawan Events
+          </p>
+          <p className={tailwindWrapper("font-bold text-[#133BC5]")}>
+            View More
+          </p>
         </div>
-        {!loading ? (
-          <div className={tailwindWrapper("flex flex-col space-y-2")}>
-            {[...Array(this.state.max_length)].map((_, index) => (
-              <EventCard
-                key={index}
-                eventName={`Event ${index + 1}`}
-                eventLocation={`Location ${index + 1}`}
-                onRegister={() => this.handleRegister(`Event ${index + 1}`)}
-                index={index}
-              />
-            ))}
-          </div>
-        ) : (
+        {loading ? (
           <div>Loading...</div>
+        ) : (
+          <div>
+            {hasEventThisMonth ? (
+              hasEventThisMonth.map((event, index) => (
+                <EventCard
+                  key={index}
+                  eventName={event.name}
+                  eventLocation={event.location}
+                  eventDate={event.date}
+                  eventTime={event.timings[0].start}
+                  onRegister={() => this.handleRegister(event.name)}
+                />
+              ))
+            ) : (
+              <p>There's no event today.</p>
+            )}
+          </div>
         )}
       </div>
     );
