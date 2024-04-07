@@ -5,7 +5,7 @@ import { Switch, Route, Link } from "react-router-dom"
 import { Grid, Button, Segment } from "semantic-ui-react"
 
 import { AppHeader, AppFooter, Loading } from "formula_one"
-
+const GuestHouseBooking =lazy(()=> import('./room-new/index'))
 const Nav = lazy(() => import("./navbar/index"))
 const BookRoom = lazy(() => import("./book-room-new/index"))
 const ComplaintRegister = lazy(() => import("./complaint_register/index"))
@@ -254,7 +254,7 @@ class App extends React.Component {
                         path={`${match.path}book_room`}
                         exact
                         render={(props) =>
-                          ![...constants['administrative_council'], ...constants['global_council']].includes(activePost) ? (
+                          ![...constants['administrative_council'],...constants['global_council']].includes(activePost) ? (
                             <BookRoom
                               who_am_i={who_am_i}
                               constants={constants}
@@ -265,6 +265,15 @@ class App extends React.Component {
                           )
                         }
                       />
+                      {/* <Route
+                        path={`${match.path}events`}
+                        render={(props) => (
+                          <EventCalendar
+                            who_am_i={who_am_i}
+                            setNavigation={this.setNavigation}
+                          />
+                        )}
+                      /> */}
                       <Route
                         path={`${match.path}complaint`}
                         exact
@@ -304,7 +313,7 @@ class App extends React.Component {
                         exact
                         render={(props) => (
                           <Grid.Column width={this.state.columns} floated="left">
-                            {/* <Facilities
+                            <Facilities
                               who_am_i={who_am_i}
                               setNavigation={this.setNavigation}
                               {...this.props}
@@ -313,13 +322,19 @@ class App extends React.Component {
                               who_am_i={who_am_i}
                               constants={constants}
                               {...this.props}
-                            /> */}
+                            />
+                            <GuestHouseBooking
+                            who_am_i={who_am_i}
+                            constants={constants}
+                            {...this.props}
+                            />
                             <NewEvents who_am_i={who_am_i}
                               constants={constants}
                               {...this.props} />
                           </Grid.Column>
                         )}
                       />
+                      {/*  */}
                       <Route
                         path={`${match.path}events`}
                         render={(props) => (

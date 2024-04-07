@@ -156,7 +156,7 @@ class AdminAuthorities extends React.Component {
                     onChange={this.onChange}
                     value={selected}
                     selection
-                    search
+                    search={(options, _) => {return options}}
                     closeOnChange
                     options={options}
                     placeholder="Enter Name"
