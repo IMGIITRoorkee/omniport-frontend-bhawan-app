@@ -4,8 +4,16 @@ import { tailwindWrapper } from "../../../../../formula_one/src/utils/tailwindWr
 
 class EventCard extends Component {
   render() {
-    const { eventName, eventLocation, onRegister, index } = this.props;
-    const backgroundColorClass = index % 2 === 0 ? "bg-[#E5E9FF]" : "bg-white";
+    const {
+      eventName,
+      eventTime,
+      eventLocation,
+      eventDate,
+      onRegister,
+      eventDeadline,
+      id,
+    } = this.props;
+    const backgroundColorClass = id % 2 === 0 ? "bg-white" : "bg-[#E5E9FF]";
 
     return (
       <div
@@ -22,9 +30,11 @@ class EventCard extends Component {
           <p className={tailwindWrapper("text-[#133BC5] mb-1 font-bold")}>
             {eventLocation}
           </p>
-          <p className={tailwindWrapper("mb-1 font-bold")}>Date : 10/12/24</p>
+          <p className={tailwindWrapper("mb-1 font-bold")}>
+            Date : {eventDate}
+          </p>
           <p className={tailwindWrapper("mb-1 text-[#133BC5] font-bold")}>
-            Time : 8:00PM
+            Time :{eventTime}
           </p>
         </div>
         <div className={tailwindWrapper("flex flex-col gap-2")}>
@@ -37,7 +47,7 @@ class EventCard extends Component {
             Register
           </button>
           <p className={tailwindWrapper("text-gray-700 mb-2")}>
-            registration upto 10/12/24 8:00pm
+            registration upto {eventDeadline}
           </p>
         </div>
       </div>

@@ -3,11 +3,9 @@ import { connect } from "react-redux";
 import moment from "moment";
 
 import { tailwindWrapper } from "../../../../../formula_one/src/utils/tailwindWrapper";
-import { Loading } from "formula_one";
 
 import { getComplaints } from "../../actions/complaints";
 import { complaintsUrl } from "../../urls";
-import { entries } from "../constants";
 
 class ComplaintsRegisterNew extends React.Component {
   constructor(props) {
@@ -43,11 +41,7 @@ class ComplaintsRegisterNew extends React.Component {
 
   render() {
     const { complaints } = this.props;
-    const links = [complaints.links];
-
     const { complaintsLoading } = this.state;
-    console.log(complaints, links);
-
     return (
       <div className={tailwindWrapper("w-full")}>
         {this.state.error && (
@@ -83,14 +77,14 @@ class ComplaintsRegisterNew extends React.Component {
           My Complaints
         </h3>
 
-        {!complaintsLoading &&
-        complaints.results &&
-        complaints.results.length > 0 ? (
+        {!complaintsLoading && complaints && complaints.length > 0 ? (
           <div className={tailwindWrapper("overflow-x-auto my-8")}>
             <table
               className={tailwindWrapper("min-w-full divide-y divide-gray-200")}
             >
-              <thead className={tailwindWrapper("bg-[#6381EB]")}>
+              <thead
+                className={tailwindWrapper("bg-[#6381EB] sticky top-0 z-50")}
+              >
                 <tr className={tailwindWrapper("")}>
                   <th
                     scope="col"
@@ -137,7 +131,7 @@ class ComplaintsRegisterNew extends React.Component {
               <tbody
                 className={tailwindWrapper("bg-white divide-y divide-gray-200")}
               >
-                {complaints.results.map((complaint, index) => (
+                {complaints.map((complaint, index) => (
                   <tr
                     key={index}
                     className={tailwindWrapper(
