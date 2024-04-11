@@ -67,6 +67,7 @@ class GuestHouseBooking extends Component{
             </div>
             <hr/>
             { bookingRequests.results.map((request, index) => {
+              // TO DO : fetch data about visitor name, relation and status of booking from backend to show here
               return(
                 <div className={tailwindWrapper('flex item-center justify-around font-extralight text-xs')}>
                   <div className={tailwindWrapper('max-w-20')}>{request.bookedBy}</div>

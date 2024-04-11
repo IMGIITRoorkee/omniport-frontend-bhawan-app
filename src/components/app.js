@@ -334,7 +334,6 @@ class App extends React.Component {
                           </Grid.Column>
                         )}
                       />
-                      {/*  */}
                       <Route
                         path={`${match.path}events`}
                         render={(props) => (
