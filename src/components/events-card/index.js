@@ -135,7 +135,6 @@ class EventsCard extends React.Component {
                     control={Input}
                     onChange={this.handleChange}
                     label='Event name'
-                    placeholder='Event name'
                     required
                   />
                   <Form.Field
@@ -144,7 +143,6 @@ class EventsCard extends React.Component {
                     control={Input}
                     onChange={this.handleChange}
                     label='Venue'
-                    placeholder='Venue'
                     required
                   />
                   <Form.Field required>
