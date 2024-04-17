@@ -1,42 +1,43 @@
-import React, { Suspense, lazy } from "react"
-import { connect } from "react-redux"
-import { Switch, Route, Link } from "react-router-dom"
+import React, { Suspense, lazy } from "react";
+import { connect } from "react-redux";
+import { Switch, Route, Link } from "react-router-dom";
 
-import { Grid, Button, Segment } from "semantic-ui-react"
+import { Grid, Button, Segment } from "semantic-ui-react";
 
-import { AppHeader, AppFooter, Loading } from "formula_one"
-
-const Nav = lazy(() => import("./navbar/index"))
-const BookRoom = lazy(() => import("./book-room-new/index"))
-const ComplaintRegister = lazy(() => import("./complaint_register/index"))
-const Authorities = lazy(() => import("./authorities/index"))
-const Facilities = lazy(() => import("./facilities/index"))
-const MyInfo = lazy(() => import("./my_info/index"))
-const StudentDatabase = lazy(() => import("./student-database/index"))
-const EventsCard = lazy(() => import("./events-card/index"))
-const Events = lazy(() => import("./events/index"))
-const AdminComplaints = lazy(() => import("./admin-complaints/index"))
-const Items = lazy(() => import("./items/index"))
-const BookingRequests = lazy(() => import("./booking_request/index"))
-const Facility = lazy(() => import("./facility/index"))
-const MyProfile = lazy(() => import("./my_profile/index"))
-const AdminAuthorities = lazy(() => import("./admin_authorities/index"))
-const EditAuthorities = lazy(() => import("./edit-authorities/index"))
-const AddFacility = lazy(() => import("./add-facility/index"))
-const RegisterStudent = lazy(() => import("./register_student/index"))
-const Rooms = lazy(() => import("./rooms/index"))
-const NewEvents = lazy(() => import("./events-new/index"))
-const FeedbackForm = lazy(() => import("./Feedback/index"))
+import { AppHeader, AppFooter, Loading } from "formula_one";
+const GuestHouseBooking = lazy(() => import("./room-new/index"));
+const Nav = lazy(() => import("./navbar/index"));
+const BookRoom = lazy(() => import("./book-room-new/index"));
+const ComplaintRegister = lazy(() => import("./complaint_register/index"));
+const Authorities = lazy(() => import("./authorities/index"));
+const Facilities = lazy(() => import("./facilities/index"));
+const MyInfo = lazy(() => import("./my_info/index"));
+const StudentDatabase = lazy(() => import("./student-database/index"));
+const EventsCard = lazy(() => import("./events-card/index"));
+const Events = lazy(() => import("./events/index"));
+const AdminComplaints = lazy(() => import("./admin-complaints/index"));
+const Items = lazy(() => import("./items/index"));
+const BookingRequests = lazy(() => import("./booking_request/index"));
+const Facility = lazy(() => import("./facility/index"));
+const MyProfile = lazy(() => import("./my_profile/index"));
+const AdminAuthorities = lazy(() => import("./admin_authorities/index"));
+const EditAuthorities = lazy(() => import("./edit-authorities/index"));
+const AddFacility = lazy(() => import("./add-facility/index"));
+const RegisterStudent = lazy(() => import("./register_student/index"));
+const Rooms = lazy(() => import("./rooms/index"));
+const NewEvents = lazy(() => import("./events-new/index"));
+const FeedbackForm = lazy(() => import("./Feedback/index"));
+const EventCalendar = lazy(() => import("./events-calendar-new/index"));
 
 import { whoami } from "../actions/who_am_i";
 import { getConstants } from "../actions/get-constants";
 import { setActiveHostel } from "../actions/set-active-hostel";
-import { setActivePost } from "../actions/set-active-post"
+import { setActivePost } from "../actions/set-active-post";
 import { constantsUrl } from "../urls";
-import AdminRoute from "./routes/adminRoute"
+import AdminRoute from "./routes/adminRoute";
 import main from "formula_one/src/css/app.css";
 import blocks from "../css/app.css";
-import ComplaintForm from "./complaints-new"
+import ComplaintForm from "./complaints-new";
 
 const creators = [
   {
@@ -82,7 +83,7 @@ class App extends React.Component {
       loaded: false,
       activeNav: "Home",
       isMobile: false,
-      width: 0
+      width: 0,
     };
   }
 
@@ -91,38 +92,38 @@ class App extends React.Component {
       this.setState({
         width: window.innerWidth,
         isMobile: window.innerWidth <= 1000,
-        columns: window.innerWidth <= 1000 ? 16 : 12
+        columns: window.innerWidth <= 1000 ? 16 : 12,
       });
     }
-  }
+  };
 
   changeActiveHostel = (hostelCode, designation) => {
-    this.props.history.push('/bhawan_app/')
-    this.props.setActiveHostel(hostelCode)
-    this.props.setActivePost(designation)
-  }
+    this.props.history.push("/bhawan_app/");
+    this.props.setActiveHostel(hostelCode);
+    this.props.setActivePost(designation);
+  };
 
   setDefaultHostel = (hostel) => {
     if (hostel && hostel.length > 0) {
-      this.props.setActiveHostel(hostel[0][0])
-      this.props.setActivePost(hostel[0][1])
+      this.props.setActiveHostel(hostel[0][0]);
+      this.props.setActivePost(hostel[0][1]);
     }
-  }
+  };
 
   componentDidMount() {
-    this.resize()
+    this.resize();
     this.props.getConstants(
       constantsUrl(),
       this.consSuccessCallBack,
       this.errCallBack
-    )
+    );
   }
 
   setNavigation = (activeNav) => {
     this.setState({
       activeNav,
-    })
-  }
+    });
+  };
 
   successCallBack = (res) => {
     this.setDefaultHostel(res.data.hostel);
@@ -136,7 +137,7 @@ class App extends React.Component {
   };
 
   consSuccessCallBack = (res) => {
-    this.props.whoami(this.successCallBack, this.errCallBack)
+    this.props.whoami(this.successCallBack, this.errCallBack);
     this.setState({
       success: true,
       error: false,
@@ -159,7 +160,7 @@ class App extends React.Component {
   render() {
     const { match, who_am_i, constants, activeHostel, activePost } = this.props;
     if (this.state.loaded && this.state.consLoaded) {
-      if (activeHostel != '') {
+      if (activeHostel != "") {
         return (
           <div ref={this.divRef} styleName="blocks.app-wrapper">
             <Suspense fallback={<Loading />}>
@@ -205,7 +206,10 @@ class App extends React.Component {
                       path={`${match.path}book_room`}
                       exact
                       render={(props) =>
-                        [...constants['administrative_council'], ...constants['global_council']].includes(activePost) && (
+                        [
+                          ...constants["administrative_council"],
+                          ...constants["global_council"],
+                        ].includes(activePost) && (
                           <BookingRequests
                             who_am_i={who_am_i}
                             constants={constants}
@@ -254,7 +258,10 @@ class App extends React.Component {
                         path={`${match.path}book_room`}
                         exact
                         render={(props) =>
-                          ![...constants['administrative_council'], ...constants['global_council']].includes(activePost) ? (
+                          ![
+                            ...constants["administrative_council"],
+                            ...constants["global_council"],
+                          ].includes(activePost) ? (
                             <BookRoom
                               who_am_i={who_am_i}
                               constants={constants}
@@ -303,8 +310,11 @@ class App extends React.Component {
                         path={`${match.path}`}
                         exact
                         render={(props) => (
-                          <Grid.Column width={this.state.columns} floated="left">
-                            {/* <Facilities
+                          <Grid.Column
+                            width={this.state.columns}
+                            floated="left"
+                          >
+                            <Facilities
                               who_am_i={who_am_i}
                               setNavigation={this.setNavigation}
                               {...this.props}
@@ -313,17 +323,24 @@ class App extends React.Component {
                               who_am_i={who_am_i}
                               constants={constants}
                               {...this.props}
-                            /> */}
-                            <NewEvents who_am_i={who_am_i}
+                            />
+                            <GuestHouseBooking
+                              who_am_i={who_am_i}
                               constants={constants}
-                              {...this.props} />
+                              {...this.props}
+                            />
+                            <NewEvents
+                              who_am_i={who_am_i}
+                              constants={constants}
+                              {...this.props}
+                            />
                           </Grid.Column>
                         )}
                       />
                       <Route
                         path={`${match.path}events`}
                         render={(props) => (
-                          <Events
+                          <EventCalendar
                             who_am_i={who_am_i}
                             setNavigation={this.setNavigation}
                           />
@@ -354,12 +371,30 @@ class App extends React.Component {
                         path={`${match.path}`}
                         exact
                         render={(props) => (
-                          <Grid.Column width={3} floated="right" styleName="blocks.side-info">
-                            <MyInfo {...props} who_am_i={who_am_i} constants={constants} activeHostel={activeHostel} />
-                            <EventsCard {...props} who_am_i={who_am_i} activeHostel={activeHostel} />
-                            {constants['student_council'].includes(activePost) ? (
+                          <Grid.Column
+                            width={3}
+                            floated="right"
+                            styleName="blocks.side-info"
+                          >
+                            <MyInfo
+                              {...props}
+                              who_am_i={who_am_i}
+                              constants={constants}
+                              activeHostel={activeHostel}
+                            />
+                            <EventsCard
+                              {...props}
+                              who_am_i={who_am_i}
+                              activeHostel={activeHostel}
+                            />
+                            {constants["student_council"].includes(
+                              activePost
+                            ) ? (
                               <Link to="/bhawan_app/admin_complaint">
-                                <Button fluid styleName="blocks.student-complaints">
+                                <Button
+                                  fluid
+                                  styleName="blocks.student-complaints"
+                                >
                                   Student Complaints
                                 </Button>
                               </Link>
@@ -371,9 +406,22 @@ class App extends React.Component {
                         path={`${match.path}complaint`}
                         exact
                         render={(props) => (
-                          <Grid.Column width={3} floated="right" styleName="blocks.side-info">
-                            <MyInfo {...props} who_am_i={who_am_i} constants={constants} activeHostel={activeHostel} />
-                            <EventsCard {...props} who_am_i={who_am_i} activeHostel={activeHostel} />
+                          <Grid.Column
+                            width={3}
+                            floated="right"
+                            styleName="blocks.side-info"
+                          >
+                            <MyInfo
+                              {...props}
+                              who_am_i={who_am_i}
+                              constants={constants}
+                              activeHostel={activeHostel}
+                            />
+                            <EventsCard
+                              {...props}
+                              who_am_i={who_am_i}
+                              activeHostel={activeHostel}
+                            />
                           </Grid.Column>
                         )}
                       />
@@ -381,33 +429,74 @@ class App extends React.Component {
                         path={`${match.path}feedback`}
                         exact
                         render={(props) => (
-                          <Grid.Column width={3} floated="right" styleName="blocks.side-info">
-                            <MyInfo {...props} who_am_i={who_am_i} constants={constants} activeHostel={activeHostel} />
-                            <EventsCard {...props} who_am_i={who_am_i} activeHostel={activeHostel} />
+                          <Grid.Column
+                            width={3}
+                            floated="right"
+                            styleName="blocks.side-info"
+                          >
+                            <MyInfo
+                              {...props}
+                              who_am_i={who_am_i}
+                              constants={constants}
+                              activeHostel={activeHostel}
+                            />
+                            <EventsCard
+                              {...props}
+                              who_am_i={who_am_i}
+                              activeHostel={activeHostel}
+                            />
                           </Grid.Column>
                         )}
                       />
-                       <Route
+                      <Route
                         path={`${match.path}feedback`}
                         exact
                         render={(props) => (
-                          <Grid.Column width={3} styleName="blocks.side-info" style={{ position: 'relative' }}>
-                            <MyInfo {...props} who_am_i={who_am_i} constants={constants} activeHostel={activeHostel} />
+                          <Grid.Column
+                            width={3}
+                            styleName="blocks.side-info"
+                            style={{ position: "relative" }}
+                          >
+                            <MyInfo
+                              {...props}
+                              who_am_i={who_am_i}
+                              constants={constants}
+                              activeHostel={activeHostel}
+                            />
 
-                            <FeedbackForm {...props} who_am_i={who_am_i} activeHostel={activeHostel} />
-
+                            <FeedbackForm
+                              {...props}
+                              who_am_i={who_am_i}
+                              activeHostel={activeHostel}
+                            />
                           </Grid.Column>
                         )}
-                      /> 
+                      />
 
-                      {![...constants['administrative_council'], ...constants['global_council']].includes(activePost) && (
+                      {![
+                        ...constants["administrative_council"],
+                        ...constants["global_council"],
+                      ].includes(activePost) && (
                         <Route
                           path={`${match.path}book_room`}
                           exact
                           render={(props) => (
-                            <Grid.Column width={3} floated="right" styleName="blocks.side-info">
-                              <MyInfo {...props} who_am_i={who_am_i} constants={constants} activeHostel={activeHostel} />
-                              <EventsCard {...props} who_am_i={who_am_i} activeHostel={activeHostel} />
+                            <Grid.Column
+                              width={3}
+                              floated="right"
+                              styleName="blocks.side-info"
+                            >
+                              <MyInfo
+                                {...props}
+                                who_am_i={who_am_i}
+                                constants={constants}
+                                activeHostel={activeHostel}
+                              />
+                              <EventsCard
+                                {...props}
+                                who_am_i={who_am_i}
+                                activeHostel={activeHostel}
+                              />
                             </Grid.Column>
                           )}
                         />
@@ -416,8 +505,16 @@ class App extends React.Component {
                         path={`${match.path}events`}
                         exact
                         render={(props) => (
-                          <Grid.Column width={3} floated="right" styleName="blocks.side-info">
-                            <EventsCard {...props} who_am_i={who_am_i} activeHostel={activeHostel} />
+                          <Grid.Column
+                            width={3}
+                            floated="right"
+                            styleName="blocks.side-info"
+                          >
+                            <EventsCard
+                              {...props}
+                              who_am_i={who_am_i}
+                              activeHostel={activeHostel}
+                            />
                           </Grid.Column>
                         )}
                       />
@@ -432,7 +529,10 @@ class App extends React.Component {
       } else {
         return (
           <React.Fragment>
-            <Segment>Contact your Chief Warden. Your Bhawan details have not been filled</Segment>
+            <Segment>
+              Contact your Chief Warden. Your Bhawan details have not been
+              filled
+            </Segment>
           </React.Fragment>
         );
       }
@@ -450,23 +550,23 @@ function mapStateToProps(state) {
     who_am_i: state.who_am_i,
     constants: state.constants,
     activeHostel: state.activeHostel,
-    activePost: state.activePost
+    activePost: state.activePost,
   };
 }
 const mapDispatchToProps = (dispatch) => {
   return {
     whoami: (successCallBack, errCallBack) => {
-      dispatch(whoami(successCallBack, errCallBack))
+      dispatch(whoami(successCallBack, errCallBack));
     },
     getConstants: (url, successCallBack, errCallBack) => {
-      dispatch(getConstants(url, successCallBack, errCallBack))
+      dispatch(getConstants(url, successCallBack, errCallBack));
     },
     setActiveHostel: (hostelCode) => {
-      dispatch(setActiveHostel(hostelCode))
+      dispatch(setActiveHostel(hostelCode));
     },
     setActivePost: (designation) => {
-      dispatch(setActivePost(designation))
-    }
+      dispatch(setActivePost(designation));
+    },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App);
