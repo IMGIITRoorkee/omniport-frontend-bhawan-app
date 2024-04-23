@@ -1,6 +1,7 @@
 import React, { Component, lazy } from "react";
 import { eventsUrl } from "../../urls";
 import { getEvents } from "../../actions/events";
+import { connect } from "react-redux";
 
 import { tailwindWrapper } from "../../../../../formula_one/src/utils/tailwindWrapper";
 
@@ -10,56 +11,22 @@ class NewEvents extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      events: [],
       loading: true,
-      hasEventThisMonth: false,
     };
   }
 
   componentDidMount() {
-    this.fetchEvents();
+    this.props.getEvents(eventsUrl(this.props.activeHostel));
+    this.state.loading = false;
   }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.activeHostel !== this.props.activeHostel) {
-      this.fetchEvents();
-    }
-  }
-
-  fetchEvents = async () => {
-    try {
-      const response = await getEvents(eventsUrl(this.props.activeHostel));
-      this.setState({
-        events: response.data,
-        loading: false,
-      });
-      this.checkIfEventThisMonth();
-    } catch (error) {
-      console.error("Error fetching events:", error);
-    }
-  };
-
-  checkIfEventThisMonth = () => {
-    const today = new Date();
-    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-    const eventsThisMonth = this.state.events.some((event) => {
-      const eventDate = new Date(event.date);
-      return eventDate >= startOfMonth && eventDate <= endOfMonth;
-    });
-
-    this.setState({
-      hasEventThisMonth: eventsThisMonth,
-    });
-  };
 
   handleRegister = (eventName) => {
     alert(`You have registered for ${eventName}`);
   };
 
   render() {
-    const { loading, hasEventThisMonth } = this.state;
+    const { events } = this.props;
+    const { loading } = this.state;
     return (
       <div className={tailwindWrapper("container mx-auto mb-4")}>
         <h2
@@ -79,19 +46,20 @@ class NewEvents extends Component {
           <div>Loading...</div>
         ) : (
           <div>
-            {hasEventThisMonth ? (
-              hasEventThisMonth.map((event, index) => (
+            {events.length > 0 ? (
+              events.map((event, index) => (
                 <EventCard
                   key={index}
                   eventName={event.name}
                   eventLocation={event.location}
                   eventDate={event.date}
                   eventTime={event.timings[0].start}
+                  eventDeadline={event.deadlineDate}
                   onRegister={() => this.handleRegister(event.name)}
                 />
               ))
             ) : (
-              <p>There's no event today.</p>
+              <p>There are no events.</p>
             )}
           </div>
         )}
@@ -100,4 +68,20 @@ class NewEvents extends Component {
   }
 }
 
-export default NewEvents;
+function mapStateToProps(state) {
+  return {
+    events: state.events,
+    loading: state.loading,
+    activeHostel: state.activeHostel,
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getEvents: (url) => {
+      dispatch(getEvents(url));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewEvents);

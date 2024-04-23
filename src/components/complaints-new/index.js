@@ -39,17 +39,31 @@ class ComplaintForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    let data = {
-      complaintType: this.state.category,
-      description: this.state.description.trim(),
-      startTime: this.state.startTime,
-      endTime: this.state.endTime,
-    };
+    const formData = new FormData();
+
+    formData.append("complaintType", this.state.category);
+    formData.append("description", this.state.description.trim());
+
+
+    // TODO map it to timing in backend 
+    // const timing = {
+    //   startTime: this.state.startTime,
+    //   endTime: this.state.endTime,
+    // };
+    // formData.append("timing", JSON.stringify(timing));
+
+
+    // TODO map it to items in backend 
+    // if (this.state.selectedFile) {
+    //   formData.append("items", this.state.selectedFile);
+    // }
+
     this.setState({
       loading: true,
     });
+
     this.props.addComplaint(
-      data,
+      formData,
       this.props.activeHostel,
       this.successCallBack,
       this.errCallBack
@@ -75,10 +89,7 @@ class ComplaintForm extends Component {
   render() {
     return (
       <div className={tailwindWrapper("w-2/3 ml-16")}>
-        <form
-          onSubmit={this.handleSubmit}
-          className={tailwindWrapper("  mb-8")}
-        >
+        <form onSubmit={this.handleSubmit} className={tailwindWrapper("mb-8")}>
           <div className={tailwindWrapper("mb-4")}>
             <Link
               to="/bhawan_app/complaints"
