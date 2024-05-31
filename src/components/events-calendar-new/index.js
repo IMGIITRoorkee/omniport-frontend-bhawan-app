@@ -52,7 +52,6 @@ class EventCalendar extends React.Component {
           defaultView="dayGridMonth"
           dateClick={this.handleDateClick}
           weekends
-          // aspectRatio="1.3"
           events={this.props.mappedEvents}
           selectable={true}
           plugins={[
