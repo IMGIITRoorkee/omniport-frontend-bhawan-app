@@ -86,13 +86,13 @@ class EventsCard extends React.Component {
       <>
         <div styleName='event-card-border'>
           {dayEvents.length > 0 ? dayEvents.map((event) => {
+            console.log(event)
             return(
               <div styleName='event-card'>
                 <div styleName='event-card-upper'> 
                   <div styleName='event-card-upper-left'>
                     {/* image goes in this part */}
-                    
-                    
+                    <img src={event.displayPicture}></img>
                     </div>
                     <div styleName='event-card-upper-right'>
                       <div styleName='event-card-upper-right-upper'>
@@ -108,9 +108,12 @@ class EventsCard extends React.Component {
                               <div> {moment(
                                 event.timings[0].start,
                                 'hh:mm:ss'
+                              ).format('hh:mm A')} - {moment(
+                                event.timings[0].end,
+                                'hh:mm:ss'
                               ).format('hh:mm A')} </div>
                               <div> {event.date} </div>
-                              <div> (how to access?) </div>
+                              <div> No venue field </div>
                           </div>
                          </div>
                          <div styleName='event-card-upper-right-bottom'> 

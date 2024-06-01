@@ -2,6 +2,7 @@
 
 .event-card-border{
     margin-top: 4.2rem;
+    padding: 2%;
     width: 130%;
     border-color: #F6F7F9;
     border-width: 0.1rem;
@@ -30,14 +31,15 @@
 .event-card-upper-left{
     display: flex;    
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
+    margin-top: 5%;
+    margin-bottom: 5%;
     flex-grow: 1;
-
+    max-width: 40%;
 }
 
 .event-card-upper-left > img{
     border-radius: 10%;
-    width: 100%;
 }
 
 
@@ -75,6 +77,9 @@
     font-family: "Lato", sans-serif;
     font-weight: 700;
     font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .event-card-upper-right-bottom{
@@ -96,15 +101,19 @@
 
 .event-card-lower{
     display: flex;
-    margin: auto;
-    padding-top: 0.5rem;
     font-family: "Inter", sans-serif;
     font-size: 12px;
     line-height: 1rem;
     overflow-y: scroll;
     overflow-x: hidden;
     max-height: 35%;
-    width: 100%;
+    box-sizing: border-box;
+    width: 107%;
+    padding-right: 5%;
+    /* margin: auto; */
+    margin-top: 2%;
+    /* margin-right: 5%; */
+    padding-top: 0.5rem;
     text-align: center;
     flex-wrap: wrap;
     justify-content: center;
