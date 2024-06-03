@@ -5,11 +5,10 @@ import "./index.css";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 import { tailwindWrapper } from "../../../../../formula_one/src/utils/tailwindWrapper";
 
-import { Grid, Responsive } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import { getEvents } from "../../actions/events";
 import { setActiveDay } from "../../actions/set-active-day";
 import { eventsUrl } from "../../urls";
@@ -46,35 +45,29 @@ class EventCalendar extends React.Component {
 
   render() {
     return (
-      <Grid.Column width={this.state.columns} floated='left'>
-      <div className={tailwindWrapper("mb-12")}>
-        <FullCalendar
-          defaultView="dayGridMonth"
-          dateClick={this.handleDateClick}
-          weekends
-          // aspectRatio="1.3"
-          events={this.props.mappedEvents}
-          selectable={true}
-          plugins={[
-            dayGridPlugin,
-            timeGridPlugin,
-            interactionPlugin,
-          ]}
-          headerToolbar={{
-            left: "today prev,next",
-            center: "title",
-            right: "",
-          }}
-          buttonText={{
-            today: 'Today',
-          }}
-          dayHeaderFormat={{
-            weekday: "long",
-          }}
-          // editable={true}
-          eventColor="#6381EB"
-        />
-      </div>
+      <Grid.Column width={this.state.columns} floated="left">
+        <div className={tailwindWrapper("mb-12")}>
+          <FullCalendar
+            defaultView="dayGridMonth"
+            dateClick={this.handleDateClick}
+            weekends
+            events={this.props.mappedEvents}
+            selectable={true}
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            headerToolbar={{
+              left: "today prev,next",
+              center: "title",
+              right: "",
+            }}
+            buttonText={{
+              today: "Today",
+            }}
+            dayHeaderFormat={{
+              weekday: "long",
+            }}
+            eventColor="#6381EB"
+          />
+        </div>
       </Grid.Column>
     );
   }
