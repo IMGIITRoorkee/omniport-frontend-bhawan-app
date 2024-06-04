@@ -1,13 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Card, Form, Button, Input, Header } from 'semantic-ui-react';
-import { TimeInput } from 'semantic-ui-calendar-react';
 import './index.css';
 import { getEvents } from '../../actions/events';
 import { eventsUrl, eventUrl } from '../../urls';
 import { addEvent } from '../../actions/add-events';
 import moment from 'moment' 
+
 
 class EventsCard extends React.Component {
   constructor(props) {
@@ -84,90 +83,60 @@ class EventsCard extends React.Component {
     const { dayEvents, activePost } = this.props;
 
     return (
-      <React.Fragment>
-        {location.pathname === '/bhawan_app/events' ? (
-          <div styleName='day-heading'>
-            {moment(this.props.activeDay, 'YYYY-MM-DD').format('DD/MM/YYYY')}
-          </div>
-        ) : null}
-        <Link to='/bhawan_app/events'>
-          <Card styleName='font_color'>
-            <Card.Content>
-              <Card.Header>
-                {location.pathname === eventUrl()
-                  ? 'On this day'
-                  : 'Todays events'}
-              </Card.Header>
-              {dayEvents.length > 0
-                ? dayEvents.map((event) => {
-                    return (
-                      <div styleName='max-content-width mid-font'>
-                        <Card.Description>
-                          {event.name}
-                          <div styleName='display-flex small-font'>
-                            <div styleName='min-margin'>
-                              {event.description}
-                            </div>
-                            <div>
-                              {moment(
+      <>
+        <div styleName='event-card-border'>
+          {dayEvents.length > 0 ? dayEvents.map((event) => {
+            return(
+              <>
+              <div styleName='event-card'>
+                <div styleName='event-card-upper'> 
+                  <div styleName='event-card-upper-left'>
+                    <img src={event.displayPicture}></img>
+                    </div>
+                    <div styleName='event-card-upper-right'>
+                      <div styleName='event-card-upper-right-upper'>
+                        {event.name}
+                         </div>
+                         <div styleName=' event-card-upper-right-middle'>
+                          <div styleName='flex-down event-props'> 
+                              <div> Time : </div>
+                              <div> Date : </div>
+                              <div> Venue: </div>
+                          </div>
+                          <div styleName='flex-down event-props-values'> 
+                              <div> {moment(
                                 event.timings[0].start,
                                 'hh:mm:ss'
-                              ).format('hh:mm A')}
-                            </div>
+                              ).format('hh:mm A')} - {moment(
+                                event.timings[0].end,
+                                'hh:mm:ss'
+                              ).format('hh:mm A')} </div>
+                              <div> {event.date} </div>
+                              {/* TO DO:  CREATE VENUE FIELD */}
+                              <div> No venue field </div>
                           </div>
-                        </Card.Description>
-                      </div>
-                    );
-                  })
-                : 'No events today'}
-              { activePost &&
-              location.pathname === '/bhawan_app/events' ? (
-                <Header as='h5' onClick={this.toggleAddEvent}>
-                  {!this.state.addEvent ? <span>+</span> : null}
-                  Add event
-                </Header>
-              ) : null}
-              {this.state.addEvent ? (
-                <Form>
-                  <Form.Field
-                    name='event'
-                    placeholder='Event'
-                    control={Input}
-                    onChange={this.handleChange}
-                    label='Event name'
-                    required
-                  />
-                  <Form.Field
-                    name='venue'
-                    placeholder='Venue'
-                    control={Input}
-                    onChange={this.handleChange}
-                    label='Venue'
-                    required
-                  />
-                  <Form.Field required>
-                    <label>Time</label>
-                    <TimeInput
-                      name='time'
-                      value={this.state.time}
-                      onChange={this.handleChange}
-                    />
-                  </Form.Field>
-                  <Button
-                    primary
-                    type='submit'
-                    fluid
-                    onClick={this.handleSubmit}
-                    disabled={event.trim() == '' || venue.trim() == '' || time.trim() == ''}
-                    >
-                      Submit
-                  </Button>
-                </Form>
-              ) : null}
-            </Card.Content>
-          </Card>
-        </Link>
-      </React.Fragment>
+                         </div>
+                         <div styleName='event-card-upper-right-bottom'>
+                           {/*TO DO: REGISTER API CREATE  */}
+                            <div styleName='register-button'> Register </div>
+                         </div>
+                    </div>
+                </div>
+                <div styleName='event-card-lower'> 
+                  {event.description}
+                </div>
+              </div>
+              </>
+            );
+          }) : 
+            <>
+            <Link to='/bhawan_app/events'>
+                <div>No events today</div>
+              </Link>
+              </>
+          }
+        </div>
+      </>
     );
   }
 }

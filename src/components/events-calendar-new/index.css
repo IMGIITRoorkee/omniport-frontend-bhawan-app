@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
+:global .fc-col-header-cell {
+  background-color: #6381eb;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+  border-radius: 0.3rem;
+}
+
+:global .fc-col-header-cell-cushion {
+  color: white;
+}
+
+:global .fc-button-primary {
+  border-color: #133bc5 !important;
+  border-width: 0.1rem !important;
+  color: #133bc5 !important;
+}
+
+:global .fc-toolbar-title {
+  margin-right: 13rem !important;
+  color: #133bc5 !important;
+  font-size: 24 !important;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+:global .fc-day-sun .fc-daygrid-day-number {
+  color: #ba0c0c !important;
+}
+
+:global .fc-daygrid-day-number {
+  font-weight: 800;
+  color: #0b2274 !important;
+}

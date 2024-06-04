@@ -28,6 +28,7 @@ const Rooms = lazy(() => import("./rooms/index"));
 const NewEvents = lazy(() => import("./events-new/index"));
 const FeedbackForm = lazy(() => import("./Feedback/index"));
 const EventCalendar = lazy(() => import("./events-calendar-new/index"));
+const EventsCalendarCard = lazy(() => import("./events-calendarpage-card/index"));
 
 import { whoami } from "../actions/who_am_i";
 import { getConstants } from "../actions/get-constants";
@@ -38,6 +39,7 @@ import AdminRoute from "./routes/adminRoute";
 import main from "formula_one/src/css/app.css";
 import blocks from "../css/app.css";
 import ComplaintForm from "./complaints-new";
+
 
 const creators = [
   {
@@ -340,7 +342,7 @@ class App extends React.Component {
                       <Route
                         path={`${match.path}events`}
                         render={(props) => (
-                          <EventCalendar
+                          <EventCalendar //the calendar component
                             who_am_i={who_am_i}
                             setNavigation={this.setNavigation}
                           />
@@ -382,7 +384,7 @@ class App extends React.Component {
                               constants={constants}
                               activeHostel={activeHostel}
                             />
-                            <EventsCard
+                            <EventsCard   //we have to change event card here also
                               {...props}
                               who_am_i={who_am_i}
                               activeHostel={activeHostel}
@@ -506,7 +508,7 @@ class App extends React.Component {
                         exact
                         render={(props) => (
                           <Grid.Column
-                            width={3}
+                            width={4}
                             floated="right"
                             styleName="blocks.side-info"
                           >
