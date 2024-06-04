@@ -86,12 +86,11 @@ class EventsCard extends React.Component {
       <>
         <div styleName='event-card-border'>
           {dayEvents.length > 0 ? dayEvents.map((event) => {
-            console.log(event)
             return(
+              <>
               <div styleName='event-card'>
                 <div styleName='event-card-upper'> 
                   <div styleName='event-card-upper-left'>
-                    {/* image goes in this part */}
                     <img src={event.displayPicture}></img>
                     </div>
                     <div styleName='event-card-upper-right'>
@@ -113,10 +112,12 @@ class EventsCard extends React.Component {
                                 'hh:mm:ss'
                               ).format('hh:mm A')} </div>
                               <div> {event.date} </div>
+                              {/* TO DO:  CREATE VENUE FIELD */}
                               <div> No venue field </div>
                           </div>
                          </div>
-                         <div styleName='event-card-upper-right-bottom'> 
+                         <div styleName='event-card-upper-right-bottom'>
+                           {/*TO DO: REGISTER API CREATE  */}
                             <div styleName='register-button'> Register </div>
                          </div>
                     </div>
@@ -125,8 +126,15 @@ class EventsCard extends React.Component {
                   {event.description}
                 </div>
               </div>
+              </>
             );
-          }) : 'No events today'}
+          }) : 
+            <>
+            <Link to='/bhawan_app/events'>
+                <div>No events today</div>
+              </Link>
+              </>
+          }
         </div>
       </>
     );
