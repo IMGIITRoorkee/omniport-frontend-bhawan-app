@@ -145,7 +145,7 @@ class Nav extends Component {
     const { who_am_i, constants, activePost } = this.props
     let options = []
     for (var i = 0; i < who_am_i.hostel.length; i++ ) {
-      const text = constants.hostels[who_am_i.hostel[i][0]]
+      let text = constants.hostels[who_am_i.hostel[i][0]]
       if(who_am_i.hostel[i][1])
         text = `${text} (${who_am_i.hostel[i][1]})`
       options.push({
