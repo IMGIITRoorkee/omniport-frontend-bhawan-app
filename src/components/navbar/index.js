@@ -137,6 +137,8 @@ class Nav extends Component {
   }
 
   render() {
+    // TODO: Remove after testing
+    console.log("Made with ❤️ by IMG")
     const {
       activeSubGroup,
       sideBarVisibility,
