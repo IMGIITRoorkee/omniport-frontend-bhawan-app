@@ -52,6 +52,8 @@ class RegisterStudent extends React.Component {
       deregisterLoading: false,
       editLoading: false,
       address: '',
+      address_bhawan:'',
+      registration_date:'',
       state: '',
       city: '',
       country: '',
@@ -111,6 +113,8 @@ class RegisterStudent extends React.Component {
       insideCampus: res.isLivingInCampus,
       feeStatus: res.feeType,
       address: res.address,
+      address_bhawan:res.address_bhawan,
+      registration_date:res.registration_date,
       state: res.state,
       city: res.city,
       postalCode: res.postalCode,
@@ -169,6 +173,8 @@ class RegisterStudent extends React.Component {
       displayPicture : '',
       successMessage : 'Student Registered',
       address: '',
+      address_bhawan:'',
+      registration_date:'',
       city: '',
       postalCode: '',
       country: '',
@@ -217,6 +223,8 @@ class RegisterStudent extends React.Component {
       displayPicture : '',
       successMessage : 'Student Edited Succesfully',
       address: '',
+      address_bhawan:'',
+      registration_date:'',
       city: '',
       postalCode: '',
       country: '',
@@ -338,6 +346,8 @@ class RegisterStudent extends React.Component {
       insideCampus,
       feeStatus,
       startDate,
+      address_bhawan,
+      registration_date
     } = this.state
     let data = {
       "person" : selected.person.id,
@@ -348,7 +358,9 @@ class RegisterStudent extends React.Component {
       "fathers_name": fathersName,
       "mothers_name": mothersName,
       "fathers_contact": fathersContact,
-      "mothers_contact": mothersContact
+      "mothers_contact": mothersContact,
+      "address_bhawan":address_bhawan,
+      "registration_date":registration_date
     }
     this.setState({
       registerLoading: true
@@ -371,6 +383,8 @@ class RegisterStudent extends React.Component {
       insideCampus,
       feeStatus,
       startDate,
+      address_bhawan,
+      registration_date
     } = this.state
     let data = {
       "room_number" : roomNo,
@@ -380,7 +394,9 @@ class RegisterStudent extends React.Component {
       "fathers_name": fathersName,
       "mothers_name": mothersName,
       "fathers_contact": fathersContact,
-      "mothers_contact": mothersContact
+      "mothers_contact": mothersContact,
+      "address_bhawan":address_bhawan,
+      "registration_date":registration_date
     }
     this.setState({
       editLoading: true
@@ -414,6 +430,8 @@ class RegisterStudent extends React.Component {
       displayPicture,
       loading,
       address,
+      address_bhawan,
+      registration_date,
       feeStatus,
       city,
       state,
@@ -557,6 +575,26 @@ class RegisterStudent extends React.Component {
                   <Input
                     name='mothersContact'
                     value={mothersContact}
+                    onChange={this.fieldsChange}
+                    loading={loading}
+                  />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group fluid widths='equal'>
+                <Form.Field>
+                  <label>"Address (As Per Bhawan)"</label>
+                  <Input
+                    name='address_bhawan'
+                    value={address_bhawan}
+                    onChange={this.fieldsChange}
+                    loading={loading}
+                  />
+                </Form.Field>
+                <Form.Field fluid widths='equal'>
+                  <label>Registration Date</label>
+                  <Input
+                    name='registration_date'
+                    value={registration_date}
                     onChange={this.fieldsChange}
                     loading={loading}
                   />
