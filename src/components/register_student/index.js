@@ -590,7 +590,7 @@ class RegisterStudent extends React.Component {
                     loading={loading}
                   />
                 </Form.Field>
-                <Form.Field fluid widths='equal'>
+                <Form.Field>
                   <label>Registration Date</label>
                   <Input
                     name='registration_date'
