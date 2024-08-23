@@ -182,6 +182,8 @@ class RegisterStudent extends React.Component {
       fathersContact: '',
       mothersName: '',
       mothersContact: '',
+      registration_date: '',
+      address_bhawan: ''    
     })
     toast({
       type: 'success',
@@ -223,8 +225,6 @@ class RegisterStudent extends React.Component {
       displayPicture : '',
       successMessage : 'Student Edited Succesfully',
       address: '',
-      address_bhawan:'',
-      registration_date:'',
       city: '',
       postalCode: '',
       country: '',
@@ -582,7 +582,7 @@ class RegisterStudent extends React.Component {
               </Form.Group>
               <Form.Group fluid widths='equal'>
                 <Form.Field>
-                  <label>"Address (As Per Bhawan)"</label>
+                  <label>Address (As Per Bhawan)</label>
                   <Input
                     name='address_bhawan'
                     value={address_bhawan}
@@ -594,6 +594,7 @@ class RegisterStudent extends React.Component {
                   <label>Registration Date</label>
                   <Input
                     name='registration_date'
+                    type='datetime-local'
                     value={registration_date}
                     onChange={this.fieldsChange}
                     loading={loading}
