@@ -114,7 +114,7 @@ class RegisterStudent extends React.Component {
       feeStatus: res.feeType,
       address: res.address,
       addressBhawan:res.addressBhawan,
-      registrationDate:res.registrationDate,
+      registrationDate: moment(res.registrationDate).format('YYYY-MM-DDThh:mm:ss'),
       state: res.state,
       city: res.city,
       postalCode: res.postalCode,
@@ -181,9 +181,7 @@ class RegisterStudent extends React.Component {
       fathersName: '',
       fathersContact: '',
       mothersName: '',
-      mothersContact: '',
-      registrationDate: '',
-      addressBhawan: ''    
+      mothersContact: ''    
     })
     toast({
       type: 'success',
