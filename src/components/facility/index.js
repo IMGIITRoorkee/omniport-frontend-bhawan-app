@@ -12,7 +12,8 @@ import {
   Icon,
   Grid,
   Message,
-  Label
+  Label,
+  Modal
 } from 'semantic-ui-react';
 import { TimeInput } from 'semantic-ui-calendar-react';
 import {
@@ -47,7 +48,10 @@ class Facility extends React.Component {
       descriptions: [''],
       name: '',
       days: [[]],
-      formattedTimings: {}
+      formattedTimings: {},
+      displayImage: null,
+      imageURL: '',
+      removerDisplay: false,
     };
   }
 
@@ -169,6 +173,33 @@ class Facility extends React.Component {
     this.toggleEditMode();
   };
 
+  uploadImage = () => {
+    if (this.state.displayImage && this.state.imageURL) {
+      const formData = new FormData()
+      formData.append('displayPicture', this.state.displayImage);
+      this.props.editFacility(
+        facilityUrl(this.props.activeHostel, this.state.id),
+        formData,
+        this.editFacilityCallBack,
+        this.errCallBack
+      );
+      this.handleCloseModal()
+    }
+  }
+
+  removeImage = () => {
+    const data = {
+      'displayPicture': null
+    }
+    this.props.editFacility(
+      facilityUrl(this.props.activeHostel, this.state.id),
+      data,
+      this.editFacilityCallBack,
+      this.errCallBack
+    );
+    this.handleRemoverModal()
+  }
+
   removeClick = (i) => {
     let descriptions = [...this.state.descriptions];
     let startTime = [...this.state.startTime];
@@ -208,6 +239,13 @@ class Facility extends React.Component {
     let endTime = [...this.state.endTime];
     endTime[i] = value;
     this.setState({ endTime });
+  }
+
+  handleCloseModal = () => {
+    this.setState({
+      displayImage: null,
+      imageURL: '',
+    })
   }
 
   addClick = () => {
@@ -263,7 +301,7 @@ class Facility extends React.Component {
       message: err,
     });
   };
-  facilityErrCallBack = (err) => {};
+  facilityErrCallBack = (err) => { };
   toggleEditMode = () => {
     const editMode = this.state.editMode;
     this.setState({
@@ -274,7 +312,7 @@ class Facility extends React.Component {
   formatTimings = (timings) => {
     var filterByDesc = {}
     timings.forEach(function (item) {
-      if(!filterByDesc.hasOwnProperty(item.description)) {
+      if (!filterByDesc.hasOwnProperty(item.description)) {
         filterByDesc[item.description] = []
       }
       filterByDesc[item.description].push(item)
@@ -283,8 +321,8 @@ class Facility extends React.Component {
     for (let [key, value] of Object.entries(filterByDesc)) {
       formattedTimings[key] = {}
       value.forEach(function (item) {
-        const time = item.start+"-"+item.end
-        if(!formattedTimings[key].hasOwnProperty(time)){
+        const time = item.start + "-" + item.end
+        if (!formattedTimings[key].hasOwnProperty(time)) {
           formattedTimings[key][time] = []
         }
         formattedTimings[key][time].push(item.day)
@@ -309,10 +347,27 @@ class Facility extends React.Component {
       this.errCallBack
     );
   };
+  handleSelectPicture = async (e, i) => {
+    const z = e.target.files;
+    if (e.target.files && e.target.files.length == 1) {
+      const displayImage = await readFile(z[0]);
+      const displayImageFile = await dataURLtoFile(displayImage, 'image.png');
+
+      this.setState({
+        displayImage: displayImageFile,
+        imageURL: displayImage
+      });
+    }
+  };
+  handleRemoverModal = () => {
+    this.setState({
+      removerDisplay: !this.state.removerDisplay,
+    })
+  }
 
   render() {
     const { facility, facilities, activePost } = this.props;
-    const { information, formattedTimings } = this.state;
+    const { information, formattedTimings, displayImage, imageURL } = this.state;
     return (
       <Grid.Column width={16}>
         <Grid.Column>
@@ -328,30 +383,127 @@ class Facility extends React.Component {
           <div>
             {facilities && facilities.length > 0
               ? facilities.map((allFacility, index) => {
-                  return (
-                    <Button
-                      styleName='button_margin'
-                      onClick={() => this.handleFacilityChange(allFacility.id)}
-                    >
-                      {allFacility.name}
-                    </Button>
-                  );
-                })
+                return (
+                  <Button
+                    styleName='button_margin'
+                    onClick={() => this.handleFacilityChange(allFacility.id)}
+                  >
+                    {allFacility.name}
+                  </Button>
+                );
+              })
               : null}
           </div>
           {facility ? (
             <React.Fragment>
+              <Modal
+                open={Boolean(imageURL)}
+                centered
+                size='tiny'
+                closeIcon
+                closeOnDimmerClick={false}
+              >
+                <Header>Upload facility image</Header>
+                <Modal.Content>
+                  <Image
+                    src={imageURL}
+                  />
+                </Modal.Content>
+                <Modal.Actions>
+                  <Button
+                    basic
+                    icon='left arrow'
+                    content='Keep current'
+                    secondary
+                    onClick={this.handleCloseModal}
+                  />
+                  <Button
+                    basic
+                    icon='photo'
+                    content='Done'
+                    primary
+                    onClick={this.uploadImage}
+                  />
+                </Modal.Actions>
+              </Modal>
+              <Modal
+                open={this.state.removerDisplay}
+                onClose={this.handleRemoverModal}
+                size='mini'
+                closeIcon
+              >
+                <Header>Are you sure?</Header>
+                <Modal.Content>
+                  Are you sure you want to continue this irreversible
+                  action?
+                </Modal.Content>
+                <Modal.Actions>
+                  <Button
+                    basic
+                    icon='left arrow'
+                    content='Keep'
+                    positive
+                    onClick={this.handleRemoverModal}
+                  />
+                  <Button
+                    basic
+                    icon='trash alternate'
+                    content='Delete'
+                    negative
+                    onClick={this.removeImage}
+                  />
+                </Modal.Actions>
+              </Modal>
               <Header as='h2'>{facility.name}</Header>
               <Grid divided='vertically'>
                 <Grid.Row columns={2}>
                   <Grid.Column width={4}>
-                    <Image
-                      src={
-                        facility.displayPicture ||
-                        'https://react.semantic-ui.com/images/wireframe/image.png'
+                    <div styleName='facilityImage'>
+                      <Image
+                        src={
+                          facility.displayPicture ||
+                          'https://react.semantic-ui.com/images/wireframe/image.png'
+                        }
+                        size='medium'
+                      />
+                      {activePost != null && facility.displayPicture ?
+                        <div styleName='actions'>
+                          <Button styleName="update-image">
+                            <label htmlFor='updatedFile' styleName='labelButton'>
+                              Change
+                            </label>
+                          </Button>
+                          <input
+                            type='file'
+                            accept='image/*'
+                            onChange={this.handleSelectPicture}
+                            id='updatedFile'
+                            hidden
+                          />
+                          <Button
+                            styleName='update-image'
+                            onClick={this.handleRemoverModal}
+                          >
+                            Remove
+                          </Button>
+                        </div> :
+                        <React.Fragment>
+                          <Button styleName="upload-image">
+                            <label htmlFor='uploadedFile' styleName='labelButton'>
+                              Upload image
+                            </label>
+                          </Button>
+                          <input
+                            type='file'
+                            accept='image/*'
+                            onChange={this.handleSelectPicture}
+                            name='uploadedFile'
+                            id='uploadedFile'
+                            hidden
+                          />
+                        </React.Fragment>
                       }
-                      size='medium'
-                    />
+                    </div>
                   </Grid.Column>
                   <Grid.Column width={12}>
                     <Container>
@@ -394,11 +546,11 @@ class Facility extends React.Component {
                           <Header size='small' styleName='low_margin'>
                             Timings
                           </Header>
-                            {
-                              facility.timings && facility.timings.length > 0 && formattedTimings != {}
+                          {
+                            facility.timings && facility.timings.length > 0 && formattedTimings != {}
                               ? <Grid celled>
-                                  {
-                                    Object.keys(formattedTimings).map((key) => {
+                                {
+                                  Object.keys(formattedTimings).map((key) => {
                                     return (
                                       <Grid.Row>
                                         <Grid.Column styleName="facilityDescription" width={4}>{key}</Grid.Column>
@@ -424,11 +576,11 @@ class Facility extends React.Component {
                                         </Grid.Column>
                                       </Grid.Row>
                                     )
-                                    })
-                                  }
-                                </Grid>
+                                  })
+                                }
+                              </Grid>
                               : ""
-                            }
+                          }
                           {activePost != null && (
                             <Button
                               basic
@@ -447,9 +599,29 @@ class Facility extends React.Component {
             </React.Fragment>
           ) : null}
         </Grid.Column>
-      </Grid.Column>
+      </Grid.Column >
     );
   }
+}
+
+function readFile(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => resolve(reader.result), false);
+    reader.readAsDataURL(file);
+  });
+}
+
+function dataURLtoFile(dataurl, filename) {
+  let arr = dataurl.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, { type: mime });
 }
 
 function mapStateToProps(state) {
