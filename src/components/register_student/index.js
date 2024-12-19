@@ -54,6 +54,8 @@ class RegisterStudent extends React.Component {
       address: '',
       addressBhawan:'',
       registrationDate:'',
+      admissionDate:'',
+      contactNumberAsBhawan:'',
       state: '',
       city: '',
       country: '',
@@ -115,6 +117,8 @@ class RegisterStudent extends React.Component {
       address: res.address,
       addressBhawan:res.addressBhawan,
       registrationDate: moment(res.registrationDate).format('YYYY-MM-DDThh:mm:ss'),
+      admissionDate: moment(res.admissionDate).format('YYYY-MM-DDThh:mm:ss'),
+      contactNumberAsBhawan: res.contactNumberAsBhawan,
       state: res.state,
       city: res.city,
       postalCode: res.postalCode,
@@ -175,6 +179,8 @@ class RegisterStudent extends React.Component {
       address: '',
       addressBhawan:'',
       registrationDate:'',
+      admissionDate:'',
+      contactNumberAsBhawan:'',
       city: '',
       postalCode: '',
       country: '',
@@ -229,6 +235,8 @@ class RegisterStudent extends React.Component {
       fathersName: '',
       addressBhawan: '',
       registrationDate: '',
+      admissionDate: '',
+      contactNumberAsBhawan:'',
       fathersContact: '',
       mothersName: '',
       mothersContact: '',
@@ -347,7 +355,9 @@ class RegisterStudent extends React.Component {
       feeStatus,
       startDate,
       addressBhawan,
-      registrationDate
+      registrationDate,
+      admissionDate,
+      contactNumberAsBhawan,
     } = this.state
     let data = {
       "person" : selected.person.id,
@@ -360,7 +370,9 @@ class RegisterStudent extends React.Component {
       "fathers_contact": fathersContact,
       "mothers_contact": mothersContact,
       "address_bhawan":addressBhawan,
-      "registration_date":registrationDate
+      "registration_date":registrationDate,
+      "admission_date":admissionDate,
+      "contact_number_as_bhawan":contactNumberAsBhawan,
     }
     this.setState({
       registerLoading: true
@@ -384,7 +396,9 @@ class RegisterStudent extends React.Component {
       feeStatus,
       startDate,
       addressBhawan,
-      registrationDate
+      registrationDate,
+      admissionDate,
+      contactNumberAsBhawan
     } = this.state
     let data = {
       "room_number" : roomNo,
@@ -396,7 +410,9 @@ class RegisterStudent extends React.Component {
       "fathers_contact": fathersContact,
       "mothers_contact": mothersContact,
       "address_bhawan":addressBhawan,
-      "registration_date":registrationDate
+      "registration_date":registrationDate,
+      "admission_date":admissionDate,
+      "contact_number_as_bhawan":contactNumberAsBhawan
     }
     this.setState({
       editLoading: true
@@ -432,6 +448,8 @@ class RegisterStudent extends React.Component {
       address,
       addressBhawan,
       registrationDate,
+      admissionDate,
+      contactNumberAsBhawan,
       feeStatus,
       city,
       state,
@@ -596,6 +614,27 @@ class RegisterStudent extends React.Component {
                     name='registrationDate'
                     type='datetime-local'
                     value={registrationDate}
+                    onChange={this.fieldsChange}
+                    loading={loading}
+                  />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group  fluid widths='equal'>
+                <Form.Field>
+                  <label>Admission Date</label>
+                  <Input
+                    name='admissionDate'
+                    type='datetime-local'
+                    value={admissionDate}
+                    onChange={this.fieldsChange}
+                    loading={loading}
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <label>Contact Number As Per Bhawan Records</label>
+                  <Input
+                    name='contactNumberAsBhawan'
+                    value={contactNumberAsBhawan}
                     onChange={this.fieldsChange}
                     loading={loading}
                   />
