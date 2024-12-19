@@ -618,6 +618,8 @@ class RegisterStudent extends React.Component {
                     loading={loading}
                   />
                 </Form.Field>
+              </Form.Group>
+              <Form.Group  fluid widths='equal'>
                 <Form.Field>
                   <label>Admission Date</label>
                   <Input
