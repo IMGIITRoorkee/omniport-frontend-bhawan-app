@@ -52,6 +52,8 @@ class RegisterStudent extends React.Component {
       deregisterLoading: false,
       editLoading: false,
       address: '',
+      addressBhawan:'',
+      registrationDate:'',
       state: '',
       city: '',
       country: '',
@@ -111,6 +113,8 @@ class RegisterStudent extends React.Component {
       insideCampus: res.isLivingInCampus,
       feeStatus: res.feeType,
       address: res.address,
+      addressBhawan:res.addressBhawan,
+      registrationDate: moment(res.registrationDate).format('YYYY-MM-DDThh:mm:ss'),
       state: res.state,
       city: res.city,
       postalCode: res.postalCode,
@@ -169,13 +173,15 @@ class RegisterStudent extends React.Component {
       displayPicture : '',
       successMessage : 'Student Registered',
       address: '',
+      addressBhawan:'',
+      registrationDate:'',
       city: '',
       postalCode: '',
       country: '',
       fathersName: '',
       fathersContact: '',
       mothersName: '',
-      mothersContact: '',
+      mothersContact: ''    
     })
     toast({
       type: 'success',
@@ -221,6 +227,8 @@ class RegisterStudent extends React.Component {
       postalCode: '',
       country: '',
       fathersName: '',
+      addressBhawan: '',
+      registrationDate: '',
       fathersContact: '',
       mothersName: '',
       mothersContact: '',
@@ -338,6 +346,8 @@ class RegisterStudent extends React.Component {
       insideCampus,
       feeStatus,
       startDate,
+      addressBhawan,
+      registrationDate
     } = this.state
     let data = {
       "person" : selected.person.id,
@@ -348,7 +358,9 @@ class RegisterStudent extends React.Component {
       "fathers_name": fathersName,
       "mothers_name": mothersName,
       "fathers_contact": fathersContact,
-      "mothers_contact": mothersContact
+      "mothers_contact": mothersContact,
+      "address_bhawan":addressBhawan,
+      "registration_date":registrationDate
     }
     this.setState({
       registerLoading: true
@@ -371,6 +383,8 @@ class RegisterStudent extends React.Component {
       insideCampus,
       feeStatus,
       startDate,
+      addressBhawan,
+      registrationDate
     } = this.state
     let data = {
       "room_number" : roomNo,
@@ -380,7 +394,9 @@ class RegisterStudent extends React.Component {
       "fathers_name": fathersName,
       "mothers_name": mothersName,
       "fathers_contact": fathersContact,
-      "mothers_contact": mothersContact
+      "mothers_contact": mothersContact,
+      "address_bhawan":addressBhawan,
+      "registration_date":registrationDate
     }
     this.setState({
       editLoading: true
@@ -414,6 +430,8 @@ class RegisterStudent extends React.Component {
       displayPicture,
       loading,
       address,
+      addressBhawan,
+      registrationDate,
       feeStatus,
       city,
       state,
@@ -491,7 +509,7 @@ class RegisterStudent extends React.Component {
                   />
                 </Form.Field>
                 <Form.Field required>
-                  <label>Date of Joining</label>
+                  <label>Date of Joining in Bhawan</label>
                   <Input
                     name='startDate'
                     type='datetime-local'
@@ -557,6 +575,27 @@ class RegisterStudent extends React.Component {
                   <Input
                     name='mothersContact'
                     value={mothersContact}
+                    onChange={this.fieldsChange}
+                    loading={loading}
+                  />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group fluid widths='equal'>
+                <Form.Field>
+                  <label>Address (As Per Bhawan)</label>
+                  <Input
+                    name='addressBhawan'
+                    value={addressBhawan}
+                    onChange={this.fieldsChange}
+                    loading={loading}
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <label>Registration Date</label>
+                  <Input
+                    name='registrationDate'
+                    type='datetime-local'
+                    value={registrationDate}
                     onChange={this.fieldsChange}
                     loading={loading}
                   />

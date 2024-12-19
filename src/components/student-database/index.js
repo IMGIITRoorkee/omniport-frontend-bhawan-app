@@ -517,7 +517,7 @@ class StudentDatabase extends Component {
                             <Table.HeaderCell>Email Address</Table.HeaderCell>
                             <Table.HeaderCell>Current Year</Table.HeaderCell>
                             <Table.HeaderCell>Department</Table.HeaderCell>
-                            <Table.HeaderCell>Date of Joining</Table.HeaderCell>
+                            <Table.HeaderCell>Date of Joining in Bhawan</Table.HeaderCell>
                             <Table.HeaderCell>Inside Campus</Table.HeaderCell>
                             <Table.HeaderCell>Fee Status</Table.HeaderCell>
                             <Table.HeaderCell>Hostel</Table.HeaderCell>
