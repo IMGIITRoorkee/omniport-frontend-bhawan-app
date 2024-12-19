@@ -509,7 +509,7 @@ class RegisterStudent extends React.Component {
                   />
                 </Form.Field>
                 <Form.Field required>
-                  <label>Date of Joining</label>
+                  <label>Date of Joining in Bhawan</label>
                   <Input
                     name='startDate'
                     type='datetime-local'
