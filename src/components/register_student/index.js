@@ -53,7 +53,6 @@ class RegisterStudent extends React.Component {
       editLoading: false,
       address: '',
       addressBhawan:'',
-      registrationDate:'',
       admissionDate:'',
       contactNumberAsBhawan:'',
       state: '',
@@ -116,7 +115,6 @@ class RegisterStudent extends React.Component {
       feeStatus: res.feeType,
       address: res.address,
       addressBhawan:res.addressBhawan,
-      registrationDate: moment(res.registrationDate).format('YYYY-MM-DDThh:mm:ss'),
       admissionDate: moment(res.admissionDate).format('YYYY-MM-DDThh:mm:ss'),
       contactNumberAsBhawan: res.contactNumberAsBhawan,
       state: res.state,
@@ -178,7 +176,6 @@ class RegisterStudent extends React.Component {
       successMessage : 'Student Registered',
       address: '',
       addressBhawan:'',
-      registrationDate:'',
       admissionDate:'',
       contactNumberAsBhawan:'',
       city: '',
@@ -234,7 +231,6 @@ class RegisterStudent extends React.Component {
       country: '',
       fathersName: '',
       addressBhawan: '',
-      registrationDate: '',
       admissionDate: '',
       contactNumberAsBhawan:'',
       fathersContact: '',
@@ -355,7 +351,6 @@ class RegisterStudent extends React.Component {
       feeStatus,
       startDate,
       addressBhawan,
-      registrationDate,
       admissionDate,
       contactNumberAsBhawan,
     } = this.state
@@ -370,7 +365,6 @@ class RegisterStudent extends React.Component {
       "fathers_contact": fathersContact,
       "mothers_contact": mothersContact,
       "address_bhawan":addressBhawan,
-      "registration_date":registrationDate,
       "admission_date":admissionDate,
       "contact_number_as_bhawan":contactNumberAsBhawan,
     }
@@ -396,7 +390,6 @@ class RegisterStudent extends React.Component {
       feeStatus,
       startDate,
       addressBhawan,
-      registrationDate,
       admissionDate,
       contactNumberAsBhawan
     } = this.state
@@ -410,7 +403,6 @@ class RegisterStudent extends React.Component {
       "fathers_contact": fathersContact,
       "mothers_contact": mothersContact,
       "address_bhawan":addressBhawan,
-      "registration_date":registrationDate,
       "admission_date":admissionDate,
       "contact_number_as_bhawan":contactNumberAsBhawan
     }
@@ -447,7 +439,6 @@ class RegisterStudent extends React.Component {
       loading,
       address,
       addressBhawan,
-      registrationDate,
       admissionDate,
       contactNumberAsBhawan,
       feeStatus,
@@ -600,20 +591,10 @@ class RegisterStudent extends React.Component {
               </Form.Group>
               <Form.Group fluid widths='equal'>
                 <Form.Field>
-                  <label>Address (As Per Bhawan)</label>
+                  <label>Student Home Address as per Bhawan Records</label>
                   <Input
                     name='addressBhawan'
                     value={addressBhawan}
-                    onChange={this.fieldsChange}
-                    loading={loading}
-                  />
-                </Form.Field>
-                <Form.Field>
-                  <label>Registration Date</label>
-                  <Input
-                    name='registrationDate'
-                    type='datetime-local'
-                    value={registrationDate}
                     onChange={this.fieldsChange}
                     loading={loading}
                   />
