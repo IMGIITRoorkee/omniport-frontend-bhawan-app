@@ -368,7 +368,6 @@ class StudentDatabase extends Component {
               <div>City: {activeResident.city}</div>
               <div>State: {activeResident.state}</div>
               <div>Reservation Category: {activeResident.reservationCategory}</div>
-              <div>Registration Date: {activeResident.registrationDate && moment(activeResident.registrationDate).format('DD/MM/YY')}</div>
               <div>Admission Date: {activeResident.admissionDate && moment(activeResident.admissionDate).format('DD/MM/YY')}</div>
               <div>Contact Number as per Bhawan Records: {activeResident.contactNumberAsBhawan}</div>
               <div>Student Home Address as per Bhawan Records: {activeResident.addressBhawan}</div>
