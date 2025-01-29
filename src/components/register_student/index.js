@@ -41,6 +41,8 @@ class RegisterStudent extends React.Component {
       startDate: '',
       emailAddress : '',
       currentYear : '',
+      currentSemester : '',
+      program : '',
       department : '',
       phoneNumber : '',
       insideCampus: '',
@@ -106,7 +108,9 @@ class RegisterStudent extends React.Component {
       startDate: moment(res.startDate).format('YYYY-MM-DDThh:mm:ss'),
       emailAddress : res.emailAddress,
       currentYear : res.currentYear,
-      department : res.department,
+      currentSemester : res.currentSemester,
+      program : res.program,
+      department: res.department,
       phoneNumber : res.phoneNumber,
       dateOfBirth : res.dateOfBirth,
       displayPicture : res.displayPicture,
@@ -169,6 +173,8 @@ class RegisterStudent extends React.Component {
       insideCampus: '',
       emailAddress : '',
       currentYear : '',
+      currentSemester : '',
+      program : '',
       department : '',
       phoneNumber : '',
       dateOfBirth : '',
@@ -220,6 +226,8 @@ class RegisterStudent extends React.Component {
       insideCampus: '',
       emailAddress : '',
       currentYear : '',
+      currentSemester : '',
+      program : '',
       department : '',
       phoneNumber : '',
       dateOfBirth : '',
@@ -432,6 +440,8 @@ class RegisterStudent extends React.Component {
       startDate,
       emailAddress,
       currentYear,
+      currentSemester,
+      program,
       department,
       phoneNumber,
       dateOfBirth,
@@ -623,6 +633,28 @@ class RegisterStudent extends React.Component {
               </Form.Group>
               <Form.Group>
                 <Form.Field>
+                  <label>Department</label>
+                  <Input
+                    name="department"
+                    value={department}
+                    readOnly
+                    disabled
+                    loading={loading}
+                  />
+                </Form.Field>
+                <Form.Field>
+                    <label>Current Semester</label>
+                    <Input
+                      name="currentSemester"
+                      value={currentSemester}
+                      readOnly
+                      disabled
+                      loading={loading}
+                    />
+                </Form.Field>
+              </Form.Group>
+              <Form.Group>
+                <Form.Field>
                     <label>Current Year</label>
                     <Input
                       name="currentYear"
@@ -633,10 +665,10 @@ class RegisterStudent extends React.Component {
                     />
                 </Form.Field>
                 <Form.Field>
-                  <label>Department</label>
+                  <label>Program</label>
                   <Input
-                    name="department"
-                    value={department}
+                    name="program"
+                    value={program}
                     readOnly
                     disabled
                     loading={loading}
