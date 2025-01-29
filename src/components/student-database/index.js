@@ -72,6 +72,7 @@ class StudentDatabase extends Component {
     filterSemester: [],
     filterBranch: [],
     filterDegree: [],
+    filterDepartment: [],
     loading: true,
     currentResidentDownloadUrl: '',
     allResidents: false,
@@ -123,6 +124,10 @@ class StudentDatabase extends Component {
 
         if (this.state.filterDegree != '') {
           filter = `${filter}degree=${this.state.filterDegree}&`
+        }
+
+        if (this.state.filterDepartment != '') {
+          filter = `${filter}department=${this.state.filterDepartment}&`
         }
 
         if (this.state.filterYear != '') {
@@ -299,6 +304,7 @@ class StudentDatabase extends Component {
       activePage,
       filterBranch,
       filterDegree,
+      filterDepartment,
       filterYear,
       filterSemester,
       loading,
@@ -344,6 +350,15 @@ class StudentDatabase extends Component {
         key: i.toString(),
         value: i.toString(),
         text: constants.branches[i].toString(),
+      });
+    }
+
+    let departmentOptions = [];
+    for (const i in constants.departments) {
+      departmentOptions.push({
+        key: i.toString(),
+        value: i.toString(),
+        text: constants.departments[i].toString(),
       });
     }
 
@@ -517,6 +532,17 @@ class StudentDatabase extends Component {
             />
           </div>
           <div styleName='filter-container'>
+            <Dropdown
+              name="filterDepartment"
+              clearable
+              multiple
+              search
+              placeholder="Filter by department"
+              value={filterDepartment}
+              onChange={this.onChange}
+              options={degreeOptions}
+              selection
+            />
             <Dropdown
               name="feeTypeFilter"
               clearable
