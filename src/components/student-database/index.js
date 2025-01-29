@@ -532,7 +532,7 @@ class StudentDatabase extends Component {
             />
           </div>
           <div styleName='filter-container'>
-            <Dropdown
+            {/* <Dropdown
               name="filterDepartment"
               clearable
               multiple
@@ -542,7 +542,7 @@ class StudentDatabase extends Component {
               onChange={this.onChange}
               options={departmentOptions}
               selection
-            />
+            /> */}
             <Dropdown
               name="feeTypeFilter"
               clearable
