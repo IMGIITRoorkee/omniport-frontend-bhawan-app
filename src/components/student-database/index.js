@@ -540,8 +540,8 @@ class StudentDatabase extends Component {
               placeholder="Filter by department"
               value={filterDepartment}
               onChange={this.onChange}
-              options={degreeOptions}
-              selection
+              options={departmentOptions}
+              selections
             />
             <Dropdown
               name="feeTypeFilter"
