@@ -41,6 +41,7 @@ class RegisterStudent extends React.Component {
       startDate: '',
       emailAddress : '',
       currentYear : '',
+      currentSemester : '',
       program : '',
       department : '',
       phoneNumber : '',
@@ -107,6 +108,7 @@ class RegisterStudent extends React.Component {
       startDate: moment(res.startDate).format('YYYY-MM-DDThh:mm:ss'),
       emailAddress : res.emailAddress,
       currentYear : res.currentYear,
+      currentSemester : res.currentSemester,
       program : res.program,
       department: res.department,
       phoneNumber : res.phoneNumber,
@@ -171,6 +173,7 @@ class RegisterStudent extends React.Component {
       insideCampus: '',
       emailAddress : '',
       currentYear : '',
+      currentSemester : '',
       program : '',
       department : '',
       phoneNumber : '',
@@ -223,6 +226,7 @@ class RegisterStudent extends React.Component {
       insideCampus: '',
       emailAddress : '',
       currentYear : '',
+      currentSemester : '',
       program : '',
       department : '',
       phoneNumber : '',
@@ -436,6 +440,7 @@ class RegisterStudent extends React.Component {
       startDate,
       emailAddress,
       currentYear,
+      currentSemester,
       program,
       department,
       phoneNumber,
@@ -636,6 +641,16 @@ class RegisterStudent extends React.Component {
                     disabled
                     loading={loading}
                   />
+                </Form.Field>
+                <Form.Field>
+                    <label>Current Semester</label>
+                    <Input
+                      name="currentSemester"
+                      value={currentSemester}
+                      readOnly
+                      disabled
+                      loading={loading}
+                    />
                 </Form.Field>
               </Form.Group>
               <Form.Group>

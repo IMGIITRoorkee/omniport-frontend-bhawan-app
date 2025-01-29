@@ -40,12 +40,36 @@ const yearOptions = [
   { key: 10, text: '10th Year', value: 10 },
 ]
 
+const semesterOptions = [
+  { key: 1, text: '1st Semester', value: 1 },
+  { key: 2, text: '2nd Semester', value: 2 },
+  { key: 3, text: '3rd Semester', value: 3 },
+  { key: 4, text: '4th Semester', value: 4 },
+  { key: 5, text: '5th Semester', value: 5 },
+  { key: 6, text: '6th Semester', value: 6 },
+  { key: 7, text: '7th Semester', value: 7 },
+  { key: 8, text: '8th Semester', value: 8 },
+  { key: 9, text: '9th Semester', value: 9 },
+  { key: 10, text: '10th Semester', value: 10 },
+  { key: 11, text: '11th Semester', value: 11 },
+  { key: 12, text: '12th Semester', value: 12 },
+  { key: 13, text: '13th Semester', value: 13 },
+  { key: 14, text: '14th Semester', value: 14 },
+  { key: 15, text: '15th Semester', value: 15 },
+  { key: 16, text: '16th Semester', value: 16 },
+  { key: 17, text: '17th Semester', value: 17 },
+  { key: 18, text: '18th Semester', value: 18 },
+  { key: 19, text: '19th Semester', value: 19 },
+  { key: 20, text: '20th Semester', value: 20 },
+]
+
 class StudentDatabase extends Component {
   state = {
     activePage: 1,
     open: false,
     filter: '',
     filterYear: [],
+    filterSemester: [],
     filterBranch: [],
     filterDegree: [],
     loading: true,
@@ -103,6 +127,9 @@ class StudentDatabase extends Component {
 
         if (this.state.filterYear != '') {
           filter = `${filter}year=${this.state.filterYear}&`
+        }
+        if (this.state.filterSemester != '') {
+          filter = `${filter}semester=${this.state.filterSemester}&`
         }
         if (this.state.inCampus !== "") {
           filter = `${filter}is_living_in_campus=${this.state.inCampus}&`
@@ -273,6 +300,7 @@ class StudentDatabase extends Component {
       filterBranch,
       filterDegree,
       filterYear,
+      filterSemester,
       loading,
       feeTypeFilter,
       currentResidentDownloadUrl,
@@ -356,6 +384,7 @@ class StudentDatabase extends Component {
               <div>Contact Number: {activeResident.phoneNumber}</div>
               <div>Email Address: {activeResident.emailAddress}</div>
               <div>Current Year: {activeResident.currentYear}</div>
+              <div>Current Semester: {activeResident.currentSemester}</div>
               <div>Program: {activeResident.program}</div>
               <div>Department: {activeResident.department}</div>
               <div>Date of Birth: {activeResident.dateOfBirth}</div>
@@ -435,6 +464,17 @@ class StudentDatabase extends Component {
               onChange={this.onChange}
               placeholder="Filter by year"
               value={filterYear}
+              selection
+            />
+            <Dropdown
+              name="filterSemester"
+              multiple
+              search
+              clearable
+              options={semesterOptions}
+              onChange={this.onChange}
+              placeholder="Filter by semester"
+              value={filterSemester}
               selection
             />
             <Dropdown
@@ -520,6 +560,7 @@ class StudentDatabase extends Component {
                             <Table.HeaderCell>Contact No.</Table.HeaderCell>
                             <Table.HeaderCell>Email Address</Table.HeaderCell>
                             <Table.HeaderCell>Current Year</Table.HeaderCell>
+                            <Table.HeaderCell>Current Semester</Table.HeaderCell>
                             <Table.HeaderCell>Program</Table.HeaderCell>
                             <Table.HeaderCell>Department</Table.HeaderCell>
                             <Table.HeaderCell>Date of Joining in Bhawan</Table.HeaderCell>
@@ -540,6 +581,7 @@ class StudentDatabase extends Component {
                                   <Table.Cell>{resident.phoneNumber}</Table.Cell>
                                   <Table.Cell>{resident.emailAddress}</Table.Cell>
                                   <Table.Cell>{resident.currentYear}</Table.Cell>
+                                  <Table.Cell>{resident.currentSemester}</Table.Cell>
                                   <Table.Cell>{resident.program}</Table.Cell>
                                   <Table.Cell>{resident.department}</Table.Cell>
                                   <Table.Cell>{resident.startDate && moment(resident.startDate).format('DD/MM/YY')}</Table.Cell>
