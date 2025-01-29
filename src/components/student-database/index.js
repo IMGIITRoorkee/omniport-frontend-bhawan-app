@@ -356,6 +356,7 @@ class StudentDatabase extends Component {
               <div>Contact Number: {activeResident.phoneNumber}</div>
               <div>Email Address: {activeResident.emailAddress}</div>
               <div>Current Year: {activeResident.currentYear}</div>
+              <div>Program: {activeResident.program}</div>
               <div>Department: {activeResident.department}</div>
               <div>Date of Birth: {activeResident.dateOfBirth}</div>
               <div>Inside Campus: {activeResident.isLivingInCampus ? "Yes" : "No"}</div>
@@ -519,6 +520,7 @@ class StudentDatabase extends Component {
                             <Table.HeaderCell>Contact No.</Table.HeaderCell>
                             <Table.HeaderCell>Email Address</Table.HeaderCell>
                             <Table.HeaderCell>Current Year</Table.HeaderCell>
+                            <Table.HeaderCell>Program</Table.HeaderCell>
                             <Table.HeaderCell>Department</Table.HeaderCell>
                             <Table.HeaderCell>Date of Joining in Bhawan</Table.HeaderCell>
                             <Table.HeaderCell>Inside Campus</Table.HeaderCell>
@@ -538,6 +540,7 @@ class StudentDatabase extends Component {
                                   <Table.Cell>{resident.phoneNumber}</Table.Cell>
                                   <Table.Cell>{resident.emailAddress}</Table.Cell>
                                   <Table.Cell>{resident.currentYear}</Table.Cell>
+                                  <Table.Cell>{resident.program}</Table.Cell>
                                   <Table.Cell>{resident.department}</Table.Cell>
                                   <Table.Cell>{resident.startDate && moment(resident.startDate).format('DD/MM/YY')}</Table.Cell>
                                   <Table.Cell>{resident.isLivingInCampus ? "Yes" : "No"}</Table.Cell>
