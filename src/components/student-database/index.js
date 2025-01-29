@@ -541,7 +541,7 @@ class StudentDatabase extends Component {
               value={filterDepartment}
               onChange={this.onChange}
               options={departmentOptions}
-              selections
+              selection
             />
             <Dropdown
               name="feeTypeFilter"
