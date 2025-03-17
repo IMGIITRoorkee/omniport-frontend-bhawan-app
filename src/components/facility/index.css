@@ -17,3 +17,25 @@
     align-self: center;
     text-align: center;
 }
+.upload-image {
+    width: 100%;
+}
+.update-image {
+    width: 50%;
+    margin-right: 0 !important;
+}
+.actions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+.facilityImage {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.labelButton {
+    height: 100%;
+    width: 100%;
+}
