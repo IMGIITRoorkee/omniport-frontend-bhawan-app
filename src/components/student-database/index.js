@@ -73,6 +73,7 @@ class StudentDatabase extends Component {
     filterBranch: [],
     filterDegree: [],
     filterDepartment: [],
+    filterBhawan: [],
     loading: true,
     currentResidentDownloadUrl: '',
     allResidents: false,
@@ -128,6 +129,10 @@ class StudentDatabase extends Component {
 
         if (this.state.filterDepartment != '') {
           filter = `${filter}department=${this.state.filterDepartment}&`
+        }
+
+        if (this.state.filterBhawan != '') {
+          filter = `${filter}hostel=${this.state.filterBhawan}&`
         }
 
         if (this.state.filterYear != '') {
@@ -305,6 +310,7 @@ class StudentDatabase extends Component {
       filterBranch,
       filterDegree,
       filterDepartment,
+      filterBhawan,
       filterYear,
       filterSemester,
       loading,
@@ -368,6 +374,15 @@ class StudentDatabase extends Component {
         key: i,
         value: constants.degrees[i],
         text: constants.degrees[i],
+      });
+    }
+
+    let bhawanOptions = [];
+    for (const i in constants.hostels) {
+      bhawanOptions.push({
+        key: i.toString(),
+        value: i.toString(),
+        text: constants.hostels[i].toString(),
       });
     }
 
@@ -469,7 +484,7 @@ class StudentDatabase extends Component {
             </div>
 
           }
-          <div styleName='filter-container'>
+          <div styleName='filter-container filter-actions'>
             <Dropdown
               name="filterYear"
               multiple
@@ -514,6 +529,17 @@ class StudentDatabase extends Component {
               options={branchOptions}
               selection
             />
+            <Dropdown
+              name="filterBhawan"
+              clearable
+              multiple
+              search
+              placeholder="Filter by bhawan"
+              value={filterBhawan}
+              onChange={this.onChange}
+              options={bhawanOptions}
+              selection
+            />
             <Input
               name="residentSearch"
               value={residentSearch}
@@ -530,8 +556,7 @@ class StudentDatabase extends Component {
               options={LivingOptions}
               selection
             />
-          </div>
-          <div styleName='filter-container'>
+       
             {/* <Dropdown
               name="filterDepartment"
               clearable
