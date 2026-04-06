@@ -65,6 +65,7 @@ class RegisterStudent extends React.Component {
       fathersContact: '',
       mothersName: '',
       mothersContact: '',
+      isResident: false,
     }
     this.delayedCallback = _.debounce(this.ajaxCall, 300)
   }
@@ -128,7 +129,8 @@ class RegisterStudent extends React.Component {
       fathersName: res.fathersName,
       fathersContact: res.fathersContact,
       mothersName: res.mothersName,
-      mothersContact: res.mothersContact
+      mothersContact: res.mothersContact,
+      isResident: res.isResident,
     })
   }
 
@@ -190,7 +192,8 @@ class RegisterStudent extends React.Component {
       fathersName: '',
       fathersContact: '',
       mothersName: '',
-      mothersContact: ''    
+      mothersContact: '',
+      isResident: false
     })
     toast({
       type: 'success',
@@ -244,6 +247,7 @@ class RegisterStudent extends React.Component {
       fathersContact: '',
       mothersName: '',
       mothersContact: '',
+      isResident: false,
     })
     toast({
       type: 'success',
@@ -324,6 +328,7 @@ class RegisterStudent extends React.Component {
   deregisterSuccessCallBack = (res) => {
     this.setState({
       deregisterLoading: false,
+      isResident: false,
     })
     toast({
       type: 'success',
@@ -348,6 +353,16 @@ class RegisterStudent extends React.Component {
   }
 
   registerStudent = () => {
+    if (this.state.isResident) {
+      toast({
+        type: 'error',
+        title: 'Student is already registered in this bhawan',
+        animation: 'fade up',
+        icon: 'frown outline',
+        time: 4000,
+      })
+      return
+    }
     const {
       selected,
       roomNo,
@@ -463,7 +478,8 @@ class RegisterStudent extends React.Component {
       mothersContact,
       editLoading,
       registerLoading,
-      deregisterLoading
+      deregisterLoading,
+      isResident
     } = this.state
     const { constants } = this.props;
     let feeOptions = [];
@@ -763,6 +779,11 @@ class RegisterStudent extends React.Component {
                   />
                 </Form.Field>
               </Form.Group>
+              {isResident && (
+                <div className='ui negative message'>
+                  Already registered
+                </div>
+              )}
               <div>
               <Button
                   primary
@@ -778,7 +799,7 @@ class RegisterStudent extends React.Component {
                   type='submit'
                   loading={registerLoading}
                   onClick={this.registerStudent}
-                  disabled={!roomNo || !selected || !feeStatus}
+                  disabled={!roomNo || !selected || !feeStatus || isResident}
                 >
                   Register
                 </Button>
