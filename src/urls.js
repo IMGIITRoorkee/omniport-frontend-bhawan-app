@@ -53,6 +53,10 @@ export const databaseUrl = () => {
   return `${baseNavUrl('/database')}`
 }
 
+export const nonResidingStudentsPageUrl = () => {
+  return `${baseNavUrl('/non_residing_students')}`
+}
+
 // Backend URLs
 
 export const baseApiUrl = () => {
@@ -195,4 +199,16 @@ export const markInsideUrl = (residence, person) => {
 
 export const markOutUrl = (residence, person) => {
   return `${baseApiUrl()}${residence}/resident/${person}/markout/`
+}
+
+export const nonResidingStudentsUrl = (residence) => {
+  return `${baseApiUrl()}${residence}/non_residing_student/`
+}
+
+export const nonResidingStudentsDownloadUrl = (residence) => {
+  return `${baseApiUrl()}${residence}/non_residing_student/download/`
+}
+
+export const allNonResidingStudentsUrl = () => {
+  return `${baseApiUrl()}non_residing_student/all/`
 }
