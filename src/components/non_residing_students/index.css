@@ -1,0 +1,37 @@
+/* NRS header action buttons: better contrast and clearer selected interaction state */
+.ui.grid > .row > .right.aligned.eight.wide.column > .ui.button {
+	margin-left: 0.45rem !important;
+	border-radius: 8px !important;
+	border: 1px solid #d6d9e0 !important;
+	background: #f4f6f9 !important;
+	color: #1f2937 !important;
+	font-weight: 600 !important;
+	transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.ui.grid > .row > .right.aligned.eight.wide.column > .ui.button:hover {
+	background: #e7ebf2 !important;
+	border-color: #c8d0de !important;
+}
+
+.ui.grid > .row > .right.aligned.eight.wide.column > .ui.button:active,
+.ui.grid > .row > .right.aligned.eight.wide.column > .ui.button:focus,
+.ui.grid > .row > .right.aligned.eight.wide.column > .ui.button:focus-visible {
+	background: #324a6d !important;
+	border-color: #243754 !important;
+	color: #ffffff !important;
+	box-shadow: 0 0 0 2px rgba(50, 74, 109, 0.2) !important;
+}
+
+.ui.grid > .row > .right.aligned.eight.wide.column > .ui.primary.button,
+.ui.grid > .row > .right.aligned.eight.wide.column > .ui.secondary.button {
+	background: #2e4a7d !important;
+	border-color: #233a62 !important;
+	color: #ffffff !important;
+}
+
+.ui.grid > .row > .right.aligned.eight.wide.column > .ui.primary.button:hover,
+.ui.grid > .row > .right.aligned.eight.wide.column > .ui.secondary.button:hover {
+	background: #233a62 !important;
+	border-color: #1a2d4d !important;
+}

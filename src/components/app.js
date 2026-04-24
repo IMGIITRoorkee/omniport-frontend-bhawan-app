@@ -25,6 +25,7 @@ const EditAuthorities = lazy(() => import("./edit-authorities/index"))
 const AddFacility = lazy(() => import("./add-facility/index"))
 const RegisterStudent = lazy(() => import("./register_student/index"))
 const Rooms = lazy(() => import("./rooms/index"))
+const NonResidingStudents = lazy(() => import("./non_residing_students/index"))
 
 import { whoami } from "../actions/who_am_i";
 import { getConstants } from "../actions/get-constants";
@@ -315,6 +316,12 @@ class App extends React.Component {
                       <AdminRoute
                         path={`${match.path}registration`}
                         component={RegisterStudent}
+                        setNavigation={this.setNavigation}
+                        {...this.props}
+                      />
+                      <AdminRoute
+                        path={`${match.path}non_residing_students`}
+                        component={NonResidingStudents}
                         setNavigation={this.setNavigation}
                         {...this.props}
                       />
