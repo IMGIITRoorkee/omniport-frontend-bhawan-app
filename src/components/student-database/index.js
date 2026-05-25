@@ -117,7 +117,11 @@ class StudentDatabase extends Component {
   onChange = (event, { name, value }) => {
     let filter = 'is_student=true&'
     if (this.state.hasOwnProperty(name)) {
-      this.setState({ [name]: value }, () => {
+      let updatedState = { [name]: value }
+      if (name == 'allResidents' && !value) {
+        updatedState.filterBhawan = []
+      }
+      this.setState(updatedState, () => {
 
         if (this.state.filterBranch != '') {
           filter = `${filter}branch=${this.state.filterBranch}&`
@@ -131,7 +135,7 @@ class StudentDatabase extends Component {
           filter = `${filter}department=${this.state.filterDepartment}&`
         }
 
-        if (this.state.filterBhawan != '') {
+        if (this.state.allResidents && this.state.filterBhawan != '') {
           filter = `${filter}hostel=${this.state.filterBhawan}&`
         }
 
@@ -538,6 +542,7 @@ class StudentDatabase extends Component {
               value={filterBhawan}
               onChange={this.onChange}
               options={bhawanOptions}
+              disabled={!allResidents}
               selection
             />
             <Input
@@ -700,4 +705,3 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentDatabase)
-
