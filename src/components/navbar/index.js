@@ -25,7 +25,8 @@ import {
   complaintUrl,
   registrationUrl,
   databaseUrl,
-  roomUrl
+  roomUrl,
+  nonResidingStudentsPageUrl,
 } from '../../urls'
 
 const hamburgerDefaultOptions = [
@@ -105,6 +106,12 @@ class Nav extends Component {
       case roomUrl(): {
         this.setState({
           activeSubGroup: 'rooms'
+        })
+        return
+      }
+      case nonResidingStudentsPageUrl(): {
+        this.setState({
+          activeSubGroup: 'non-residing-students'
         })
         return
       }
@@ -316,6 +323,17 @@ class Nav extends Component {
               onClick={() => this.handleGroupClick('room', '/bhawan_app/room')}
             >
               Accommodation
+            </Menu.Item>
+
+            <Menu.Item
+              size='mini'
+              name='non-residing-students'
+              color='blue'
+              styleName='navCss.navColor'
+              active={activeSubGroup == 'non-residing-students'}
+              onClick={() => this.handleGroupClick('non-residing-students', '/bhawan_app/non_residing_students')}
+            >
+              Non Residing Students
             </Menu.Item>
           </Menu>
         ) : (
