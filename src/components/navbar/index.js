@@ -331,7 +331,7 @@ class Nav extends Component {
               color='blue'
               styleName='navCss.navColor'
               active={activeSubGroup == 'non-residing-students'}
-              onClick={() => this.handleGroupClick('non-residing-students', '/bhawan_app/non_residing_students')}
+              onClick={() => this.handleGroupClick('non-residing-students', nonResidingStudentsPageUrl())}
             >
               Non Residing Students
             </Menu.Item>

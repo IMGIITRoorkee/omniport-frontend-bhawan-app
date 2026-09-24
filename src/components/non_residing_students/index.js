@@ -42,6 +42,7 @@ class NonResidingStudents extends React.Component {
       showAddForm: false,
       editMode: false,
       editingStudentId: null,
+      editingStudentHostel: null,
       searchQuery: '',
       filterDesignation: '',
       filterDepartment: '',
@@ -59,6 +60,15 @@ class NonResidingStudents extends React.Component {
 
   componentDidUpdate (prevProps) {
     if (prevProps.activeHostel !== this.props.activeHostel) {
+      this.refreshStudents()
+    }
+  }
+
+  // Reload whichever list is on screen, current bhawan or all bhawans
+  refreshStudents = () => {
+    if (this.state.showAllBhawans) {
+      this.fetchAllStudents()
+    } else {
       this.fetchStudents()
     }
   }
@@ -201,6 +211,7 @@ class NonResidingStudents extends React.Component {
       showAddForm: !prevState.showAddForm,
       editMode: prevState.showAddForm ? false : prevState.editMode,
       editingStudentId: prevState.showAddForm ? null : prevState.editingStudentId,
+      editingStudentHostel: prevState.showAddForm ? null : prevState.editingStudentHostel,
     }))
   }
 
@@ -209,6 +220,7 @@ class NonResidingStudents extends React.Component {
       showAddForm: true,
       editMode: true,
       editingStudentId: student.id,
+      editingStudentHostel: student.hostel_code || student.hostelCode || this.props.activeHostel,
       name: student.name || '',
       designation: student.designation || '',
       department: this.getDepartmentCodeFromValue(student.department || ''),
@@ -233,6 +245,7 @@ class NonResidingStudents extends React.Component {
       saving: false,
       editMode: false,
       editingStudentId: null,
+      editingStudentHostel: null,
     })
   }
 
@@ -248,6 +261,7 @@ class NonResidingStudents extends React.Component {
       emailId,
       editMode,
       editingStudentId,
+      editingStudentHostel,
     } = this.state
 
     const parsedFromDate = moment(fromDate, 'YYYY-MM-DD', true)
@@ -294,14 +308,14 @@ class NonResidingStudents extends React.Component {
     axios
       [editMode ? 'patch' : 'post'](
         editMode
-          ? `${nonResidingStudentsUrl(this.props.activeHostel)}${editingStudentId}/`
+          ? `${nonResidingStudentsUrl(editingStudentHostel)}${editingStudentId}/`
           : nonResidingStudentsUrl(this.props.activeHostel),
         payload,
         { headers: headers }
       )
       .then(() => {
         this.resetForm()
-        this.fetchStudents()
+        this.refreshStudents()
         toast({
           type: 'success',
           title: editMode ? 'Non residing student updated successfully' : 'Non residing student registered successfully',
@@ -314,7 +328,7 @@ class NonResidingStudents extends React.Component {
         this.setState({ saving: false })
         toast({
           type: 'error',
-          title: 'Unable to register non residing student',
+          title: editMode ? 'Unable to update non residing student' : 'Unable to register non residing student',
           animation: 'fade up',
           icon: 'frown outline',
           time: 3000,
@@ -337,6 +351,7 @@ class NonResidingStudents extends React.Component {
       students,
       showAddForm,
       editMode,
+      editingStudentHostel,
       searchQuery,
       filterDesignation,
       filterDepartment,
@@ -406,9 +421,9 @@ class NonResidingStudents extends React.Component {
             <Grid.Column width={8}>
               <Header as='h3'>Non Residing Students</Header>
             </Grid.Column>
-            <Grid.Column width={8} textAlign='right'>
+            <Grid.Column width={8} textAlign='right' styleName='header-actions'>
               <Button primary type='button' onClick={this.toggleAddForm}>
-                {showAddForm ? 'Close Form' : 'Add Non Dining Student'}
+                {showAddForm ? 'Close Form' : 'Add Non Residing Student'}
               </Button>
               <Button type='button' onClick={this.fetchAllStudents}>Show All Bhawans</Button>
               <Button  type='button' onClick={this.showCurrentBhawanStudents}>Show Current Bhawan</Button>
@@ -424,7 +439,7 @@ class NonResidingStudents extends React.Component {
               <Form.Field required>
                 <label>Name of the bhawan</label>
                 <Input
-                  value={constants.hostels && constants.hostels[activeHostel]}
+                  value={constants.hostels && constants.hostels[editingStudentHostel || activeHostel]}
                   readOnly
                   disabled
                 />
@@ -492,7 +507,7 @@ class NonResidingStudents extends React.Component {
                   !emailId
                 }
               >
-                {editMode ? 'Update Non Dining Student' : 'Save Non Dining Student'}
+                {editMode ? 'Update Non Residing Student' : 'Save Non Residing Student'}
               </Button>
               {editMode && (
                 <Button
@@ -512,7 +527,7 @@ class NonResidingStudents extends React.Component {
         <Segment>
           <Grid>
             <Grid.Row>
-              <Grid.Column width={6}>
+              <Grid.Column width={4}>
                 <Input
                   fluid
                   icon='search'
@@ -522,7 +537,7 @@ class NonResidingStudents extends React.Component {
                   onChange={this.handleChange}
                 />
               </Grid.Column>
-              <Grid.Column width={5}>
+              <Grid.Column width={4}>
                 <Dropdown
                   fluid
                   selection
@@ -534,7 +549,7 @@ class NonResidingStudents extends React.Component {
                   onChange={this.handleChange}
                 />
               </Grid.Column>
-              <Grid.Column width={5}>
+              <Grid.Column width={4}>
                 <Dropdown
                   fluid
                   selection
@@ -547,7 +562,7 @@ class NonResidingStudents extends React.Component {
                   onChange={this.handleChange}
                 />
               </Grid.Column>
-              <Grid.Column width={5}>
+              <Grid.Column width={4}>
                 <Dropdown
                   fluid
                   selection
