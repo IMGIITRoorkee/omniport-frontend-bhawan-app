@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { toast } from 'react-semantic-toasts'
 import moment from 'moment'
+import debounce from 'lodash/debounce'
 
 import {
   Button,
@@ -66,7 +67,13 @@ class RegisterStudent extends React.Component {
       mothersName: '',
       mothersContact: '',
     }
-    this.delayedCallback = _.debounce(this.ajaxCall, 300)
+    this.delayedCallback = debounce(this.ajaxCall, 300)
+  }
+
+  componentDidMount () {
+    if (this.props.setNavigation) {
+      this.props.setNavigation('Registration')
+    }
   }
 
   successCallBack = (res) => {
