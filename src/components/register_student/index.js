@@ -193,7 +193,9 @@ class RegisterStudent extends React.Component {
       fathersContact: '',
       mothersName: '',
       mothersContact: '',
-      isResident: false
+      // The selected student stays selected and is now a resident, so keep
+      // Register blocked until another student is picked
+      isResident: true
     })
     toast({
       type: 'success',
@@ -205,14 +207,19 @@ class RegisterStudent extends React.Component {
   }
 
   residentErrCallBack = (err) => {
+    // 409 means the backend found an active registration in this bhawan
+    const isDuplicate = err.response && err.response.status === 409
     this.setState({
       errMessage: 'Failed to register student',
       successMessage: '',
       registerLoading: false,
+      isResident: isDuplicate || this.state.isResident,
     })
     toast({
       type: 'error',
-      title: 'Unable to register Student',
+      title: isDuplicate
+        ? 'Student is already registered in this bhawan'
+        : 'Unable to register Student',
       animation: 'fade up',
       icon: 'frown outline',
       time: 4000,
@@ -247,7 +254,6 @@ class RegisterStudent extends React.Component {
       fathersContact: '',
       mothersName: '',
       mothersContact: '',
-      isResident: false,
     })
     toast({
       type: 'success',
@@ -781,7 +787,7 @@ class RegisterStudent extends React.Component {
               </Form.Group>
               {isResident && (
                 <div className='ui negative message'>
-                  Already registered
+                  This student is already registered in this bhawan. Use Edit Resident to update their details.
                 </div>
               )}
               <div>
