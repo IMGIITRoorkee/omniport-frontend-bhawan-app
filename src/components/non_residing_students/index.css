@@ -1,37 +1,35 @@
-/* NRS header action buttons: better contrast and clearer selected interaction state */
-.header-actions :global(.ui.button) {
-	margin-left: 0.45rem;
-	border-radius: 8px;
-	border: 1px solid #d6d9e0;
-	background: #f4f6f9;
-	color: #1f2937;
-	font-weight: 600;
-	transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+.actions {
+    margin: 1rem 0;
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-bottom: 0.5px solid #00000031;
 }
 
-.header-actions :global(.ui.button:hover) {
-	background: #e7ebf2;
-	border-color: #c8d0de;
+.filter-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    width: 100%;
+    margin: 0.5rem 0 1rem;
 }
 
-.header-actions :global(.ui.button:active),
-.header-actions :global(.ui.button:focus),
-.header-actions :global(.ui.button:focus-visible) {
-	background: #324a6d;
-	border-color: #243754;
-	color: #ffffff;
-	box-shadow: 0 0 0 2px rgba(50, 74, 109, 0.2);
+.filter-container > :global(.ui.dropdown),
+.filter-container > :global(.ui.input) {
+    flex: 1 1 220px;
+    min-width: 200px;
 }
 
-.header-actions :global(.ui.primary.button),
-.header-actions :global(.ui.secondary.button) {
-	background: #2e4a7d;
-	border-color: #233a62;
-	color: #ffffff;
+.filter-container > :global(.ui.checkbox) {
+    flex: 0 0 auto;
+    white-space: nowrap;
 }
 
-.header-actions :global(.ui.primary.button:hover),
-.header-actions :global(.ui.secondary.button:hover) {
-	background: #233a62;
-	border-color: #1a2d4d;
+.table-overflow {
+    overflow-x: auto;
+    width: 100%;
+    display: block;
 }

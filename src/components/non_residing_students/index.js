@@ -7,6 +7,7 @@ import { getCookie } from 'formula_one/src/utils'
 
 import {
   Button,
+  Checkbox,
   Container,
   Dropdown,
   Form,
@@ -14,7 +15,6 @@ import {
   Input,
   Segment,
   Table,
-  Grid,
 } from 'semantic-ui-react'
 
 import {
@@ -120,6 +120,14 @@ class NonResidingStudents extends React.Component {
       filterBhawan: '',
     })
     this.fetchStudents()
+  }
+
+  toggleAllBhawans = (e, { checked }) => {
+    if (checked) {
+      this.fetchAllStudents()
+    } else {
+      this.showCurrentBhawanStudents()
+    }
   }
 
   downloadFilteredCsv = (filteredStudents) => {
@@ -415,23 +423,17 @@ class NonResidingStudents extends React.Component {
     })
 
     return (
-      <Container>
-        <Grid>
-          <Grid.Row verticalAlign='middle'>
-            <Grid.Column width={8}>
-              <Header as='h3'>Non Residing Students</Header>
-            </Grid.Column>
-            <Grid.Column width={8} textAlign='right' styleName='header-actions'>
-              <Button primary type='button' onClick={this.toggleAddForm}>
-                {showAddForm ? 'Close Form' : 'Add Non Residing Student'}
-              </Button>
-              <Button type='button' onClick={this.fetchAllStudents}>Show All Bhawans</Button>
-              <Button  type='button' onClick={this.showCurrentBhawanStudents}>Show Current Bhawan</Button>
-            </Grid.Column>
-          </Grid.Row>
-     
-        
-        </Grid>
+      <div>
+        <Header as='h4'>Non Residing Students</Header>
+        <Container>
+        <div>
+          Total Count: {filteredStudents.length}
+        </div>
+        <div styleName='actions'>
+          <Button primary type='button' onClick={this.toggleAddForm}>
+            {showAddForm ? 'Close Form' : 'Add Non Residing Student'}
+          </Button>
+        </div>
 
         {showAddForm && (
           <Segment>
@@ -524,68 +526,56 @@ class NonResidingStudents extends React.Component {
           </Segment>
         )}
 
-        <Segment>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={4}>
-                <Input
-                  fluid
-                  icon='search'
-                  placeholder='Search by name/mobile/email/room/department'
-                  name='searchQuery'
-                  value={searchQuery}
-                  onChange={this.handleChange}
-                />
-              </Grid.Column>
-              <Grid.Column width={4}>
-                <Dropdown
-                  fluid
-                  selection
-                  clearable
-                  placeholder='Filter by designation'
-                  name='filterDesignation'
-                  value={filterDesignation}
-                  options={designationOptions}
-                  onChange={this.handleChange}
-                />
-              </Grid.Column>
-              <Grid.Column width={4}>
-                <Dropdown
-                  fluid
-                  selection
-                  search
-                  clearable
-                  placeholder='Filter by department'
-                  name='filterDepartment'
-                  value={filterDepartment}
-                  options={departmentOptions}
-                  onChange={this.handleChange}
-                />
-              </Grid.Column>
-              <Grid.Column width={4}>
-                <Dropdown
-                  fluid
-                  selection
-                  search
-                  clearable
-                  placeholder='Filter by bhawan'
-                  name='filterBhawan'
-                  value={filterBhawan}
+        <div styleName='filter-container'>
+          <Input
+            icon='search'
+            placeholder='Search by name/mobile/email/room/department'
+            name='searchQuery'
+            value={searchQuery}
+            onChange={this.handleChange}
+          />
+          <Dropdown
+            selection
+            clearable
+            placeholder='Filter by designation'
+            name='filterDesignation'
+            value={filterDesignation}
+            options={designationOptions}
+            onChange={this.handleChange}
+          />
+          <Dropdown
+            selection
+            search
+            clearable
+            placeholder='Filter by department'
+            name='filterDepartment'
+            value={filterDepartment}
+            options={departmentOptions}
+            onChange={this.handleChange}
+          />
+          <Dropdown
+            selection
+            search
+            clearable
+            placeholder='Filter by bhawan'
+            name='filterBhawan'
+            value={filterBhawan}
+            options={Object.keys(constants.hostels || {}).map((code) => ({ key: code, text: constants.hostels[code], value: code }))}
+            onChange={this.handleChange}
+            disabled={!showAllBhawans}
+          />
+          <Checkbox
+            label='All bhawans'
+            checked={showAllBhawans}
+            onChange={this.toggleAllBhawans}
+          />
+          <Button primary type='button' onClick={() => this.downloadFilteredCsv(filteredStudents)}>
+            Download list
+          </Button>
+        </div>
 
-                  options={Object.keys(constants.hostels || {}).map((code) => ({ key: code, text: constants.hostels[code], value: code }))}
-                  onChange={this.handleChange}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
-
-        <Segment>
-          <div>Total Count: {filteredStudents.length}</div>
-        <Button style={{ marginBottom: '5px' }}  type='button' onClick={() => this.downloadFilteredCsv(filteredStudents)}>Download  CSV</Button>
-
-          <div style={{ overflowX: 'auto' }}>
-          <Table celled compact unstackable>
+          <div styleName='table-overflow'>
+          <Table unstackable celled>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Name of the bhawan</Table.HeaderCell>
@@ -624,7 +614,7 @@ class NonResidingStudents extends React.Component {
                       <Table.Cell>{uptoDate ? moment(uptoDate).format('DD/MM/YYYY') : ''}</Table.Cell>
                       <Table.Cell>{email}</Table.Cell>
                       <Table.Cell>
-                        <Button size='small' onClick={() => this.editStudent(student)}>
+                        <Button onClick={() => this.editStudent(student)}>
                           Edit
                         </Button>
                       </Table.Cell>
@@ -643,8 +633,8 @@ class NonResidingStudents extends React.Component {
             </Table.Body>
           </Table>
           </div>
-        </Segment>
-      </Container>
+        </Container>
+      </div>
     )
   }
 }
