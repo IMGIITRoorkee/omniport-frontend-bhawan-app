@@ -65,6 +65,7 @@ class RegisterStudent extends React.Component {
       fathersContact: '',
       mothersName: '',
       mothersContact: '',
+      isResident: false,
     }
     this.delayedCallback = _.debounce(this.ajaxCall, 300)
   }
@@ -128,7 +129,8 @@ class RegisterStudent extends React.Component {
       fathersName: res.fathersName,
       fathersContact: res.fathersContact,
       mothersName: res.mothersName,
-      mothersContact: res.mothersContact
+      mothersContact: res.mothersContact,
+      isResident: res.isResident,
     })
   }
 
@@ -190,7 +192,10 @@ class RegisterStudent extends React.Component {
       fathersName: '',
       fathersContact: '',
       mothersName: '',
-      mothersContact: ''    
+      mothersContact: '',
+      // The selected student stays selected and is now a resident, so keep
+      // Register blocked until another student is picked
+      isResident: true
     })
     toast({
       type: 'success',
@@ -202,14 +207,19 @@ class RegisterStudent extends React.Component {
   }
 
   residentErrCallBack = (err) => {
+    // 409 means the backend found an active registration in this bhawan
+    const isDuplicate = err.response && err.response.status === 409
     this.setState({
       errMessage: 'Failed to register student',
       successMessage: '',
       registerLoading: false,
+      isResident: isDuplicate || this.state.isResident,
     })
     toast({
       type: 'error',
-      title: 'Unable to register Student',
+      title: isDuplicate
+        ? 'Student is already registered in this bhawan'
+        : 'Unable to register Student',
       animation: 'fade up',
       icon: 'frown outline',
       time: 4000,
@@ -324,6 +334,7 @@ class RegisterStudent extends React.Component {
   deregisterSuccessCallBack = (res) => {
     this.setState({
       deregisterLoading: false,
+      isResident: false,
     })
     toast({
       type: 'success',
@@ -348,6 +359,16 @@ class RegisterStudent extends React.Component {
   }
 
   registerStudent = () => {
+    if (this.state.isResident) {
+      toast({
+        type: 'error',
+        title: 'Student is already registered in this bhawan',
+        animation: 'fade up',
+        icon: 'frown outline',
+        time: 4000,
+      })
+      return
+    }
     const {
       selected,
       roomNo,
@@ -463,7 +484,8 @@ class RegisterStudent extends React.Component {
       mothersContact,
       editLoading,
       registerLoading,
-      deregisterLoading
+      deregisterLoading,
+      isResident
     } = this.state
     const { constants } = this.props;
     let feeOptions = [];
@@ -763,6 +785,11 @@ class RegisterStudent extends React.Component {
                   />
                 </Form.Field>
               </Form.Group>
+              {isResident && (
+                <div className='ui negative message'>
+                  This student is already registered in this bhawan. Use Edit Resident to update their details.
+                </div>
+              )}
               <div>
               <Button
                   primary
@@ -778,7 +805,7 @@ class RegisterStudent extends React.Component {
                   type='submit'
                   loading={registerLoading}
                   onClick={this.registerStudent}
-                  disabled={!roomNo || !selected || !feeStatus}
+                  disabled={!roomNo || !selected || !feeStatus || isResident}
                 >
                   Register
                 </Button>
