@@ -24,6 +24,7 @@ import {
   eventUrl,
   complaintUrl,
   registrationUrl,
+  bulkRegistrationUrl,
   databaseUrl,
   roomUrl
 } from '../../urls'
@@ -91,6 +92,12 @@ class Nav extends Component {
         return
       }
       case registrationUrl(): {
+        this.setState({
+          activeSubGroup: 'register'
+        })
+        return
+      }
+      case bulkRegistrationUrl(): {
         this.setState({
           activeSubGroup: 'register'
         })
