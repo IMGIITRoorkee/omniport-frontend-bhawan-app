@@ -1,0 +1,35 @@
+.actions {
+    margin: 1rem 0;
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-bottom: 0.5px solid #00000031;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    width: 100%;
+    margin: 0.5rem 0 1rem;
+}
+
+.filter-container > :global(.ui.dropdown),
+.filter-container > :global(.ui.input) {
+    flex: 1 1 220px;
+    min-width: 200px;
+}
+
+.filter-container > :global(.ui.checkbox) {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.table-overflow {
+    overflow-x: auto;
+    width: 100%;
+    display: block;
+}
