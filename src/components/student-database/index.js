@@ -17,12 +17,13 @@ import {
 } from 'semantic-ui-react'
 
 import moment from 'moment'
+import { toast } from 'react-semantic-toasts'
 
 import { Loading } from "formula_one";
 
-import { residentUrl, residentDownloadUrl, markInsideUrl, markOutUrl, updateBhawanDataUrl } from '../../urls'
+import { residentUrl, residentDownloadUrl, markInsideUrl, markOutUrl, updateBhawanDataUrl, deregisterUrl } from '../../urls'
 
-import { getResidents, downloadResidents, fetchPreviousRecords } from '../../actions/residents'
+import { getResidents, downloadResidents, fetchPreviousRecords, deregister } from '../../actions/residents'
 import { updateBhawanData } from '../../actions/update_bhawan_data'
 
 import './index.css'
@@ -216,6 +217,34 @@ class StudentDatabase extends Component {
       open: true,
       activeResident: resident,
     })
+  }
+
+  deregisterResident = (resident) => {
+    if (!window.confirm(`Deregister ${resident.residentName} (${resident.enrolmentNumber}) from this Bhawan?`)) {
+      return
+    }
+    this.props.deregister(
+      deregisterUrl(resident.hostelCode, resident.person),
+      (res) => {
+        toast({ type: 'success', title: res.data, animation: 'fade up', icon: 'smile outline', time: 4000 })
+        this.setState({ loading: true, activePage: 1 })
+        this.props.getResidents(
+          `${residentUrl(this.props.activeHostel)}?${this.state.filter || 'is_student=true'}`,
+          this.successCallBack,
+          this.errCallBack
+        )
+      },
+      (err) => {
+        const data = err.response && err.response.data
+        toast({
+          type: 'error',
+          title: (data && data.error) || 'Unable to deregister student, please try again',
+          animation: 'fade up',
+          icon: 'frown outline',
+          time: 4000,
+        })
+      }
+    )
   }
 
   successCallBack = () => {
@@ -648,6 +677,11 @@ class StudentDatabase extends Component {
                                     <Button onClick={() => { this.showResidentDetails(resident) }}>
                                       Show
                                     </Button>
+                                    {!nonResident && resident.person && resident.hostelCode === this.props.activeHostel &&
+                                      <Button negative onClick={() => { this.deregisterResident(resident) }}>
+                                        Deregister
+                                      </Button>
+                                    }
                                   </Table.Cell>
                                 </Table.Row>
                               )
@@ -694,6 +728,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     downloadResidents: (url, successCallBack, errCallBack) => {
       dispatch(downloadResidents(url, successCallBack, errCallBack))
+    },
+    deregister: (url, successCallBack, errCallBack) => {
+      dispatch(deregister(url, successCallBack, errCallBack))
     },
     fetchPreviousRecords: (url, prevSuccessCallBack, prevErrCallBack) => {
       dispatch(fetchPreviousRecords(url, prevSuccessCallBack, prevErrCallBack))
